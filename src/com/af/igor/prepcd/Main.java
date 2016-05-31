@@ -8,7 +8,7 @@ target path is an appropriate cd directory.
 
 else it can rename base .ckd to machine files, alike I...ckd -> I5500-GA1881.ckd
 автоматичне створення каталога диску з подальшим копіюванням html файлів, файлів креслень, розпарсювання .xls файла
-і автоматичного виделення зайвих директорій, відкриття пдф'ів інсттрукцій для ручного додаваня самих інструкцій.
+і автоматичного видалення зайвих директорій, відкриття пдф'ів інсттрукцій для ручного додаваня самих інструкцій.
  */
 
 import java.nio.file.Path;
@@ -17,6 +17,8 @@ import java.nio.file.Paths;
 public class Main {
     String sourcePathDir;
     String targetPathDir;
+    String machineName;
+    String machineType;
 
 
     public static void main(String[] args){
@@ -34,17 +36,21 @@ public class Main {
          */
     }
     void initializePath(String[] args){
-        Path pwd=Paths.get("");
+        Path path=Paths.get("").toAbsolutePath();
+        String pwd=path.toString();
+        String cd="d:\\my_docs\\cdrom\\";
+        machineName=path.getFileName().toString();
+
         if (args.length>1) {
             sourcePathDir = args[0];
             targetPathDir = args[1];
         }else if (args.length==1){
-            sourcePathDir = Paths.class.getCanonicalName();
+            sourcePathDir = pwd;
             targetPathDir = args[0];
         }else {
-            sourcePathDir = Paths.class.getCanonicalName();
+            sourcePathDir = pwd;
+            targetPathDir = cd+machineName;
         }
-        System.out.println("cur dir is "+sourcePathDir);
-        System.out.println("another cur dir is "+pwd.toAbsolutePath().toString());
+
     }
 }
