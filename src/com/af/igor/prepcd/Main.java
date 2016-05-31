@@ -11,9 +11,40 @@ else it can rename base .ckd to machine files, alike I...ckd -> I5500-GA1881.ckd
 і автоматичного виделення зайвих директорій, відкриття пдф'ів інсттрукцій для ручного додаваня самих інструкцій.
  */
 
-public class Main {
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-    public static void main(String[] args) {
-	// write your code here
+public class Main {
+    String sourcePathDir;
+    String targetPathDir;
+
+
+    public static void main(String[] args){
+        Main mainProgram=new Main();
+        mainProgram.initializePath(args);
+        /*
+        create ArrayList<String> files in directory (or other list of files)
+        analize numbers of files and type files
+        case1 if there is only 1 xls file - copy base xls and rename it by the name of directory and (if need)
+        correct type of machine inside it (using dialog) and open it
+        case2 if there are .ckd files rename it according to type of machine (using the previos .xls)
+        case3 if there are .pdf files copy it to the print directory (or to the machine directory using flag)
+        case4 if there are .pdf files and used flag prepare CD directory using .xls and copy .pdf to plans directory
+            maybe will better combine case3 and case4 together
+         */
+    }
+    void initializePath(String[] args){
+        Path pwd=Paths.get("");
+        if (args.length>1) {
+            sourcePathDir = args[0];
+            targetPathDir = args[1];
+        }else if (args.length==1){
+            sourcePathDir = Paths.class.getCanonicalName();
+            targetPathDir = args[0];
+        }else {
+            sourcePathDir = Paths.class.getCanonicalName();
+        }
+        System.out.println("cur dir is "+sourcePathDir);
+        System.out.println("another cur dir is "+pwd.toAbsolutePath().toString());
     }
 }
