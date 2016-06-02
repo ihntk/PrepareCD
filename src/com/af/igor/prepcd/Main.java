@@ -11,20 +11,42 @@ else it can rename base .ckd to machine files, alike I...ckd -> I5500-GA1881.ckd
 і автоматичного видалення зайвих директорій, відкриття пдф'ів інсттрукцій для ручного додаваня самих інструкцій.
  */
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
-    static String sourcePathDir;
-    static String targetPathDir;
+    static String machinePathDir;
+    static String cdPathDir;
     static String machineName;
     static String machineType;
     static final String XLS="d:\\my_docs\\workDir\\XL's\\20XX0000.xls";
+    static final String MACHINEXLS=machineName+".xlsx";
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
         initializePath(args);
-
+        File machineDirectory=new File(machinePathDir);
+        String[]files=machineDirectory.list();
+        List<String> xls=new ArrayList<>();
+        List<String> pdf=new ArrayList<>();
+        List<String> ckd=new ArrayList<>();
+        Desktop desktop=Desktop.getDesktop();
+        for (String file:files) {
+            if (file.contains(".xls")) xls.add(file);
+            if (file.contains(".pdf")) pdf.add(file);
+            if (file.contains(".ckd")) ckd.add(file);
+        }
+        if (!xls.contains(MACHINEXLS)) {
+            Files.copy(Paths.get(XLS),Paths.get(machinePathDir+"\\"+MACHINEXLS));
+            desktop.open(new File(MACHINEXLS));
+        }
+//        if (xls.contains(MACHINEXLS))
         /*
         create ArrayList<String> files in directory (or other list of files)
         analize numbers of files and type files
@@ -43,14 +65,14 @@ public class Main {
         machineName=path.getFileName().toString();
 
         if (args.length>1) {
-            sourcePathDir = args[0];
-            targetPathDir = args[1];
+            machinePathDir = args[0];
+            cdPathDir = args[1];
         }else if (args.length==1){
-            sourcePathDir = pwd;
-            targetPathDir = args[0];
+            machinePathDir = pwd;
+            cdPathDir = args[0];
         }else {
-            sourcePathDir = pwd;
-            targetPathDir = cd+machineName;
+            machinePathDir = pwd;
+            cdPathDir = cd+machineName;
         }
 
     }
