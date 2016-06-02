@@ -15,15 +15,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Main {
-    String sourcePathDir;
-    String targetPathDir;
-    String machineName;
-    String machineType;
+    static String sourcePathDir;
+    static String targetPathDir;
+    static String machineName;
+    static String machineType;
+    static final String XLS="d:\\my_docs\\workDir\\XL's\\20XX0000.xls";
 
 
     public static void main(String[] args){
-        Main mainProgram=new Main();
-        mainProgram.initializePath(args);
+        initializePath(args);
+
         /*
         create ArrayList<String> files in directory (or other list of files)
         analize numbers of files and type files
@@ -35,7 +36,7 @@ public class Main {
             maybe will better combine case3 and case4 together
          */
     }
-    void initializePath(String[] args){
+    static void initializePath(String[] args){
         Path path=Paths.get("").toAbsolutePath();
         String pwd=path.toString();
         String cd="d:\\my_docs\\cdrom\\";
