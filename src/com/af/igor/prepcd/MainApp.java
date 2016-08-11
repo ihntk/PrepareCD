@@ -21,16 +21,55 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainApp {
-    static String machinePathDir;
-    static String cdPathDir;
-    static String machineName;
-    static String machineType;
+    private static MainApp instance;
+    private Machine machine;
     static final String XLS="d:\\my_docs\\workDir\\XL's\\20XX0000.xls";
-    static final String MACHINEXLS=machineName+".xlsx";
+    static final String MACHINES="d:\\my_docs\\plans\\";
+    static final String CDS="d:\\my_docs\\cdrom\\";
 
+    private MainApp() {
+    }
 
+    public static MainApp getInstance() {
+        if (instance==null){
+            instance=new MainApp();
+            return instance;
+        }
+        else return instance;
+    }
+
+    void initializePath(String[] args){
+        /*
+        Use current dir as path to machine
+         */
+        Path path=Paths.get("").toAbsolutePath();
+        String pwd=path.toString();
+        String machineName=path.getFileName().toString();
+
+//        machine=new Machine(machineName);
+
+        /*
+        next code mast be in Machine class and Machine(a,b,c) constructor mast be deleted!
+         */
+        String machinePathDir;
+        String cdPathDir;
+
+        if (args.length>1) {
+            machinePathDir = args[0];
+            cdPathDir = args[1];
+        }else if (args.length==1){
+            machinePathDir = pwd;
+            cdPathDir = args[0];
+        }else {
+            machinePathDir = pwd;
+            cdPathDir = CDS+machineName;
+        }
+
+        machine=new Machine(machineName, machinePathDir, cdPathDir);
+
+    }
     public static void main(String[] args) throws IOException {
-        initializePath(args);
+        getInstance().initializePath(args);
         Desktop desktop=Desktop.getDesktop();
 
         //list of exist files
@@ -66,22 +105,5 @@ public class MainApp {
             maybe will better combine case3 and case4 together
          */
     }
-    static void initializePath(String[] args){
-        Path path=Paths.get("").toAbsolutePath();
-        String pwd=path.toString();
-        String cd="d:\\my_docs\\cdrom\\";
-        machineName=path.getFileName().toString();
 
-        if (args.length>1) {
-            machinePathDir = args[0];
-            cdPathDir = args[1];
-        }else if (args.length==1){
-            machinePathDir = pwd;
-            cdPathDir = args[0];
-        }else {
-            machinePathDir = pwd;
-            cdPathDir = cd+machineName;
-        }
-
-    }
 }
