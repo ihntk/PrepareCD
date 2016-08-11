@@ -20,7 +20,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main {
+public class MainApp {
     static String machinePathDir;
     static String cdPathDir;
     static String machineName;
@@ -31,22 +31,30 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         initializePath(args);
+        Desktop desktop=Desktop.getDesktop();
+
+        //list of exist files
         File machineDirectory=new File(machinePathDir);
         String[]files=machineDirectory.list();
         List<String> xls=new ArrayList<>();
         List<String> pdf=new ArrayList<>();
         List<String> ckd=new ArrayList<>();
-        Desktop desktop=Desktop.getDesktop();
         for (String file:files) {
             if (file.contains(".xls")) xls.add(file);
             if (file.contains(".pdf")) pdf.add(file);
             if (file.contains(".ckd")) ckd.add(file);
         }
+
+        //create machine xls
         if (!xls.contains(MACHINEXLS)) {
             Files.copy(Paths.get(XLS),Paths.get(machinePathDir+"\\"+MACHINEXLS));
             desktop.open(new File(MACHINEXLS));
         }
+
+        //
 //        if (xls.contains(MACHINEXLS))
+
+
         /*
         create ArrayList<String> files in directory (or other list of files)
         analize numbers of files and type files
