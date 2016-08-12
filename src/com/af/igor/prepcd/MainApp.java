@@ -22,29 +22,29 @@ import java.util.List;
 
 public class MainApp {
     private static MainApp instance;
-    private Machine machine;
-    static final String XLS="d:\\my_docs\\workDir\\XL's\\20XX0000.xls";
-    static final String MACHINES="d:\\my_docs\\plans\\";
-    static final String CDS="d:\\my_docs\\cdrom\\";
+    private static Machine machine;         //in future this field will replace static ArrayList<Machine>
+    static final String XLS = "d:\\my_docs\\workDir\\XL's\\20XX0000.xls";
+    static final String MACHINES = "d:\\my_docs\\plans\\";
+    static final String CDS = "d:\\my_docs\\cdrom\\";
+    static Desktop desktop = Desktop.getDesktop();
 
     private MainApp() {
     }
 
     public static MainApp getInstance() {
-        if (instance==null){
-            instance=new MainApp();
+        if (instance == null) {
+            instance = new MainApp();
             return instance;
-        }
-        else return instance;
+        } else return instance;
     }
 
-    void initializePath(String[] args){
+    void initializePath(String[] args) {
         /*
         Use current dir as path to machine
          */
-        Path path=Paths.get("").toAbsolutePath();
-        String pwd=path.toString();
-        String machineName=path.getFileName().toString();
+        Path path = Paths.get("").toAbsolutePath();
+        String pwd = path.toString();
+        String machineName = path.getFileName().toString();
 
 //        machine=new Machine(machineName);
 
@@ -54,41 +54,26 @@ public class MainApp {
         String machinePathDir;
         String cdPathDir;
 
-        if (args.length>1) {
+        if (args.length > 1) {
             machinePathDir = args[0];
             cdPathDir = args[1];
-        }else if (args.length==1){
+        } else if (args.length == 1) {
             machinePathDir = pwd;
             cdPathDir = args[0];
-        }else {
+        } else {
             machinePathDir = pwd;
-            cdPathDir = CDS+machineName;
+            cdPathDir = CDS + machineName;
         }
 
-        machine=new Machine(machineName, machinePathDir, cdPathDir);
+        machine = new Machine(machineName, machinePathDir, cdPathDir);
 
     }
+
     public static void main(String[] args) throws IOException {
         getInstance().initializePath(args);
-        Desktop desktop=Desktop.getDesktop();
-
-        //list of exist files
-        File machineDirectory=new File(machinePathDir);
-        String[]files=machineDirectory.list();
-        List<String> xls=new ArrayList<>();
-        List<String> pdf=new ArrayList<>();
-        List<String> ckd=new ArrayList<>();
-        for (String file:files) {
-            if (file.contains(".xls")) xls.add(file);
-            if (file.contains(".pdf")) pdf.add(file);
-            if (file.contains(".ckd")) ckd.add(file);
-        }
 
         //create machine xls
-        if (!xls.contains(MACHINEXLS)) {
-            Files.copy(Paths.get(XLS),Paths.get(machinePathDir+"\\"+MACHINEXLS));
-            desktop.open(new File(MACHINEXLS));
-        }
+        getInstance().machine.machineDir.getMACHINEXLS();
 
         //
 //        if (xls.contains(MACHINEXLS))

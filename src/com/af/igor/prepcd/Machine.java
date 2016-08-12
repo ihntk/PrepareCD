@@ -15,9 +15,9 @@ public class Machine {
     }
 
     public Machine(String machineName, String machinePathDir, String cdPathDir) {
-        this.machineName=machineName;
-        this.machineDir=new MachineDir(machinePathDir);
-        this.cdDir=new CdDir(cdPathDir);
+        this.machineName = machineName;
+        this.machineDir = new MachineDir(machinePathDir);
+        this.cdDir = new CdDir(cdPathDir);
     }
 
     public Machine() {
