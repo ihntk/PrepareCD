@@ -3,10 +3,8 @@ package com.af.igor.prepcd;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ede on 11.08.2016.
@@ -15,7 +13,7 @@ public class MachineDir extends Machine {
 
     MainApp app= MainApp.getInstance();
     private File machinePathDir;
-    final String MACHINEXLS = getMachineName() + ".xlsx";
+    private String machineXls = getMachineName() + ".xlsx";
     private String luxFile = null;
 
 
@@ -69,12 +67,12 @@ public class MachineDir extends Machine {
         File machineXls = null;
         if (xls.size()<=0){
             copyXls();
-            machineXls=new File(MACHINEXLS);
+            machineXls=new File(this.machineXls);
             app.desktop.open(machineXls);
         }
         else{
             for (File file:xls){
-            if (file.getName().equals(MACHINEXLS)){
+            if (file.getName().equals(this.machineXls)){
                 machineXls=file;
                 break;
             }
@@ -84,7 +82,7 @@ public class MachineDir extends Machine {
     }
 
     private void copyXls() throws IOException {
-        Files.copy(Paths.get(app.XLS), Paths.get(machinePathDir + "\\" + MACHINEXLS));
+        Files.copy(Paths.get(app.XLS), Paths.get(machinePathDir + "\\" + machineXls));
 
         String luxPathString=app.LUX_DIR+"\\"+getMachineSeries().charAt(0)+"\\"+getMachineSeries()+"\\";
         /*
