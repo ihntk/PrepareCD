@@ -12,13 +12,9 @@ else it can rename base .ckd to machine files, alike I...ckd -> I5500-GA1881.ckd
  */
 
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainApp {
     private static MainApp instance;
@@ -74,7 +70,7 @@ public class MainApp {
         getInstance().initializePath(args);
 
         //create machine xls
-        getInstance().machine.machineDir.getMACHINEXLS();
+        getInstance().machine.machineDir.getMachineXls();
 
         //
 //        if (xls.contains(MACHINEXLS))

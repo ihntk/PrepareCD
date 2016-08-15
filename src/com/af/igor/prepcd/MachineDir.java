@@ -59,16 +59,17 @@ public class MachineDir extends Machine {
     }
 
     /*
-    getMACHINEXLS() chec machineXls exist, if no copy and launch it in excel
+    getMachineXls() chec machineXls exist, if no copy and launch it in excel
     also need add line to copy Luxemburd xls and launch it too !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      */
-    public void getMACHINEXLS() throws IOException {
+    public void getMachineXls() throws IOException {
         ArrayList<File>xls=getXlsFiles();
         File machineXls = null;
         if (xls.size()<=0){
             copyXls();
             machineXls=new File(this.machineXls);
             app.desktop.open(machineXls);
+            app.desktop.open(new File(luxFile));
         }
         else{
             for (File file:xls){
