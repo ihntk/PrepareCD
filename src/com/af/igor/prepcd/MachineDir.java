@@ -3,6 +3,7 @@ package com.af.igor.prepcd;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,18 +65,43 @@ public class MachineDir extends Machine {
     public void getMACHINEXLS() throws IOException {
         ArrayList<File>xls=getXlsFiles();
         File machineXls = null;
-        if (xls.size()>0)
-            for (File file:xls){
-                if (file.getName().equals(MACHINEXLS)){
-                    machineXls=file;
-                    break;
-                }
-            }else{
-            Files.copy(Paths.get(app.XLS), Paths.get(machinePathDir + "\\" + MACHINEXLS));
+        if (xls.size()<=0){
+            copyXls();
             machineXls=new File(MACHINEXLS);
             app.desktop.open(machineXls);
         }
+        else{
+            for (File file:xls){
+            if (file.getName().equals(MACHINEXLS)){
+                machineXls=file;
+                break;
+            }
+        }
+        }
 //        return machineXls;
+    }
+
+    private void copyXls() throws IOException {
+        Files.copy(Paths.get(app.XLS), Paths.get(machinePathDir + "\\" + MACHINEXLS));
+
+        String luxPathString=app.LUX_DIR+"\\"+getMachineSeries().charAt(0)+"\\"+getMachineSeries()+"\\";
+        String luxFile = null;
+        /*
+        Searching lux xls file
+         */
+        String[]luxFiles=new File(luxPathString).list();
+        int count=0;
+        for (String lux:luxFiles){
+            if (lux.startsWith(getMachineName())){
+                luxFile=lux;
+                count++;
+            }
+        }
+        if (count>1){
+            app.desktop.open(new File(luxPathString));
+            System.out.println("Attention! There are "+count+" files for machine "+getMachineName());           //in future we can copy both (or many) files to machineDir and show message in window
+        }else Files.copy(Paths.get(luxPathString+luxFile), Paths.get(machinePathDir.toString()));
+
     }
 
 }
