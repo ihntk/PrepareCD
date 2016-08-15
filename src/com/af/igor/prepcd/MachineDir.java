@@ -16,6 +16,8 @@ public class MachineDir extends Machine {
     MainApp app= MainApp.getInstance();
     private File machinePathDir;
     final String MACHINEXLS = getMachineName() + ".xlsx";
+    private String luxFile = null;
+
 
 
     public MachineDir(String machinePathDir) {
@@ -85,7 +87,6 @@ public class MachineDir extends Machine {
         Files.copy(Paths.get(app.XLS), Paths.get(machinePathDir + "\\" + MACHINEXLS));
 
         String luxPathString=app.LUX_DIR+"\\"+getMachineSeries().charAt(0)+"\\"+getMachineSeries()+"\\";
-        String luxFile = null;
         /*
         Searching lux xls file
          */
