@@ -40,21 +40,9 @@ public class MainApp {
         Use current dir as path to machine
          */
         Path path = Paths.get("").toAbsolutePath();
-        String pwd = path.toString();
         String machineName = path.getFileName().toString();
 
-//        machine=new Machine(machineName);
-
-        /*
-        next code mast be in Machine class and Machine(a,b,c) constructor mast be deleted!
-         */
-        String machinePathDir;
-        String cdPathDir;
-        machinePathDir = pwd;
-        cdPathDir = CDS + machineName;
-
-        machine = new Machine(machineName, machinePathDir, cdPathDir);
-
+        machine=new Machine(machineName);
     }
 
     public static void main(String[] args) throws IOException {
@@ -67,12 +55,12 @@ public class MainApp {
 
         for (int i = 0; i < args.length; i++) {
             String flag = args[i];
-            if (flag.equals("-n")) getInstance().initializePath(args[i + 1]);
+            if (flag.equals("-n")) machine=new Machine(args[i+1]);
             if (flag.equals("-x")) getInstance().machine.machineDir.getMachineXls();
             if (flag.equals("-c")) getInstance().machine.cdDir.prepareCd();
         }
 
-        getInstance().initializePath(args);
+        getInstance().initializePath();
 
         //create machine xls
         getInstance().machine.machineDir.getMachineXls();

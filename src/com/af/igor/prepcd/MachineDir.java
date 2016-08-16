@@ -17,7 +17,9 @@ public class MachineDir extends Machine {
     private String luxFile = null;
 
 
-
+    /*
+    need to check the machinePathDir exist, if no create it !!!!!!!!!!!
+     */
     public MachineDir(String machinePathDir) {
         this.machinePathDir = new File(machinePathDir);
     }

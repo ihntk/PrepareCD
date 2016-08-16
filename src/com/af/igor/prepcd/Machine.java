@@ -4,6 +4,7 @@ package com.af.igor.prepcd;
  * Created by ede on 11.08.2016.
  */
 public class Machine {
+    MainApp app= MainApp.getInstance();
     private String machineName;
     private String machineType;
     private String machineSeries;
@@ -14,13 +15,8 @@ public class Machine {
     public Machine(String machineName) {
         this.machineName = machineName;
         machineSeries=machineName.substring(2,4);
-    }
-
-    public Machine(String machineName, String machinePathDir, String cdPathDir) {
-        this.machineName = machineName;
-        this.machineDir = new MachineDir(machinePathDir);
-        this.cdDir = new CdDir(cdPathDir);
-        machineSeries=machineName.substring(2,4);
+        machineDir=new MachineDir(app.MACHINES+machineSeries+machineName);
+        cdDir=new CdDir(app.CDS+machineName);
     }
 
     public Machine() {
