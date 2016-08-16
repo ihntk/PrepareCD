@@ -67,6 +67,20 @@ public class MainApp {
     }
 
     public static void main(String[] args) throws IOException {
+        /*
+        available flags
+        -x xls
+        -n machine name
+        -c cd
+         */
+
+        for (int i = 0; i < args.length; i++) {
+            String flag=args[i];
+            if (flag.equals("-n")) getInstance().initializePath(args[i+1]);
+            if (flag.equals("-x")) getInstance().machine.machineDir.getMachineXls();
+            if (flag.equals("-c"))getInstance().machine.cdDir.prepareCd();
+        }
+
         getInstance().initializePath(args);
 
         //create machine xls
