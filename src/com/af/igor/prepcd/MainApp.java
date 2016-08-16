@@ -22,7 +22,7 @@ public class MainApp {
     static final String XLS = "d:\\my_docs\\workDir\\XL's\\20XX0000.xls";
     static final String MACHINES = "d:\\my_docs\\plans\\";
     static final String CDS = "d:\\my_docs\\cdrom\\";
-    static final String LUX_DIR="";         //need to add luxemburg dir path
+    static final String LUX_DIR = "";         //need to add luxemburg dir path
     static Desktop desktop = Desktop.getDesktop();
 
     private MainApp() {
@@ -35,7 +35,7 @@ public class MainApp {
         } else return instance;
     }
 
-    void initializePath(String[] args) {
+    void initializePath() {
         /*
         Use current dir as path to machine
          */
@@ -50,17 +50,8 @@ public class MainApp {
          */
         String machinePathDir;
         String cdPathDir;
-
-        if (args.length > 1) {
-            machinePathDir = args[0];
-            cdPathDir = args[1];
-        } else if (args.length == 1) {
-            machinePathDir = pwd;
-            cdPathDir = args[0];
-        } else {
-            machinePathDir = pwd;
-            cdPathDir = CDS + machineName;
-        }
+        machinePathDir = pwd;
+        cdPathDir = CDS + machineName;
 
         machine = new Machine(machineName, machinePathDir, cdPathDir);
 
@@ -75,10 +66,10 @@ public class MainApp {
          */
 
         for (int i = 0; i < args.length; i++) {
-            String flag=args[i];
-            if (flag.equals("-n")) getInstance().initializePath(args[i+1]);
+            String flag = args[i];
+            if (flag.equals("-n")) getInstance().initializePath(args[i + 1]);
             if (flag.equals("-x")) getInstance().machine.machineDir.getMachineXls();
-            if (flag.equals("-c"))getInstance().machine.cdDir.prepareCd();
+            if (flag.equals("-c")) getInstance().machine.cdDir.prepareCd();
         }
 
         getInstance().initializePath(args);
