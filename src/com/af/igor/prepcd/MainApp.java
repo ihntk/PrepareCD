@@ -23,6 +23,7 @@ public class MainApp {
     static final String MACHINES = "d:\\my_docs\\plans\\";
     static final String CDS = "d:\\my_docs\\cdrom\\";
     static final String LUX_DIR = "";         //need to add luxemburg dir path
+    static final String CDTEMPLATE="";        //need to add cd template dir path
     static Desktop desktop = Desktop.getDesktop();
 
     private MainApp() {
