@@ -5,10 +5,12 @@ package com.af.igor.prepcd;
  */
 public class CdDir {
     MainApp app=MainApp.getInstance();
+    private final Machine machine;
     String cdPathDir;
 
-    public CdDir(String cdPathDir) {
-        this.cdPathDir = cdPathDir;
+    public CdDir(Machine machine) {
+        this.machine=machine;
+        this.cdPathDir = app.CDS+machine.getMachineName()+"\\";
     }
 
     public void prepareCd() {

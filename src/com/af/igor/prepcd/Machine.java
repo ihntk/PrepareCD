@@ -18,7 +18,7 @@ public class Machine {
         sm=machineName.substring(0,2);
         machineSeries=machineName.substring(2,4);
         machineDir=new MachineDir(this);
-        cdDir=new CdDir(app.CDS+machineName);
+        cdDir=new CdDir(this);
     }
 
     public String getMachineName() {
