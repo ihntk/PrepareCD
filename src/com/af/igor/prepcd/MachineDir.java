@@ -14,6 +14,7 @@ public class MachineDir extends Machine {
     MainApp app= MainApp.getInstance();
     private File machinePathDir;
     private String machineXls = getMachineName() + ".xlsx";
+    private String hMachine=null;
     private String luxFile = null;
 
 
@@ -22,6 +23,11 @@ public class MachineDir extends Machine {
      */
     public MachineDir(String machinePathDir) {
         this.machinePathDir = new File(machinePathDir);
+        if (isMachine()) this.machinePathDir.mkdir();
+    }
+
+    private boolean isMachine(){
+        getLuxFile;         //??????????????????????????????
     }
 
     /*
@@ -104,5 +110,9 @@ public class MachineDir extends Machine {
         }else Files.copy(Paths.get(luxPathString+luxFile), Paths.get(machinePathDir.toString()));
 
     }
+
+    private void getLuxFile(
+//            ??????????????????????????????
+    ){}
 
 }
