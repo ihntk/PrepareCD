@@ -15,7 +15,6 @@ public class MachineDir{
 
     MainApp app= MainApp.getInstance();
     private Machine machine;
-    private final String machinePath;
     private final File machinePathDir;
     private String machineXls = machine.getMachineName() + ".xlsx";
     private String hMachine=null;
@@ -27,7 +26,7 @@ public class MachineDir{
      */
     public MachineDir(Machine machine) {
         this.machine=machine;
-        machinePath=app.MACHINES+machine.getSm()+machine.getMachineSeries()+"\\"+machine.getMachineName();
+        String machinePath=app.MACHINES+machine.getSm()+machine.getMachineSeries()+"\\"+machine.getMachineName()+"\\";
         machinePathDir = new File(machinePath);
 //        if (isMachine()) this.machinePathDir.mkdir();
         System.out.println("===test===\ncreating machineDir: "+machinePathDir.getName());
@@ -81,18 +80,16 @@ public class MachineDir{
      */
     public void getMachineXls() throws IOException {
         ArrayList<File>xls=getXlsFiles();
-        File machineXls = null;
-        if (xls.size()<=0){
+        String machinePath=machinePathDir.toString();
+        if (xls.size()<2){
             copyXls();
-            machineXls=new File(this.machineXls);
-            app.desktop.open(machineXls);
-            app.desktop.open(new File(luxFile));
+            app.desktop.open(new File(machinePath+machineXls));
+            app.desktop.open(new File(machinePath+luxFile));
         }
         else{
             for (File file:xls){
-            if (file.getName().equals(this.machineXls)){
-                machineXls=file;
-                app.desktop.open(machineXls);
+            if (file.getName().equals(machineXls)){
+                app.desktop.open(new File(machinePath+machineXls));
             }
         }
         }
@@ -106,8 +103,9 @@ public class MachineDir{
         /*
         Searching lux xls file
          */
+        luxFile=searchFileName(luxPathString,machine.getMachineName());
 
-        Files.copy(Paths.get(luxPathString+luxFile), Paths.get(machinePathDir.toString()));
+        if (luxFile!=null) Files.copy(Paths.get(luxPathString+luxFile), Paths.get(machinePathDir.toString()));
 
     }
 
@@ -133,8 +131,9 @@ public class MachineDir{
                     count++;
                     if (count==5){
                         System.out.println("something wrong!");
+                        fileName=null;
                         break;
-//                        Thread.currentThread().stop();
+//                        Thread.currentThread().stop();        // тут лежить какашка. Потрібно це зробити акуратніше
                     }
                 }
             }
