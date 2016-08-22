@@ -22,8 +22,8 @@ public class MainApp {
     static final String XLS = "d:\\my_docs\\workDir\\XL's\\20XX0000.xls";
     static final String MACHINES = "d:\\my_docs\\plans\\";
     static final String CDS = "d:\\my_docs\\cdrom\\";
-    static final String LUX_DIR = "";         //need to add luxemburg dir path
-    static final String CDTEMPLATE="";        //need to add cd template dir path
+    static final String LUX_DIR = "k:\\Vente\\1. Customer\\1.3. Commandes\\";
+    static final String CDTEMPLATE="\\\\Serverua\\AF_UA\\1.4.CD\\WEB3_Operator Manual\\";
     static Desktop desktop = Desktop.getDesktop();
 
     private MainApp() {
