@@ -17,7 +17,7 @@ public class Machine {
         this.machineName = machineName;
         sm=machineName.substring(0,2);
         machineSeries=machineName.substring(2,4);
-        machineDir=new MachineDir(app.MACHINES+sm+machineSeries+machineName);
+        machineDir=new MachineDir(app.MACHINES+sm+machineSeries+"\\"+machineName);
         cdDir=new CdDir(app.CDS+machineName);
     }
 
