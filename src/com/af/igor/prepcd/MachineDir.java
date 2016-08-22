@@ -77,11 +77,10 @@ public class MachineDir extends Machine {
             for (File file:xls){
             if (file.getName().equals(this.machineXls)){
                 machineXls=file;
-                break;
+                app.desktop.open(machineXls);
             }
         }
         }
-//        return machineXls;
     }
 
     private void copyXls() throws IOException {
