@@ -42,7 +42,7 @@ public class MainApp {
          */
         if (machineName==null) {
             Path path = Paths.get("").toAbsolutePath();
-            machineName = path.getFileName().toString();
+            machineName = path.getFileName().toString().toUpperCase();
         }
 
         machine=new Machine(machineName);
@@ -80,7 +80,7 @@ public class MainApp {
             String flag = args[i];
             String machineName = null;
             try{
-                if (flag.equals("-n")) machineName=args[i+1];
+                if (flag.equals("-n")) machineName=args[i+1].toUpperCase();
             }catch (ArrayIndexOutOfBoundsException e){
                 System.out.println("\nYou must specify the filename after -n flag");
                 getInstance().help();
