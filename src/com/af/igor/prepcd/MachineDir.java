@@ -27,7 +27,8 @@ public class MachineDir extends Machine {
     }
 
     private boolean isMachine(){
-        getLuxFile;         //??????????????????????????????
+//        getLuxFile;         //??????????????????????????????
+        return true;
     }
 
     /*
@@ -92,7 +93,8 @@ public class MachineDir extends Machine {
     private void copyXls() throws IOException {
         Files.copy(Paths.get(app.XLS), Paths.get(machinePathDir + "\\" + machineXls));
 
-        String luxPathString=app.LUX_DIR+"\\"+getMachineSeries().charAt(0)+"\\"+getMachineSeries()+"\\";
+        String luxPathString=app.LUX_DIR+"\\"+getSm()+getMachineSeries().charAt(0)+"\\";
+                luxPathString=luxPathString+searchFileName(luxPathString,getMachineSeries())+"\\";
         /*
         Searching lux xls file
          */
@@ -104,6 +106,7 @@ public class MachineDir extends Machine {
                 count++;
             }
         }
+        System.out.println(luxFile);
         if (count>1){
             app.desktop.open(new File(luxPathString));
             System.out.println("Attention! There are "+count+" files for machine "+getMachineName());           //in future we can copy both (or many) files to machineDir and show message in window
@@ -111,8 +114,15 @@ public class MachineDir extends Machine {
 
     }
 
-    private void getLuxFile(
-//            ??????????????????????????????
-    ){}
+    private void getLuxFile()
+    {//            ??????????????????????????????
+    }
+
+    private String searchFileName(String path,String pattern){
+        String fileName = null;
+        String[]files=new File(path).list();
+        for (String file:files)if (file.startsWith(pattern))fileName=file;
+        return fileName;
+    }
 
 }
