@@ -93,7 +93,7 @@ public class MachineDir extends Machine {
     private void copyXls() throws IOException {
         Files.copy(Paths.get(app.XLS), Paths.get(machinePathDir + "\\" + machineXls));
 
-        String luxPathString=app.LUX_DIR+"\\"+getSm()+getMachineSeries().charAt(0)+"\\";
+        String luxPathString=app.LUX_DIR+"\\"+getSm()+" "+getMachineSeries().substring(0,1)+"\\";
                 luxPathString=luxPathString+searchFileName(luxPathString,getMachineSeries())+"\\";
         /*
         Searching lux xls file
