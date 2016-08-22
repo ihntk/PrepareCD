@@ -21,9 +21,6 @@ public class Machine {
         cdDir=new CdDir(app.CDS+machineName);
     }
 
-    public Machine() {
-    }
-
     public String getMachineName() {
         return machineName;
     }
