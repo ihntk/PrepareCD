@@ -7,6 +7,7 @@ public class Machine {
     MainApp app= MainApp.getInstance();
     private String machineName;
     private String machineType;
+    private String sm;
     private String machineSeries;
 
     MachineDir machineDir;
@@ -14,8 +15,9 @@ public class Machine {
 
     public Machine(String machineName) {
         this.machineName = machineName;
+        sm=machineName.substring(0,2);
         machineSeries=machineName.substring(2,4);
-        machineDir=new MachineDir(app.MACHINES+"20"+machineSeries+machineName);
+        machineDir=new MachineDir(app.MACHINES+sm+machineSeries+machineName);
         cdDir=new CdDir(app.CDS+machineName);
     }
 
