@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Created by ede on 11.08.2016.
  */
-public class MachineDir extends Machine {
+public class MachineDir{
 
     MainApp app= MainApp.getInstance();
     private File machinePathDir;

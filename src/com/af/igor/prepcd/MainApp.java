@@ -37,6 +37,10 @@ public class MainApp {
         } else return instance;
     }
 
+    public static Machine getMachine() {
+        return machine;
+    }
+
     void initializePath(String machineName) {
         /*
         Use current dir as path to machine
