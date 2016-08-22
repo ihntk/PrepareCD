@@ -87,6 +87,7 @@ public class MainApp {
                 getInstance().help();
                 return;
             }
+            System.out.println("===test===\ncreating machine: "+machineName);
             getInstance().initializePath(machineName);
         }
 
