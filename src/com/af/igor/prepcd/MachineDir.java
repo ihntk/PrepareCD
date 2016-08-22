@@ -23,12 +23,14 @@ public class MachineDir extends Machine {
      */
     public MachineDir(String machinePathDir) {
         this.machinePathDir = new File(machinePathDir);
-        if (isMachine()) this.machinePathDir.mkdir();
+//        if (isMachine()) this.machinePathDir.mkdir();
+        System.out.println("===test===\ncreating machineDir: "+this.machinePathDir.getName());
+        this.machinePathDir.mkdir();
     }
 
     private boolean isMachine(){
 //        getLuxFile;         //??????????????????????????????
-        return true;
+        return false;
     }
 
     /*
