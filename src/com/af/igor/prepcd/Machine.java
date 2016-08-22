@@ -31,4 +31,8 @@ public class Machine {
     public String getMachineSeries() {
         return machineSeries;
     }
+
+    public String getSm() {
+        return sm;
+    }
 }
