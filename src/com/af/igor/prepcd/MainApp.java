@@ -36,14 +36,24 @@ public class MainApp {
         } else return instance;
     }
 
-    void initializePath() {
+    void initializePath(String machineName) {
         /*
         Use current dir as path to machine
          */
-        Path path = Paths.get("").toAbsolutePath();
-        String machineName = path.getFileName().toString();
+        if (machineName==null) {
+            Path path = Paths.get("").toAbsolutePath();
+            machineName = path.getFileName().toString();
+        }
 
         machine=new Machine(machineName);
+    }
+
+    private void help() {
+        System.out.println("_________________\n" +
+                "Available parameters:\n" +
+                "-n [machine name]    Name of machine\n" +
+                "-x xls               Create xls\n" +
+                "-c                   Prepare cd");
     }
 
     public static void main(String[] args) throws IOException {
@@ -52,23 +62,49 @@ public class MainApp {
         -x xls
         -n machine name
         -c cd
+
+        parsing args
+        first of all we need to find -n flag and if it exist create machine instance with machine name as machine directory
+        else we use current directory as machine dir
+
+        use - marker control program:
+        0 - do nothing
+        1 - xls
+        2 - cd
+        3 - xls+cd
          */
+
+        byte use=0;
 
         for (int i = 0; i < args.length; i++) {
             String flag = args[i];
-            if (flag.equals("-n")) machine=new Machine(args[i+1]);
-            if (flag.equals("-x")) getInstance().machine.machineDir.getMachineXls();
-            if (flag.equals("-c")) getInstance().machine.cdDir.prepareCd();
+            String machineName = null;
+            try{
+                if (flag.equals("-n")) machineName=args[i+1];
+            }catch (ArrayIndexOutOfBoundsException e){
+                System.out.println("\nYou must specify the filename after -n flag");
+                getInstance().help();
+                return;
+            }
+            getInstance().initializePath(machineName);
         }
 
-        getInstance().initializePath();
+        for (int i = 0; i < args.length; i++) {
+            String flag = args[i];
+            if (flag.equals("-x")) use++;
+            if (flag.equals("-c")) use++;
+        }
 
-        //create machine xls
-        getInstance().machine.machineDir.getMachineXls();
-
-        //
-//        if (xls.contains(MACHINEXLS))
-
+        if (use==0){
+            System.out.println("\nYou must specify target. Application wont to know what to do");
+            getInstance().help();
+        }
+        if (use==1)getInstance().machine.machineDir.getMachineXls();
+        if (use==2)getInstance().machine.cdDir.prepareCd();
+        if (use==3){
+            getInstance().machine.machineDir.getMachineXls();
+            getInstance().machine.cdDir.prepareCd();
+        }
 
         /*
         create ArrayList<String> files in directory (or other list of files)
