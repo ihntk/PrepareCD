@@ -21,6 +21,7 @@ public class MainApp {
     private static Machine machine;         //in future this field will replace static ArrayList<Machine>
     static final String XLS = "d:\\my_docs\\workDir\\XL's\\20XX0000.xls";
     static final String MACHINES = "d:\\my_docs\\plans\\";
+    static final String H_MACHINES = "h:\\DATAGEN\\Bt\\1.Client\\1.1.Machines\\";
     static final String CDS = "d:\\my_docs\\cdrom\\";
     static final String LUX_DIR = "k:\\Vente\\1. Customer\\1.3. Commandes\\";
     static final String CDTEMPLATE="\\\\Serverua\\AF_UA\\1.4.CD\\WEB3_Operator Manual\\";
