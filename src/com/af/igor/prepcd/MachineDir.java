@@ -1,7 +1,9 @@
 package com.af.igor.prepcd;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -12,8 +14,10 @@ import java.util.ArrayList;
 public class MachineDir{
 
     MainApp app= MainApp.getInstance();
-    private File machinePathDir;
-    private String machineXls = getMachineName() + ".xlsx";
+    private Machine machine;
+    private final String machinePath;
+    private final File machinePathDir;
+    private String machineXls = machine.getMachineName() + ".xlsx";
     private String hMachine=null;
     private String luxFile = null;
 
@@ -21,11 +25,13 @@ public class MachineDir{
     /*
     need to check the machinePathDir exist, if no create it !!!!!!!!!!!
      */
-    public MachineDir(String machinePathDir) {
-        this.machinePathDir = new File(machinePathDir);
+    public MachineDir(Machine machine) {
+        this.machine=machine;
+        machinePath=app.MACHINES+machine.getSm()+machine.getMachineSeries()+"\\"+machine.getMachineName();
+        machinePathDir = new File(machinePath);
 //        if (isMachine()) this.machinePathDir.mkdir();
-        System.out.println("===test===\ncreating machineDir: "+this.machinePathDir.getName());
-        this.machinePathDir.mkdir();
+        System.out.println("===test===\ncreating machineDir: "+machinePathDir.getName());
+        machinePathDir.mkdir();
     }
 
     private boolean isMachine(){
@@ -95,24 +101,13 @@ public class MachineDir{
     private void copyXls() throws IOException {
         Files.copy(Paths.get(app.XLS), Paths.get(machinePathDir + "\\" + machineXls));
 
-        String luxPathString=app.LUX_DIR+"\\"+getSm()+" "+getMachineSeries().substring(0,1)+"\\";
-                luxPathString=luxPathString+searchFileName(luxPathString,getMachineSeries())+"\\";
+        String luxPathString=app.LUX_DIR+"\\"+machine.getSm()+" "+machine.getMachineSeries().substring(0,1)+"\\";
+                luxPathString=luxPathString+searchFileName(luxPathString,machine.getMachineSeries())+"\\";
         /*
         Searching lux xls file
          */
-        String[]luxFiles=new File(luxPathString).list();
-        int count=0;
-        for (String lux:luxFiles){
-            if (lux.startsWith(getMachineName())){
-                luxFile=lux;
-                count++;
-            }
-        }
-        System.out.println(luxFile);
-        if (count>1){
-            app.desktop.open(new File(luxPathString));
-            System.out.println("Attention! There are "+count+" files for machine "+getMachineName());           //in future we can copy both (or many) files to machineDir and show message in window
-        }else Files.copy(Paths.get(luxPathString+luxFile), Paths.get(machinePathDir.toString()));
+
+        Files.copy(Paths.get(luxPathString+luxFile), Paths.get(machinePathDir.toString()));
 
     }
 
@@ -120,11 +115,31 @@ public class MachineDir{
     {//            ??????????????????????????????
     }
 
-    private String searchFileName(String path,String pattern){
+    private String searchFileName(String path,String pattern) throws IOException {
         String fileName = null;
+        int count=0;
         String[]files=new File(path).list();
-        for (String file:files)if (file.startsWith(pattern))fileName=file;
-        return fileName;
+        for (String file:files){
+            if (file.startsWith(pattern))fileName=file;
+            count++;
+        }
+        if (count>1){
+            app.desktop.open(new File(path));
+            System.out.println("Attention! There are "+count+" files for machine "+machine.getMachineName()+
+            "\ncopy it manually from currently opened directory\n" +
+                    "Already done? (yes/no)");           //in future we can copy both (or many) files to machineDir and show message in window
+            try(BufferedReader reader=new BufferedReader(new InputStreamReader(System.in))){
+                while (reader.readLine().equals("yes")){
+                    count++;
+                    if (count==5){
+                        System.out.println("something wrong!");
+                        break;
+//                        Thread.currentThread().stop();
+                    }
+                }
+            }
+        }
+            return fileName;
     }
 
 }
