@@ -101,7 +101,6 @@ public class MainApp {
             }
         }
 
-        System.out.println("===test===\ncreating machine: "+machineName);
         getInstance().initializePath(machineName);
 
         /*

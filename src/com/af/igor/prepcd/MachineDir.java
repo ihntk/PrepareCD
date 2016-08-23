@@ -30,7 +30,6 @@ public class MachineDir{
         machinePathDir = new File(machinePath);
         machineXls = machine.getMachineName() + ".xlsx";
 //        if (isMachine()) this.machinePathDir.mkdir();
-        System.out.println("===test===\ncreating machineDir: "+machinePathDir.getName());
         machinePathDir.mkdir();
     }
 
