@@ -8,6 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 /**
  * Created by ede on 11.08.2016.
  */
@@ -109,7 +111,7 @@ public class MachineDir{
          */
         luxFile=searchFileName(luxPathString,machine.getMachineName());
 
-        if (luxFile!=null) Files.copy(Paths.get(luxPathString+luxFile), Paths.get(machinePathDir+"\\"+luxFile));
+        if (luxFile!=null) Files.copy(Paths.get(luxPathString+luxFile), Paths.get(machinePathDir+"\\"+luxFile),REPLACE_EXISTING);
 
     }
 
