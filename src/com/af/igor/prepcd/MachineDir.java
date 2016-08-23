@@ -80,7 +80,7 @@ public class MachineDir{
      */
     public void getMachineXls() throws IOException {
         ArrayList<File>xls=getXlsFiles();
-        String machinePath=machinePathDir.toString();
+        String machinePath=machinePathDir.toString()+"\\";
         if (xls.size()<2){
             copyXls();
             app.desktop.open(new File(machinePath+machineXls));
@@ -102,19 +102,19 @@ public class MachineDir{
     }
 
     private void copyLuxFile() throws IOException {
-        String luxPathString=app.LUX_DIR+"\\"+machine.getSm()+" "+machine.getMachineSeries().substring(0,1)+"\\";
-        luxPathString=luxPathString+searchFileName(luxPathString,machine.getMachineSeries())+"\\";
+        String luxPathString=app.LUX_DIR+machine.getSm()+" "+machine.getMachineSeries().substring(0,1)+"\\";
+        luxPathString=luxPathString+searchFileName(luxPathString,machine.getSm()+machine.getMachineSeries())+"\\";
         /*
         Searching lux xls file
          */
         luxFile=searchFileName(luxPathString,machine.getMachineName());
 
-        if (luxFile!=null) Files.copy(Paths.get(luxPathString+luxFile), Paths.get(machinePathDir.toString()));
+        if (luxFile!=null) Files.copy(Paths.get(luxPathString+luxFile), Paths.get(machinePathDir+"\\"+luxFile));
 
     }
 
     public void getLuxFile() throws IOException {
-        String machinePath=machinePathDir.toString();
+        String machinePath=machinePathDir.toString()+"\\";
         copyLuxFile();
         app.desktop.open(new File(machinePath+luxFile));
     }
@@ -124,8 +124,8 @@ public class MachineDir{
         int count=0;
         String[]files=new File(path).list();
         for (String file:files){
-            if (file.startsWith(pattern))fileName=file;
-            count++;
+            if (file.startsWith(pattern)){fileName=file;
+            count++;}
         }
         if (count>1){
             app.desktop.open(new File(path));
