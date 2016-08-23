@@ -127,6 +127,7 @@ public class MainApp {
             getInstance().machine.machineDir.getMachineXls();
             getInstance().machine.cdDir.prepareCd();
         }
+        if (use==4)getInstance().machine.machineDir.getLuxFile();
 
         /*
         create ArrayList<String> files in directory (or other list of files)
