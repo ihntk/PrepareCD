@@ -81,6 +81,10 @@ public class MainApp {
 
         byte use=0;
         String machineName = null;
+
+        /*
+        identify machine name
+         */
         for (int i = 0; i < args.length; i++) {
             String flag = args[i];
             machineName = null;
@@ -100,6 +104,9 @@ public class MainApp {
         System.out.println("===test===\ncreating machine: "+machineName);
         getInstance().initializePath(machineName);
 
+        /*
+        identify target
+         */
         for (int i = 0; i < args.length; i++) {
             String flag = args[i];
             if (flag.equals("-x")) use++;
