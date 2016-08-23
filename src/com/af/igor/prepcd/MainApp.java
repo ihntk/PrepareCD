@@ -80,20 +80,25 @@ public class MainApp {
          */
 
         byte use=0;
-
+        String machineName = null;
         for (int i = 0; i < args.length; i++) {
             String flag = args[i];
-            String machineName = null;
+            machineName = null;
             try{
-                if (flag.equals("-n")) machineName=args[i+1].toUpperCase();
+                if (flag.equals("-n")){
+                    machineName=args[i+1].toUpperCase();
+                    if (machineName.startsWith("-"))throw new ArrayIndexOutOfBoundsException();
+                    break;
+                }
             }catch (ArrayIndexOutOfBoundsException e){
                 System.out.println("\nYou must specify the filename after -n flag");
                 getInstance().help();
                 return;
             }
-            System.out.println("===test===\ncreating machine: "+machineName);
-            getInstance().initializePath(machineName);
         }
+
+        System.out.println("===test===\ncreating machine: "+machineName);
+        getInstance().initializePath(machineName);
 
         for (int i = 0; i < args.length; i++) {
             String flag = args[i];
