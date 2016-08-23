@@ -16,7 +16,7 @@ public class MachineDir{
     MainApp app= MainApp.getInstance();
     private Machine machine;
     private final File machinePathDir;
-    private String machineXls = machine.getMachineName() + ".xlsx";
+    private final String machineXls;
     private String hMachine=null;
     private String luxFile = null;
 
@@ -28,6 +28,7 @@ public class MachineDir{
         this.machine=machine;
         String machinePath=app.MACHINES+machine.getSm()+machine.getMachineSeries()+"\\"+machine.getMachineName()+"\\";
         machinePathDir = new File(machinePath);
+        machineXls = machine.getMachineName() + ".xlsx";
 //        if (isMachine()) this.machinePathDir.mkdir();
         System.out.println("===test===\ncreating machineDir: "+machinePathDir.getName());
         machinePathDir.mkdir();
