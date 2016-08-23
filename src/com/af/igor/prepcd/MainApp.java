@@ -67,16 +67,11 @@ public class MainApp {
         -x xls
         -n machine name
         -c cd
+        -i installation
 
         parsing args
         first of all we need to find -n flag and if it exist create machine instance with machine name as machine directory
         else we use current directory as machine dir
-
-        use - marker control program:
-        0 - do nothing
-        1 - xls
-        2 - cd
-        3 - xls+cd
          */
 
         byte use=0;
@@ -108,10 +103,20 @@ public class MainApp {
          */
         for (int i = 0; i < args.length; i++) {
             String flag = args[i];
-            if (flag.equals("-x")) use++;
-            if (flag.equals("-c")) use++;
+            if (flag.equals("-x")) use= (byte) (use|1);
+            if (flag.equals("-c")) use=(byte)(use|2);
+            if (flag.equals("-i")) use=(byte)(use|4);
         }
 
+
+        /*
+        use - marker control program:
+        0 - do nothing
+        1 - xls
+        2 - cd
+        3 - xls+cd
+        4 - installation
+         */
         if (use==0){
             System.out.println("\nYou must specify target. Application wont to know what to do");
             getInstance().help();
