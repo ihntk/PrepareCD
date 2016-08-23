@@ -13,13 +13,13 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 /**
  * Created by ede on 11.08.2016.
  */
-public class MachineDir{
+public class MachineDir {
 
-    MainApp app= MainApp.getInstance();
+    MainApp app = MainApp.getInstance();
     private Machine machine;
     private final File machinePathDir;
     private final String machineXls;
-    private String hMachine=null;
+    private String hMachine = null;
     private String luxFile = null;
 
 
@@ -27,15 +27,15 @@ public class MachineDir{
     need to check the machinePathDir exist, if no create it !!!!!!!!!!!
      */
     public MachineDir(Machine machine) {
-        this.machine=machine;
-        String machinePath=app.MACHINES+machine.getSm()+machine.getMachineSeries()+"\\"+machine.getMachineName()+"\\";
+        this.machine = machine;
+        String machinePath = app.MACHINES + machine.getSm() + machine.getMachineSeries() + "\\" + machine.getMachineName() + "\\";
         machinePathDir = new File(machinePath);
         machineXls = machine.getMachineName() + ".xlsx";
 //        if (isMachine()) this.machinePathDir.mkdir();
         machinePathDir.mkdir();
     }
 
-    private boolean isMachine(){
+    private boolean isMachine() {
 //        getLuxFile;         //??????????????????????????????
         return false;
     }
@@ -81,14 +81,13 @@ public class MachineDir{
     also copy Luxemburd xls and launch it too
      */
     public void getMachineXls() throws IOException {
-        String machinePath=machinePathDir.toString()+"\\";
-        if (!new File(machinePath + machineXls).exists()){
+        String machinePath = machinePathDir.toString() + "\\";
+        if (!new File(machinePath + machineXls).exists()) {
             copyXls();
-            app.desktop.open(new File(machinePath+machineXls));
-            app.desktop.open(new File(machinePath+luxFile));
-        }
-        else{
-            app.desktop.open(new File(machinePath+machineXls));
+            app.desktop.open(new File(machinePath + machineXls));
+            app.desktop.open(new File(machinePath + luxFile));
+        } else {
+            app.desktop.open(new File(machinePath + machineXls));
         }
     }
 
@@ -99,49 +98,52 @@ public class MachineDir{
     }
 
     private void copyLuxFile() throws IOException {
-        String luxPathString=app.LUX_DIR+machine.getSm()+" "+machine.getMachineSeries().substring(0,1)+"\\";
-        luxPathString=luxPathString+searchFileName(luxPathString,machine.getSm()+machine.getMachineSeries())+"\\";
+        String luxPathString = app.LUX_DIR + machine.getSm() + " " + machine.getMachineSeries().substring(0, 1) + "\\";
+        luxPathString = luxPathString + searchFileName(luxPathString, machine.getSm() + machine.getMachineSeries()) + "\\";
         /*
         Searching lux xls file
          */
-        luxFile=searchFileName(luxPathString,machine.getMachineName());
+        luxFile = searchFileName(luxPathString, machine.getMachineName());
 
-        if (luxFile!=null) Files.copy(Paths.get(luxPathString+luxFile), Paths.get(machinePathDir+"\\"+luxFile),REPLACE_EXISTING);
+        if (luxFile != null)
+            Files.copy(Paths.get(luxPathString + luxFile), Paths.get(machinePathDir + "\\" + luxFile), REPLACE_EXISTING);
 
     }
 
     public void getLuxFile() throws IOException {
-        String machinePath=machinePathDir.toString()+"\\";
+        String machinePath = machinePathDir.toString() + "\\";
         copyLuxFile();
-        app.desktop.open(new File(machinePath+luxFile));
+        app.desktop.open(new File(machinePath + luxFile));
     }
 
-    private String searchFileName(String path,String pattern) throws IOException {
+    private String searchFileName(String path, String pattern) throws IOException {
         String fileName = null;
-        int count=0;
-        String[]files=new File(path).list();
-        for (String file:files){
-            if (file.startsWith(pattern)){fileName=file;
-            count++;}
+        int count = 0;
+        String[] files = new File(path).list();
+        for (String file : files) {
+            if (file.startsWith(pattern)) {
+                fileName = file;
+                count++;
+            }
         }
-        if (count>1){
+        if (count > 1) {
             app.desktop.open(new File(path));
-            System.out.println("Attention! There are "+count+" files for machine "+machine.getMachineName()+
-            "\ncopy it manually from currently opened directory\n" +
+            System.out.println("Attention! There are " + count + " files for machine " + machine.getMachineName() +
+                    "\ncopy it manually from currently opened directory\n" +
                     "Already done? (yes/no)");           //in future we can copy both (or many) files to machineDir and show message in window
-            try(BufferedReader reader=new BufferedReader(new InputStreamReader(System.in))){
-                while (reader.readLine().equals("yes")){
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+                while (reader.readLine().equals("yes")) {
                     count++;
-                    if (count==5){
+                    if (count == 5) {
                         System.out.println("something wrong!");
-                        fileName=null;
+                        fileName = null;
                         break;
 //                        Thread.currentThread().stop();        // тут лежить какашка. Потрібно це зробити акуратніше
                     }
                 }
             }
         }
-            return fileName;
+        return fileName;
     }
 
 }

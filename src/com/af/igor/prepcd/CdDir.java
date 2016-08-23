@@ -4,13 +4,13 @@ package com.af.igor.prepcd;
  * Created by ede on 11.08.2016.
  */
 public class CdDir {
-    MainApp app=MainApp.getInstance();
+    MainApp app = MainApp.getInstance();
     private final Machine machine;
     String cdPathDir;
 
     public CdDir(Machine machine) {
-        this.machine=machine;
-        this.cdPathDir = app.CDS+machine.getMachineName()+"\\";
+        this.machine = machine;
+        this.cdPathDir = app.CDS + machine.getMachineName() + "\\";
     }
 
     public void prepareCd() {

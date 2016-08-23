@@ -24,7 +24,7 @@ public class MainApp {
     static final String H_MACHINES = "h:\\DATAGEN\\Bt\\1.Client\\1.1.Machines\\";
     static final String CDS = "d:\\my_docs\\cdrom\\";
     static final String LUX_DIR = "k:\\Vente\\1. Customer\\1.3. Commandes\\";
-    static final String CDTEMPLATE="\\\\Serverua\\AF_UA\\1.4.CD\\WEB3_Operator Manual\\";
+    static final String CDTEMPLATE = "\\\\Serverua\\AF_UA\\1.4.CD\\WEB3_Operator Manual\\";
     static Desktop desktop = Desktop.getDesktop();
 
     private MainApp() {
@@ -45,12 +45,12 @@ public class MainApp {
         /*
         Use current dir as path to machine
          */
-        if (machineName==null) {
+        if (machineName == null) {
             Path path = Paths.get("").toAbsolutePath();
             machineName = path.getFileName().toString().toUpperCase();
         }
 
-        machine=new Machine(machineName);
+        machine = new Machine(machineName);
     }
 
     private void help() {
@@ -74,7 +74,7 @@ public class MainApp {
         else we use current directory as machine dir
          */
 
-        byte use=0;
+        byte use = 0;
         String machineName = null;
 
         /*
@@ -83,13 +83,13 @@ public class MainApp {
         for (int i = 0; i < args.length; i++) {
             String flag = args[i];
             machineName = null;
-            try{
-                if (flag.equals("-n")){
-                    machineName=args[i+1].toUpperCase();
-                    if (machineName.startsWith("-"))throw new ArrayIndexOutOfBoundsException();
+            try {
+                if (flag.equals("-n")) {
+                    machineName = args[i + 1].toUpperCase();
+                    if (machineName.startsWith("-")) throw new ArrayIndexOutOfBoundsException();
                     break;
                 }
-            }catch (ArrayIndexOutOfBoundsException e){
+            } catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println("\nYou must specify the filename after -n flag");
                 getInstance().help();
                 return;
@@ -103,9 +103,9 @@ public class MainApp {
          */
         for (int i = 0; i < args.length; i++) {
             String flag = args[i];
-            if (flag.equals("-x")) use= (byte) (use|1);
-            if (flag.equals("-c")) use=(byte)(use|2);
-            if (flag.equals("-i")) use=(byte)(use|4);
+            if (flag.equals("-x")) use = (byte) (use | 1);
+            if (flag.equals("-c")) use = (byte) (use | 2);
+            if (flag.equals("-i")) use = (byte) (use | 4);
         }
 
 
@@ -117,17 +117,17 @@ public class MainApp {
         3 - xls+cd
         4 - installation
          */
-        if (use==0){
+        if (use == 0) {
             System.out.println("\nYou must specify target. Application wont to know what to do");
             getInstance().help();
         }
-        if (use==1)getInstance().machine.machineDir.getMachineXls();
-        if (use==2)getInstance().machine.cdDir.prepareCd();
-        if (use==3){
+        if (use == 1) getInstance().machine.machineDir.getMachineXls();
+        if (use == 2) getInstance().machine.cdDir.prepareCd();
+        if (use == 3) {
             getInstance().machine.machineDir.getMachineXls();
             getInstance().machine.cdDir.prepareCd();
         }
-        if (use==4)getInstance().machine.machineDir.getLuxFile();
+        if (use == 4) getInstance().machine.machineDir.getLuxFile();
 
         /*
         create ArrayList<String> files in directory (or other list of files)
