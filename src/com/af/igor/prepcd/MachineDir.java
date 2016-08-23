@@ -98,8 +98,12 @@ public class MachineDir{
     private void copyXls() throws IOException {
         Files.copy(Paths.get(app.XLS), Paths.get(machinePathDir + "\\" + machineXls));
 
+        copyLuxFile();
+    }
+
+    private void copyLuxFile() throws IOException {
         String luxPathString=app.LUX_DIR+"\\"+machine.getSm()+" "+machine.getMachineSeries().substring(0,1)+"\\";
-                luxPathString=luxPathString+searchFileName(luxPathString,machine.getMachineSeries())+"\\";
+        luxPathString=luxPathString+searchFileName(luxPathString,machine.getMachineSeries())+"\\";
         /*
         Searching lux xls file
          */
@@ -109,8 +113,10 @@ public class MachineDir{
 
     }
 
-    private void getLuxFile()
-    {//            ??????????????????????????????
+    public void getLuxFile() throws IOException {
+        String machinePath=machinePathDir.toString();
+        copyLuxFile();
+        app.desktop.open(new File(machinePath+luxFile));
     }
 
     private String searchFileName(String path,String pattern) throws IOException {
