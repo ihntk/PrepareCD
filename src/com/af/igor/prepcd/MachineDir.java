@@ -78,22 +78,17 @@ public class MachineDir{
 
     /*
     getMachineXls() chec machineXls exist, if no copy and launch it in excel
-    also need add line to copy Luxemburd xls and launch it too !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    also copy Luxemburd xls and launch it too
      */
     public void getMachineXls() throws IOException {
-        ArrayList<File>xls=getXlsFiles();
         String machinePath=machinePathDir.toString()+"\\";
-        if (xls.size()<2){
+        if (!new File(machinePath + machineXls).exists()){
             copyXls();
             app.desktop.open(new File(machinePath+machineXls));
             app.desktop.open(new File(machinePath+luxFile));
         }
         else{
-            for (File file:xls){
-            if (file.getName().equals(machineXls)){
-                app.desktop.open(new File(machinePath+machineXls));
-            }
-        }
+            app.desktop.open(new File(machinePath+machineXls));
         }
     }
 
