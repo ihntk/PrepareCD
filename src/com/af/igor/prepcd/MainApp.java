@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 
 public class MainApp {
     private static MainApp instance;
+    private static String version = "0.1.2";
     private static Machine machine;         //in future this field will replace static ArrayList<Machine>
     static final String XLS = "d:\\my_docs\\workDir\\XL's\\20XX0000.xlsx";
     static final String MACHINES = "d:\\my_docs\\plans\\";
@@ -66,6 +67,10 @@ public class MainApp {
                 "-c                   Prepare cd");
     }
 
+    public static String getVersion() {
+        return "PrepareCD version " + version;
+    }
+
     public static void main(String[] args) throws IOException {
         /*
         available flags
@@ -73,6 +78,7 @@ public class MainApp {
         -n machine name
         -c cd
         -i installation
+        -v version
 
         parsing args
         first of all we need to find -n flag and if it exist create machine instance with machine name as machine directory
@@ -81,6 +87,17 @@ public class MainApp {
 
         byte use = 0;
         String machineName = null;
+
+        /*
+        program version
+         */
+        for (int i = 0; i < args.length; i++) {
+            String flag = args[i];
+            if (flag.equals("-v")) {
+                System.out.println(getVersion());
+                return;
+            }
+        }
 
         /*
         identify machine name
