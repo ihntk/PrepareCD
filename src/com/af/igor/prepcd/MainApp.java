@@ -47,6 +47,11 @@ public class MainApp {
          */
         if (machineName == null) {
             Path path = Paths.get("").toAbsolutePath();
+            if (!path.toString().startsWith(MACHINES)) {
+                System.out.println("\nYou are not in \"plans\" directory");
+                getInstance().help();
+                return;
+            }
             machineName = path.getFileName().toString().toUpperCase();
         }
 
@@ -97,6 +102,7 @@ public class MainApp {
         }
 
         getInstance().initializePath(machineName);
+        if (machine == null) return;
 
         /*
         identify target
