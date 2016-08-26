@@ -90,15 +90,13 @@ public class MachineDir {
     }
 
     private void copyLuxFile() throws IOException {
-        String luxPathString = app.LUX_DIR + machine.getSm() + " " + machine.getMachineSeries().substring(0, 1) + "\\";
-        luxPathString = luxPathString + searchFileName(luxPathString, machine.getSm() + machine.getMachineSeries()) + "\\";
         /*
         Searching lux xls file
          */
-        luxFile = searchFileName(luxPathString, machine.getMachineName());
+        luxFile = searchFileName(machine.getLuxPathString(), machine.getMachineName());
 
         if (luxFile != null)
-            Files.copy(Paths.get(luxPathString + luxFile), Paths.get(machinePath + luxFile), REPLACE_EXISTING);
+            Files.copy(Paths.get(machine.getLuxPathString()+ luxFile), Paths.get(machinePath + luxFile), REPLACE_EXISTING);
 
     }
 

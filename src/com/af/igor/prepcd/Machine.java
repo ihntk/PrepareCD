@@ -7,10 +7,11 @@ import java.io.IOException;
  */
 public class Machine {
     MainApp app = MainApp.getInstance();
-    private String machineName;
+    private final String machineName;
     private String machineType;
-    private String sm;
-    private String machineSeries;
+    private final String sm;
+    private final String machineSeries;
+    private final String luxPathString;
 
     MachineDir machineDir;
     CdDir cdDir;
@@ -19,6 +20,9 @@ public class Machine {
         this.machineName = machineName;
         sm = machineName.substring(0, 2);
         machineSeries = machineName.substring(2, 4);
+        String luxPath = app.LUX_DIR + getSm() + " " + getMachineSeries().substring(0, 1) + "\\";
+        luxPathString = luxPath + searchFileName(luxPath, getSm() + getMachineSeries()) + "\\";
+
         machineDir = new MachineDir(this);
         cdDir = new CdDir(this);
     }
@@ -41,6 +45,13 @@ public class Machine {
         return sm;
     }
 
+    public String getLuxPathString() {
+        return luxPathString;
+    }
+
+    /*
+        plugs!!!!!!!!!!!!!!!!
+         */
     public void getMachineXls() throws IOException {
         machineDir.getMachineXls();
     }
