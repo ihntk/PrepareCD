@@ -1,5 +1,7 @@
 package com.af.igor.prepcd;
 
+import java.io.IOException;
+
 /**
  * Created by ede on 11.08.2016.
  */
@@ -31,5 +33,17 @@ public class Machine {
 
     public String getSm() {
         return sm;
+    }
+
+    public void getMachineXls() throws IOException {
+        machineDir.getMachineXls();
+    }
+
+    public void prepareCd() {
+        cdDir.prepareCd();
+    }
+
+    public void getLuxFile() throws IOException {
+        machineDir.getLuxFile();
     }
 }

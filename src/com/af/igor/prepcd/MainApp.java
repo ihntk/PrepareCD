@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 
 public class MainApp {
     private static MainApp instance;
-    private static String version = "0.1.2";
+    private static String version = "0.1.2.1";
     private static Machine machine;         //in future this field will replace static ArrayList<Machine>
     static final String XLS = "d:\\my_docs\\workDir\\XL's\\20XX0000.xlsx";
     static final String MACHINES = "d:\\my_docs\\plans\\";
@@ -144,13 +144,13 @@ public class MainApp {
             System.out.println("\nYou must specify target. Application wont to know what to do");
             getInstance().help();
         }
-        if (use == 1) getInstance().machine.machineDir.getMachineXls();
-        if (use == 2) getInstance().machine.cdDir.prepareCd();
+        if (use == 1) getInstance().machine.getMachineXls();
+        if (use == 2) getInstance().machine.prepareCd();
         if (use == 3) {
-            getInstance().machine.machineDir.getMachineXls();
-            getInstance().machine.cdDir.prepareCd();
+            getInstance().machine.getMachineXls();
+            getInstance().machine.prepareCd();
         }
-        if (use == 4) getInstance().machine.machineDir.getLuxFile();
+        if (use == 4) getInstance().machine.getLuxFile();
 
         /*
         create ArrayList<String> files in directory (or other list of files)
