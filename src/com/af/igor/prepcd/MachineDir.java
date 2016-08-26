@@ -30,13 +30,7 @@ public class MachineDir {
         machinePath = app.MACHINES + machine.getSm() + machine.getMachineSeries() + "\\" + machine.getMachineName() + "\\";
         machinePathDir = new File(machinePath);
         machineXls = machine.getMachineName() + ".xlsx";
-//        if (isMachine()) this.machinePathDir.mkdir();
         machinePathDir.mkdir();
-    }
-
-    private boolean isMachine() {
-//        getLuxFile;         //??????????????????????????????
-        return false;
     }
 
     /*
