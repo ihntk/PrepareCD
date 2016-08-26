@@ -12,7 +12,10 @@ else it can rename base .ckd to machine files, alike I...ckd -> I5500-GA1881.ckd
  */
 
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -42,7 +45,7 @@ public class MainApp {
         return machine;
     }
 
-    void initializePath(String machineName) {
+    void initializePath(String machineName) throws IOException {
         /*
         Use current dir as path to machine
          */
@@ -69,6 +72,36 @@ public class MainApp {
 
     public static String getVersion() {
         return "PrepareCD version " + version;
+    }
+
+    public String searchFileName(String path, String pattern) throws IOException {
+        String fileName = null;
+        int count = 0;
+        String[] files = new File(path).list();
+        for (String file : files) {
+            if (file.startsWith(pattern)) {
+                fileName = file;
+                count++;
+            }
+        }
+        if (count > 1) {
+            desktop.open(new File(path));
+            System.out.println("Attention! There are " + count + " files for machine " + machine.getMachineName() +
+                    "\ncopy it manually from currently opened directory\n" +
+                    "Already done? (y/N)");           //in future we can copy both (or many) files to machineDir and show message in window
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+                while (reader.readLine().toLowerCase().equals("y")) {
+                    count++;
+                    if (count == 5) {
+                        System.out.println("something wrong!");
+                        fileName = null;
+                        break;
+//                        Thread.currentThread().stop();        // тут лежить какашка. Потрібно це зробити акуратніше
+                    }
+                }
+            }
+        }
+        return fileName;
     }
 
     public static void main(String[] args) throws IOException {

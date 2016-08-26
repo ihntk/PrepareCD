@@ -1,6 +1,8 @@
 package com.af.igor.prepcd;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * Created by ede on 11.08.2016.
@@ -16,22 +18,21 @@ public class Machine {
     MachineDir machineDir;
     CdDir cdDir;
 
-    public Machine(String machineName) {
+    public Machine(String machineName) throws IOException {
         this.machineName = machineName;
         sm = machineName.substring(0, 2);
         machineSeries = machineName.substring(2, 4);
         String luxPath = app.LUX_DIR + getSm() + " " + getMachineSeries().substring(0, 1) + "\\";
-        luxPathString = luxPath + searchFileName(luxPath, getSm() + getMachineSeries()) + "\\";
-
+        luxPathString = luxPath + app.searchFileName(luxPath, getSm() + getMachineSeries()) + "\\";
+        if(app.searchFileName(getLuxPathString(), getMachineName())==null){
+            try(BufferedReader reader=new BufferedReader(new InputStreamReader(System.in))){
+                System.out.println("Are you sure the machine "+machineName+" is exist? (y/N)");
+                if (!reader.readLine().toLowerCase().equals("y")) Thread.currentThread().stop();
+            }
+        }
         machineDir = new MachineDir(this);
         cdDir = new CdDir(this);
     }
-
-    private boolean isMachineExist() {
-//        getLuxFile;         //??????????????????????????????
-        return false;
-    }
-
 
     public String getMachineName() {
         return machineName;

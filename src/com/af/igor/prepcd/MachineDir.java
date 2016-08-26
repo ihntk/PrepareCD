@@ -93,7 +93,7 @@ public class MachineDir {
         /*
         Searching lux xls file
          */
-        luxFile = searchFileName(machine.getLuxPathString(), machine.getMachineName());
+        luxFile = app.searchFileName(machine.getLuxPathString(), machine.getMachineName());
 
         if (luxFile != null)
             Files.copy(Paths.get(machine.getLuxPathString()+ luxFile), Paths.get(machinePath + luxFile), REPLACE_EXISTING);
@@ -104,35 +104,4 @@ public class MachineDir {
         copyLuxFile();
         app.desktop.open(new File(machinePath + luxFile));
     }
-
-    private String searchFileName(String path, String pattern) throws IOException {
-        String fileName = null;
-        int count = 0;
-        String[] files = new File(path).list();
-        for (String file : files) {
-            if (file.startsWith(pattern)) {
-                fileName = file;
-                count++;
-            }
-        }
-        if (count > 1) {
-            app.desktop.open(new File(path));
-            System.out.println("Attention! There are " + count + " files for machine " + machine.getMachineName() +
-                    "\ncopy it manually from currently opened directory\n" +
-                    "Already done? (yes/no)");           //in future we can copy both (or many) files to machineDir and show message in window
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
-                while (reader.readLine().equals("yes")) {
-                    count++;
-                    if (count == 5) {
-                        System.out.println("something wrong!");
-                        fileName = null;
-                        break;
-//                        Thread.currentThread().stop();        // тут лежить какашка. Потрібно це зробити акуратніше
-                    }
-                }
-            }
-        }
-        return fileName;
-    }
-
 }
