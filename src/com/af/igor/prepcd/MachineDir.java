@@ -18,17 +18,16 @@ public class MachineDir {
     MainApp app = MainApp.getInstance();
     private Machine machine;
     private final File machinePathDir;
+    String machinePath;
     private final String machineXls;
     private String hMachine = null;
     private String luxFile = null;
 
 
-    /*
-    need to check the machinePathDir exist, if no create it !!!!!!!!!!!
-     */
+
     public MachineDir(Machine machine) {
         this.machine = machine;
-        String machinePath = app.MACHINES + machine.getSm() + machine.getMachineSeries() + "\\" + machine.getMachineName() + "\\";
+        machinePath = app.MACHINES + machine.getSm() + machine.getMachineSeries() + "\\" + machine.getMachineName() + "\\";
         machinePathDir = new File(machinePath);
         machineXls = machine.getMachineName() + ".xlsx";
 //        if (isMachine()) this.machinePathDir.mkdir();
@@ -81,7 +80,6 @@ public class MachineDir {
     also copy Luxemburd xls and launch it too
      */
     public void getMachineXls() throws IOException {
-        String machinePath = machinePathDir.toString() + "\\";
         if (!new File(machinePath + machineXls).exists()) {
             copyXls();
             app.desktop.open(new File(machinePath + machineXls));
@@ -92,7 +90,7 @@ public class MachineDir {
     }
 
     private void copyXls() throws IOException {
-        Files.copy(Paths.get(app.XLS), Paths.get(machinePathDir + "\\" + machineXls));
+        Files.copy(Paths.get(app.XLS), Paths.get(machinePath + machineXls));
 
         copyLuxFile();
     }
@@ -106,12 +104,11 @@ public class MachineDir {
         luxFile = searchFileName(luxPathString, machine.getMachineName());
 
         if (luxFile != null)
-            Files.copy(Paths.get(luxPathString + luxFile), Paths.get(machinePathDir + "\\" + luxFile), REPLACE_EXISTING);
+            Files.copy(Paths.get(luxPathString + luxFile), Paths.get(machinePath + luxFile), REPLACE_EXISTING);
 
     }
 
     public void getLuxFile() throws IOException {
-        String machinePath = machinePathDir.toString() + "\\";
         copyLuxFile();
         app.desktop.open(new File(machinePath + luxFile));
     }
