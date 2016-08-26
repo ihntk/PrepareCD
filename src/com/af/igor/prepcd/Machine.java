@@ -24,9 +24,9 @@ public class Machine {
         machineSeries = machineName.substring(2, 4);
         String luxPath = app.LUX_DIR + getSm() + " " + getMachineSeries().substring(0, 1) + "\\";
         luxPathString = luxPath + app.searchFileName(luxPath, getSm() + getMachineSeries()) + "\\";
-        if(app.searchFileName(getLuxPathString(), getMachineName())==null){
-            try(BufferedReader reader=new BufferedReader(new InputStreamReader(System.in))){
-                System.out.println("Are you sure the machine "+machineName+" is exist? (y/N)");
+        if (app.searchFileName(getLuxPathString(), getMachineName()) == null) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+                System.out.println("Are you sure the machine " + machineName + " is exist? (y/N)");
                 if (!reader.readLine().toLowerCase().equals("y")) Thread.currentThread().stop();
             }
         }

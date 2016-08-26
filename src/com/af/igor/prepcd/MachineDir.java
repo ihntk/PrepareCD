@@ -1,9 +1,7 @@
 package com.af.igor.prepcd;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -22,7 +20,6 @@ public class MachineDir {
     private final String machineXls;
     private String hMachine = null;
     private String luxFile = null;
-
 
 
     public MachineDir(Machine machine) {
@@ -96,7 +93,7 @@ public class MachineDir {
         luxFile = app.searchFileName(machine.getLuxPathString(), machine.getMachineName());
 
         if (luxFile != null)
-            Files.copy(Paths.get(machine.getLuxPathString()+ luxFile), Paths.get(machinePath + luxFile), REPLACE_EXISTING);
+            Files.copy(Paths.get(machine.getLuxPathString() + luxFile), Paths.get(machinePath + luxFile), REPLACE_EXISTING);
 
     }
 
