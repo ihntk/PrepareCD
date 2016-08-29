@@ -23,7 +23,10 @@ public class Machine {
         sm = machineName.substring(0, 2);
         machineSeries = machineName.substring(2, 4);
         String luxPath = app.LUX_DIR + getSm() + " " + getMachineSeries().substring(0, 1) + "\\";
-        luxPathString = luxPath + app.searchFileName(luxPath, getSm() + getMachineSeries()) + "\\";
+        String MachSer=machineSeries.substring(0);
+        String smMachSer = sm+machineSeries;
+        if (MachSer.equals("H")||MachSer.equals("I")||MachSer.equals("J")) smMachSer=sm+" "+machineSeries;
+        luxPathString = luxPath + app.searchFileName(luxPath, smMachSer) + "\\";
         if (app.searchFileName(getLuxPathString(), getMachineName()) == null) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
                 System.out.println("Are you sure the machine " + machineName + " is exist? (y/N)");
