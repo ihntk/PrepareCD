@@ -23,9 +23,9 @@ public class Machine {
         sm = machineName.substring(0, 2);
         machineSeries = machineName.substring(2, 4);
         String luxPath = app.LUX_DIR + getSm() + " " + getMachineSeries().substring(0, 1) + "\\";
-        String MachSer=machineSeries.substring(0);
+        String machSer=machineSeries.substring(0,1);
         String smMachSer = sm+machineSeries;
-        if (MachSer.equals("H")||MachSer.equals("I")||MachSer.equals("J")) smMachSer=sm+" "+machineSeries;
+        if (machSer.equals("H")||machSer.equals("I")||machSer.equals("J")) smMachSer=sm+" "+machineSeries;
         luxPathString = luxPath + app.searchFileName(luxPath, smMachSer) + "\\";
         if (app.searchFileName(getLuxPathString(), getMachineName()) == null) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
