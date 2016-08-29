@@ -21,7 +21,7 @@ import java.nio.file.Paths;
 
 public class MainApp {
     private static MainApp instance;
-    private static String version = "0.1.2.1";
+    private static String version = "0.1.2.2";
     private static Machine machine;         //in future this field will replace static ArrayList<Machine>
     static final String XLS = "d:\\my_docs\\workDir\\XL's\\20XX0000.xlsx";
     static final String MACHINES = "d:\\my_docs\\plans\\";
@@ -30,6 +30,7 @@ public class MainApp {
     static final String LUX_DIR = "k:\\Vente\\1. Customer\\1.3. Commandes\\";
     static final String CDTEMPLATE = "\\\\Serverua\\AF_UA\\1.4.CD\\WEB3_Operator Manual\\";
     static Desktop desktop = Desktop.getDesktop();
+    static final String totalCommander="C:\\Program Files\\totalcmd\\TOTALCMD64";
 
     private MainApp() {
     }
@@ -102,6 +103,12 @@ public class MainApp {
             }
         }
         return fileName;
+    }
+
+    public void tc(String parameters) throws IOException {
+        Runtime runtime=Runtime.getRuntime();
+        String[] command={totalCommander,"/o ",parameters};
+        Process process=runtime.exec(command);
     }
 
     public static void main(String[] args) throws IOException {
