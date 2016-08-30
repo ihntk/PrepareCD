@@ -1,6 +1,7 @@
 package com.af.igor.prepcd;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -65,6 +66,9 @@ public class Machine {
     }
 
     public void getLuxFile() throws IOException {
-        machineDir.getLuxFile();
+        machineDir.copyLuxFile();
+        app.desktop.open(new File(machineDir.machinePath + machineDir.luxFile));
+        app.tc("/l="+machineDir.machinePath);
+        //  open machine directory on Liege server ????????????????????????????????????????
     }
 }

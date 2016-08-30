@@ -16,10 +16,10 @@ public class MachineDir {
     MainApp app = MainApp.getInstance();
     private Machine machine;
     private final File machinePathDir;
-    String machinePath;
+    protected String machinePath;
     private final String machineXls;
     private String hMachine = null;
-    private String luxFile = null;
+    protected String luxFile = null;
 
 
     public MachineDir(Machine machine) {
@@ -86,7 +86,7 @@ public class MachineDir {
         copyLuxFile();
     }
 
-    private void copyLuxFile() throws IOException {
+    protected void copyLuxFile() throws IOException {
         /*
         Searching lux xls file
          */
@@ -95,10 +95,5 @@ public class MachineDir {
         if (luxFile != null)
             Files.copy(Paths.get(machine.getLuxPathString() + luxFile), Paths.get(machinePath + luxFile), REPLACE_EXISTING);
 
-    }
-
-    public void getLuxFile() throws IOException {
-        copyLuxFile();
-        app.desktop.open(new File(machinePath + luxFile));
     }
 }
