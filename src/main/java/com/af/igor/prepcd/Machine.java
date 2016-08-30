@@ -62,7 +62,14 @@ public class Machine {
     }
 
     public void prepareCd() {
-        cdDir.prepareCd();
+        getLanguage();
+        copyCdTemplate();
+        if (isEnglish)copyPlans();
+        else ...;
+        copyMinMop();
+        addCertif();
+        app.desktop.open(lang/index.html);
+        app.desktop.open(index.html);
     }
 
     public void getLuxFile() throws IOException {
