@@ -4,6 +4,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 /**
  * Created by ede on 11.08.2016.
@@ -61,9 +65,10 @@ public class Machine {
         machineDir.getMachineXls();
     }
 
-    public void prepareCd() {
-        getLanguage();
-        copyCdTemplate();
+    public void prepareCd() throws IOException {
+        List<String>langs=app.luxParser.getLanguage(machineDir.luxFile);
+        new File(cdDir.cdPathDir).mkdir();
+        Files.copy(Paths.get(app.CDTEMPLATE),Paths.get(cdDir.cdPathDir));           //вибрати потрібні мови
         if (isEnglish)copyPlans();
         else ...;
         copyMinMop();

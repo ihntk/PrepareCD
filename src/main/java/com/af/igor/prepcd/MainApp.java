@@ -11,6 +11,9 @@ else it can rename base .ckd to machine files, alike I...ckd -> I5500-GA1881.ckd
 і автоматичного видалення зайвих директорій, відкриття пдф'ів інсттрукцій для ручного додаваня самих інструкцій.
  */
 
+import com.af.igor.prepcd.util.ExcelParser;
+import com.af.igor.prepcd.util.LuxParser;
+
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
@@ -31,6 +34,8 @@ public class MainApp {
     static final String CDTEMPLATE = "\\\\Serverua\\AF_UA\\1.4.CD\\WEB3_Operator Manual\\";
     static Desktop desktop = Desktop.getDesktop();
     static final String totalCommander="C:\\Program Files\\totalcmd\\TOTALCMD64";
+    static public LuxParser luxParser;
+    static ExcelParser excelParser;
 
     private MainApp() {
     }
@@ -38,6 +43,8 @@ public class MainApp {
     public static MainApp getInstance() {
         if (instance == null) {
             instance = new MainApp();
+            luxParser=LuxParser.getinstance();
+            excelParser=ExcelParser.getinstance();
             return instance;
         } else return instance;
     }

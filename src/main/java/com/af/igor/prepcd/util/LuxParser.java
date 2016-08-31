@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -17,8 +18,15 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class LuxParser {
     private String luxFile;
     private XSSFWorkbook workbook;
+    private static LuxParser instance;
 
     private LuxParser(){}
+
+    public static LuxParser getinstance(){
+        if (instance==null)
+            instance=new LuxParser();
+        return instance;
+    }
 
     public void setLuxFile(String luxFile) {
         this.luxFile = luxFile;
@@ -32,11 +40,16 @@ public class LuxParser {
     }
 
 
-    public LinkedList<String> getLanguage(String luxFile){
+    public List<String> getLanguage(String luxFile){
         setLuxFile(luxFile);
-        LinkedList<String>languages=new LinkedList<>();
+        List<String>languages=new LinkedList<>();
         XSSFSheet sheet=workbook.getSheetAt(0);
-        XSSFCell row=sheet.getRow(53).getCell(3);
+        for (int i = 0; i < 7; i++) {
+            if (i==4)languages.add("-");
+            XSSFCell cell=sheet.getRow(53+i).getCell(3);
+            String value=cell.getStringCellValue();
+            if (value!=null)languages.add(value);
+        }
 
         return languages;
     }
