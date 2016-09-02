@@ -4,10 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
 
 /**
  * Created by ede on 11.08.2016.
@@ -70,8 +66,7 @@ public class Machine {
     }
 
     public void prepareCd() throws IOException {
-        getLuxFile();
-        List<String>langs=app.luxParser.getLanguage(machineDir.machinePath + machineDir.luxFile);
+        String[] langs=app.machineExcelParser.getLanguage(machineDir.machinePath + machineDir.luxFile);
         for (String lang:langs){
             System.out.println(lang);
         }
