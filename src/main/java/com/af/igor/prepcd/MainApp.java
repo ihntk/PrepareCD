@@ -75,7 +75,8 @@ public class MainApp {
         System.out.println("_________________\n" +
                 "Available parameters:\n" +
                 "-n [machine name]    Name of machine\n" +
-                "-x xls               Create xls\n" +
+                "-i                   Make installation\n" +
+                "-x                   Create xls\n" +
                 "-c                   Prepare cd");
         Thread.sleep(5000);
     }
