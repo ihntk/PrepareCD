@@ -33,34 +33,34 @@ public class MachineDir {
     /*
     list of exist files
      */
-    private File[] getFiles() {
-        return machinePathDir.listFiles();
+    private String[] getFiles() {
+        return machinePathDir.list();
     }
 
-    public ArrayList<File> getXlsFiles() {
-        ArrayList<File> xls = new ArrayList<>();
-        for (File file : getFiles()) {
-            if (file.getName().endsWith(".xlsx")
-                    || file.getName().endsWith(".xls"))
+    public ArrayList<String> getXlsFiles() {
+        ArrayList<String> xls = new ArrayList<>();
+        for (String file : getFiles()) {
+            if (file.endsWith(".xlsx")
+                    || file.endsWith(".xls"))
                 xls.add(file);
         }
         return xls;
     }
 
-    public ArrayList<File> getPdfFiles() {
-        ArrayList<File> pdf = new ArrayList<>();
-        for (File file :
+    public ArrayList<String> getPdfFiles() {
+        ArrayList<String> pdf = new ArrayList<>();
+        for (String file :
                 getFiles()) {
-            if (file.getName().endsWith(".pdf"))
+            if (file.endsWith(".pdf"))
                 pdf.add(file);
         }
         return pdf;
     }
 
-    public ArrayList<File> getCkdFiles() {
-        ArrayList<File> ckd = new ArrayList<>();
-        for (File file : getFiles()) {
-            if (file.getName().endsWith(".ckd"))
+    public ArrayList<String> getCkdFiles() {
+        ArrayList<String> ckd = new ArrayList<>();
+        for (String file : getFiles()) {
+            if (file.endsWith(".ckd"))
                 ckd.add(file);
         }
         return ckd;
