@@ -192,11 +192,11 @@ public class MainApp {
             getInstance().help();
         }
         if (use == 1) getInstance().machine.getMachineXls();
-        if (use == 2) getInstance().machine.prepareCd();
-        if (use == 3) {
-            getInstance().machine.getMachineXls();
-            getInstance().machine.prepareCd();
-        }
+//        if (use == 2) getInstance().machine.prepareCd();
+//        if (use == 3) {
+//            getInstance().machine.getMachineXls();
+//            getInstance().machine.prepareCd();
+//        }
         if (use == 4) getInstance().machine.getLuxFile();
 
         /*
