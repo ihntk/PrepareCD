@@ -55,7 +55,7 @@ public class MainApp {
         return machine;
     }
 
-    void initializePath(String machineName) throws IOException {
+    void initializePath(String machineName) throws IOException, InterruptedException {
         /*
         Use current dir as path to machine
          */
@@ -72,16 +72,17 @@ public class MainApp {
         machine = new Machine(machineName);
     }
 
-    private void help() {
+    private void help() throws InterruptedException {
         System.out.println("_________________\n" +
                 "Available parameters:\n" +
                 "-n [machine name]    Name of machine\n" +
                 "-x xls               Create xls\n" +
                 "-c                   Prepare cd");
+        Thread.sleep(5000);
     }
 
     public static String getVersion() {
-        return "PrepareCD version " + version;
+        return "\nPrepareCD version " + version;
     }
 
     public String searchFileName(String path, String pattern) throws IOException {
@@ -191,6 +192,7 @@ public class MainApp {
          */
         if (use == 0) {
             System.out.println("\nYou must specify target. Application wont to know what to do");
+            getInstance().tc("/l="+machine.machineDir.machinePath);
             getInstance().help();
         }
         if (use == 1) getInstance().machine.getMachineXls();
