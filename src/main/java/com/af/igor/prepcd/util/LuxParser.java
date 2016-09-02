@@ -1,24 +1,15 @@
 package com.af.igor.prepcd.util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  * Created by ede on 30.08.2016.
  */
-public class LuxParser {
-    private String luxFile;
-    private XSSFWorkbook workbook;
+public class LuxParser extends ExcelParser{
     private static LuxParser instance;
 
     private LuxParser(){}
@@ -29,20 +20,9 @@ public class LuxParser {
         return instance;
     }
 
-    public void setLuxFile(String luxFile) {
-        this.luxFile = luxFile;
-        try(FileInputStream file=new FileInputStream(new File(luxFile))) {
-            workbook=new XSSFWorkbook(luxFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-
-    public List<String> getLanguage(String luxFile){
-        setLuxFile(luxFile);
+    public String[] getLanguage(String luxFile){
+        setExcelFile(luxFile);
         List<String>languages=new LinkedList<>();
         XSSFSheet sheet=workbook.getSheetAt(0);
         System.out.println("last row "+sheet.getLastRowNum());
@@ -57,6 +37,6 @@ public class LuxParser {
             if (value!=null)languages.add(value);
         }
 
-        return languages;
+        return (String[]) languages.toArray();
     }
 }
