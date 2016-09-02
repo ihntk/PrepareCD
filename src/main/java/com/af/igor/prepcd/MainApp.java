@@ -19,12 +19,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class MainApp {
     private static MainApp instance;
-    private static String version = "0.1.2.2";
+    private static String version = "0.1.3";
     private static Machine machine;         //in future this field will replace static ArrayList<Machine>
     static final String XLS = "d:\\my_docs\\workDir\\XL's\\20XX0000.xlsx";
     static final String MACHINES = "d:\\my_docs\\plans\\";
@@ -32,6 +33,7 @@ public class MainApp {
     static final String CDS = "d:\\my_docs\\cdrom\\";
     static final String LUX_DIR = "k:\\Vente\\1. Customer\\1.3. Commandes\\";
     static final String CDTEMPLATE = "\\\\Serverua\\AF_UA\\1.4.CD\\WEB3_Operator Manual\\";
+    static final String PLANS="\\\\Serverua\\af_ua\\1.2.Plans\\";
     static Desktop desktop = Desktop.getDesktop();
     static final String totalCommander="C:\\Program Files\\totalcmd\\TOTALCMD64";
     static public LuxParser luxParser;
@@ -118,7 +120,7 @@ public class MainApp {
         Process process=runtime.exec(command);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         /*
         available flags
         -x xls
@@ -197,7 +199,14 @@ public class MainApp {
 //            getInstance().machine.getMachineXls();
 //            getInstance().machine.prepareCd();
 //        }
-        if (use == 4) getInstance().machine.getLuxFile();
+        if (use == 4) {
+            getInstance().machine.getLuxFile();
+            getInstance().tc("/l="+machine.machineDir.machinePath);
+            getInstance().tc(" /r="+machine.hMachinePath);
+            getInstance().tc("/t /r="+machine.I_PLANS);
+//            System.out.println("Copy base installation drawing\nAlready done? (press enter)");
+//            Files.move(Paths.get(machine.machineDir.getCkdFiles().get(0)),Paths.get("I"+" "));   //???????????????????
+        }
 
         /*
         create ArrayList<String> files in directory (or other list of files)
