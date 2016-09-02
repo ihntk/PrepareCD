@@ -19,6 +19,8 @@ public class Machine {
     private final String sm;
     private final String machineSeries;
     private final String luxPathString;
+    protected final String hMachinePath;
+    protected final String I_PLANS=app.PLANS+"002 - Plan d'installation 2008\\";
 
     MachineDir machineDir;
     CdDir cdDir;
@@ -38,6 +40,8 @@ public class Machine {
                 if (!reader.readLine().toLowerCase().equals("y")) Thread.currentThread().stop();
             }
         }
+        String hMachPath=app.H_MACHINES+getSm()+getMachineSeries().substring(0,1)+"\\";
+        hMachinePath=hMachPath+app.searchFileName(hMachPath,smMachSer);
         machineDir = new MachineDir(this);
         cdDir = new CdDir(this);
     }
@@ -83,8 +87,6 @@ public class Machine {
 
     public void getLuxFile() throws IOException {
         machineDir.copyLuxFile();
-//        app.desktop.open(new File(machineDir.machinePath + machineDir.luxFile));
-        app.tc("/l="+machineDir.machinePath);
-        //  open machine directory on Liege server ????????????????????????????????????????
+        app.desktop.open(new File(machineDir.machinePath + machineDir.luxFile));
     }
 }
