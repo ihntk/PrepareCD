@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,9 +45,14 @@ public class LuxParser {
         setLuxFile(luxFile);
         List<String>languages=new LinkedList<>();
         XSSFSheet sheet=workbook.getSheetAt(0);
+        System.out.println("last row "+sheet.getLastRowNum());
+        for (int i = 0; i < sheet.getLastRowNum(); i++) {
+            XSSFCell cell=sheet.getRow(i).getCell(2);
+            //                                              need to test!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        }
         for (int i = 0; i < 7; i++) {
             if (i==4)languages.add("-");
-            XSSFCell cell=sheet.getRow(53+i).getCell(3);
+            XSSFCell cell=sheet.getRow(34+i).getCell(2);
             String value=cell.getStringCellValue();
             if (value!=null)languages.add(value);
         }

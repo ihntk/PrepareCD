@@ -66,20 +66,24 @@ public class Machine {
     }
 
     public void prepareCd() throws IOException {
-        List<String>langs=app.luxParser.getLanguage(machineDir.luxFile);
-        new File(cdDir.cdPathDir).mkdir();
-        Files.copy(Paths.get(app.CDTEMPLATE),Paths.get(cdDir.cdPathDir));           //вибрати потрібні мови
-        if (isEnglish)copyPlans();
-        else ...;
-        copyMinMop();
-        addCertif();
-        app.desktop.open(lang/index.html);
-        app.desktop.open(index.html);
+        getLuxFile();
+        List<String>langs=app.luxParser.getLanguage(machineDir.machinePath + machineDir.luxFile);
+        for (String lang:langs){
+            System.out.println(lang);
+        }
+//        new File(cdDir.cdPathDir).mkdir();
+//        Files.copy(Paths.get(app.CDTEMPLATE),Paths.get(cdDir.cdPathDir));           //вибрати потрібні мови і файли
+//        if (isEnglish)copyPlans();
+//        else ...;
+//        copyMinMop();
+//        addCertif();
+//        app.desktop.open(lang/index.html);
+//        app.desktop.open(index.html);
     }
 
     public void getLuxFile() throws IOException {
         machineDir.copyLuxFile();
-        app.desktop.open(new File(machineDir.machinePath + machineDir.luxFile));
+//        app.desktop.open(new File(machineDir.machinePath + machineDir.luxFile));
         app.tc("/l="+machineDir.machinePath);
         //  open machine directory on Liege server ????????????????????????????????????????
     }
