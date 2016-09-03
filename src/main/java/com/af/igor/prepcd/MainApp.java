@@ -13,12 +13,14 @@ else it can rename base .ckd to machine files, alike I...ckd -> I5500-GA1881.ckd
 
 import com.af.igor.prepcd.util.MachineExcelParser;
 import com.af.igor.prepcd.util.LuxParser;
+import com.af.igor.prepcd.util.MachinesCode;
 
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -202,12 +204,16 @@ public class MainApp {
 //            getInstance().machine.prepareCd();
 //        }
         if (use == 4) {
-            getInstance().machine.getLuxFile();
+            getInstance().machine.openLuxFile();
             getInstance().tc("/l="+machine.machineDir.machinePath);
-            getInstance().tc(" /r="+machine.hMachinePath);
+            getInstance().tc("/r="+machine.hMachinePath);
             getInstance().tc("/t /r="+machine.I_PLANS);
-//            System.out.println("Copy base installation drawing\nAlready done? (press enter)");
-//            Files.move(Paths.get(machine.machineDir.getCkdFiles().get(0)),Paths.get("I"+" "));   //???????????????????
+            System.out.println("Copy base installation drawing\nAlready done? (press enter)");
+            machine.setMachineType(luxParser.getMachineType(machine.getLuxFile()));
+            new BufferedReader(new InputStreamReader(System.in)).readLine();
+            String installationName="I"+ MachinesCode.valueOf("_"+machine.getMachineType())+"-"+machine.getMachineName().substring(2);
+            Files.move(Paths.get(machine.machineDir.getCkdFiles().get(0)),Paths.get(installationName));
+            getInstance().desktop.open(new File(machine.machineDir.machinePath+installationName));
         }
 
         /*
