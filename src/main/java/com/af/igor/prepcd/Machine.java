@@ -42,6 +42,14 @@ public class Machine {
         cdDir = new CdDir(this);
     }
 
+    public void setMachineType(String machineType) {
+        this.machineType = machineType;
+    }
+
+    public String getMachineType() {
+        return machineType;
+    }
+
     public String getMachineName() {
         return machineName;
     }
@@ -80,8 +88,12 @@ public class Machine {
 //        app.desktop.open(index.html);
     }
 
-    public void getLuxFile() throws IOException {
+    public void openLuxFile() throws IOException {
         machineDir.copyLuxFile();
         app.desktop.open(new File(machineDir.machinePath + machineDir.luxFile));
+    }
+
+    public String getLuxFile() {
+        return machineDir.luxFile;
     }
 }
