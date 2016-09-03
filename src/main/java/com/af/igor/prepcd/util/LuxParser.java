@@ -39,4 +39,9 @@ public class LuxParser extends ExcelParser{
 
         return (String[]) languages.toArray();
     }
+
+    public String getMachineType(String luxFile) {
+        setExcelFile(luxFile);
+        return null;
+    }
 }
