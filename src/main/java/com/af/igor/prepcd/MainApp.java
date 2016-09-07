@@ -212,7 +212,7 @@ public class MainApp {
             machine.setMachineType(luxParser.getMachineType(machine.getLuxFile()));
             new BufferedReader(new InputStreamReader(System.in)).readLine();
             String installationName="I"+ MachinesCode.valueOf("_"+machine.getMachineType())+"-"+machine.getMachineName().substring(2);
-            Files.move(Paths.get(machine.machineDir.getCkdFiles().get(0)),Paths.get(installationName));
+            Files.move(Paths.get(machine.machineDir.getCkdFiles().get(0)),Paths.get(machine.machineDir.machinePath+installationName));  //rename installation
             getInstance().desktop.open(new File(machine.machineDir.machinePath+installationName));
         }
 
