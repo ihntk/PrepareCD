@@ -11,8 +11,8 @@ else it can rename base .ckd to machine files, alike I...ckd -> I5500-GA1881.ckd
 і автоматичного видалення зайвих директорій, відкриття пдф'ів інсттрукцій для ручного додаваня самих інструкцій.
  */
 
-import com.af.igor.prepcd.util.MachineExcelParser;
 import com.af.igor.prepcd.util.LuxParser;
+import com.af.igor.prepcd.util.MachineExcelParser;
 import com.af.igor.prepcd.util.MachinesCode;
 
 import java.awt.*;
@@ -34,9 +34,9 @@ public class MainApp {
     static final String CDS = "d:\\my_docs\\cdrom\\";
     static final String LUX_DIR = "k:\\Vente\\1. Customer\\1.3. Commandes\\";
     static final String CDTEMPLATE = "\\\\Serverua\\AF_UA\\1.4.CD\\WEB3_Operator Manual\\";
-    static final String PLANS="\\\\Serverua\\af_ua\\1.2.Plans\\";
+    static final String PLANS = "\\\\Serverua\\af_ua\\1.2.Plans\\";
     static Desktop desktop = Desktop.getDesktop();
-    static final String totalCommander="C:\\Program Files\\totalcmd\\TOTALCMD64";
+    static final String totalCommander = "C:\\Program Files\\totalcmd\\TOTALCMD64";
     static public LuxParser luxParser;
     static MachineExcelParser machineExcelParser;
 
@@ -46,8 +46,8 @@ public class MainApp {
     public static MainApp getInstance() {
         if (instance == null) {
             instance = new MainApp();
-            luxParser=LuxParser.getinstance();
-            machineExcelParser =MachineExcelParser.getinstance();
+            luxParser = LuxParser.getinstance();
+            machineExcelParser = MachineExcelParser.getinstance();
             return instance;
         } else return instance;
     }
@@ -118,9 +118,17 @@ public class MainApp {
     }
 
     public void tc(String parameters) throws IOException {
-        Runtime runtime=Runtime.getRuntime();
-        String[] command={totalCommander,"/o ",parameters};
-        Process process=runtime.exec(command);
+        Runtime runtime = Runtime.getRuntime();
+        String[] command = {totalCommander, "/O ", parameters};
+        Process process = runtime.exec(command);
+    }
+
+    public String getMachineCode(){
+        String machineType = null;
+        if (machine.getMachineType().contains("-"))
+            machineType = machine.getMachineType().substring(0, machine.getMachineType().indexOf("-"));
+        else machineType = machine.getMachineType();
+        return MachinesCode.valueOf(machineType).toString();
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -194,7 +202,7 @@ public class MainApp {
          */
         if (use == 0) {
             System.out.println("\nYou must specify target. Application wont to know what to do");
-            getInstance().tc("/l="+machine.machineDir.machinePath);
+            getInstance().tc("/l=" + machine.machineDir.machinePath);
             getInstance().help();
         }
         if (use == 1) getInstance().machine.getMachineXls();
@@ -205,15 +213,14 @@ public class MainApp {
 //        }
         if (use == 4) {
             getInstance().machine.openLuxFile();
-            getInstance().tc("/l="+machine.machineDir.machinePath);
-            getInstance().tc("/r="+machine.hMachinePath);
-            getInstance().tc("/t /r="+machine.I_PLANS);
+            getInstance().tc("/L=" + machine.machineDir.machinePath+" /R=" + machine.hMachinePath);
+            getInstance().tc("/T /R=" + machine.I_PLANS);
             System.out.println("Copy base installation drawing\nAlready done? (press enter)");
-            machine.setMachineType(luxParser.getMachineType(machine.machineDir.machinePath+machine.getLuxFile()));
+            machine.setMachineType(luxParser.getMachineType(machine.machineDir.machinePath + machine.getLuxFile()));
             new BufferedReader(new InputStreamReader(System.in)).readLine();
-            String installationName="I"+ MachinesCode.valueOf(machine.getMachineType())+"-"+machine.getMachineName().substring(2);
-            Files.move(Paths.get(machine.machineDir.getCkdFiles().get(0)),Paths.get(machine.machineDir.machinePath+installationName));  //rename installation
-            getInstance().desktop.open(new File(machine.machineDir.machinePath+installationName));
+            String installationName = "I" + getInstance().getMachineCode() + "-" + machine.getMachineName().substring(2) + ".ckd";
+            Files.move(Paths.get(machine.machineDir.machinePath + machine.machineDir.getCkdFiles().get(0)), Paths.get(machine.machineDir.machinePath + installationName));  //rename installation
+            getInstance().desktop.open(new File(machine.machineDir.machinePath + installationName));
         }
 
         /*
