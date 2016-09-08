@@ -209,9 +209,9 @@ public class MainApp {
             getInstance().tc("/r="+machine.hMachinePath);
             getInstance().tc("/t /r="+machine.I_PLANS);
             System.out.println("Copy base installation drawing\nAlready done? (press enter)");
-            machine.setMachineType(luxParser.getMachineType(machine.getLuxFile()));
+            machine.setMachineType(luxParser.getMachineType(machine.machineDir.machinePath+machine.getLuxFile()));
             new BufferedReader(new InputStreamReader(System.in)).readLine();
-            String installationName="I"+ MachinesCode.valueOf("_"+machine.getMachineType())+"-"+machine.getMachineName().substring(2);
+            String installationName="I"+ MachinesCode.valueOf(machine.getMachineType())+"-"+machine.getMachineName().substring(2);
             Files.move(Paths.get(machine.machineDir.getCkdFiles().get(0)),Paths.get(machine.machineDir.machinePath+installationName));  //rename installation
             getInstance().desktop.open(new File(machine.machineDir.machinePath+installationName));
         }
