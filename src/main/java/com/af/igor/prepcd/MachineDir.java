@@ -2,6 +2,7 @@ package com.af.igor.prepcd;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -93,7 +94,11 @@ public class MachineDir {
         luxFile = app.searchFileName(machine.getLuxPathString(), machine.getMachineName());
 
         if (luxFile != null)
-            Files.copy(Paths.get(machine.getLuxPathString() + luxFile), Paths.get(machinePath + luxFile), REPLACE_EXISTING);
+            try {
+                Files.copy(Paths.get(machine.getLuxPathString() + luxFile), Paths.get(machinePath + luxFile), REPLACE_EXISTING);
+            }catch (FileSystemException e){
+                System.out.println("I can't replace "+luxFile+" file because it is being used by another process");
+            }
 
     }
 }
