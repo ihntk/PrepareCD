@@ -24,7 +24,7 @@ public class LuxParser extends ExcelParser{
     public String[] getLanguage(String luxFile){
         setExcelFile(luxFile);
         List<String>languages=new LinkedList<>();
-        XSSFSheet sheet=workbook.getSheetAt(0);
+        XSSFSheet sheet=workbook.getSheet("Encodage Admin");
         System.out.println("last row "+sheet.getLastRowNum());
         for (int i = 0; i < sheet.getLastRowNum(); i++) {
             XSSFCell cell=sheet.getRow(i).getCell(2);
@@ -42,6 +42,8 @@ public class LuxParser extends ExcelParser{
 
     public String getMachineType(String luxFile) {
         setExcelFile(luxFile);
-        return null;
+        XSSFSheet sheet=workbook.getSheet("Encodage Admin");
+        String machineType=String.format("%s", sheet.getRow(1).getCell(2)).replaceAll(" ","").trim();
+        return machineType;
     }
 }
