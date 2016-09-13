@@ -37,7 +37,7 @@ public class Machine {
             }
         }
         String hMachPath=app.H_MACHINES+getSm()+getMachineSeries().substring(0,1)+"\\";
-        hMachinePath=hMachPath+app.searchFileName(hMachPath,smMachSer);
+        hMachinePath=hMachPath+app.searchFileName(hMachPath,smMachSer)+"\\";
         machineDir = new MachineDir(this);
         cdDir = new CdDir(this);
     }
