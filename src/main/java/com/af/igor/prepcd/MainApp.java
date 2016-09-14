@@ -26,7 +26,7 @@ import java.nio.file.Paths;
 
 public class MainApp {
     private static MainApp instance;
-    private static String version = "0.2.2";
+    private static String version = "0.2.3";
     private static Machine machine;         //in future this field will replace static ArrayList<Machine>
     static final String XLS = "d:\\my_docs\\workDir\\XL's\\20XX0000.xlsx";
     static final String MACHINES = "d:\\my_docs\\plans\\";
@@ -119,8 +119,9 @@ public class MainApp {
 
     public void tc(String parameters) throws IOException {
         Runtime runtime = Runtime.getRuntime();
-        String[] command = {totalCommander, "/O ", parameters};
+        String command = totalCommander+" /O "+ parameters;
         Process process = runtime.exec(command);
+//        System.out.println("==test==\n"+command+"\n==test==");
     }
 
     public String getMachineCode(){
@@ -213,14 +214,14 @@ public class MainApp {
 //        }
         if (use == 4) {
             getInstance().machine.openLuxFile();
-            getInstance().tc("/L=" + machine.machineDir.machinePath+" /R=" + machine.hMachinePath);
-            getInstance().tc("/T /R=" + machine.I_PLANS);
+            getInstance().tc("/L=\"" + machine.machineDir.machinePath+"\" /T /R=\"" + machine.I_PLANS+"\"");
             System.out.println("Copy base installation drawing\nAlready done? (press enter)");
             machine.setMachineType(luxParser.getMachineType(machine.machineDir.machinePath + machine.getLuxFile()));
             new BufferedReader(new InputStreamReader(System.in)).readLine();
             String installationName = "I" + getInstance().getMachineCode() + "-" + machine.getMachineName().substring(2) + ".ckd";
             Files.move(Paths.get(machine.machineDir.machinePath + machine.machineDir.getCkdFiles().get(0)), Paths.get(machine.machineDir.machinePath + installationName));  //rename installation
             getInstance().desktop.open(new File(machine.machineDir.machinePath + installationName));
+            getInstance().tc("/R=" + machine.hMachinePath+"\"");
         }
 
         /*
