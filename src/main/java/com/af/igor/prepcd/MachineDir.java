@@ -82,8 +82,10 @@ public class MachineDir {
         if (luxFile != null)
             try {
                 Files.copy(Paths.get(machine.getLuxPathString() + luxFile), Paths.get(machinePath + luxFile), REPLACE_EXISTING);
+                app.logger.log("Copied luxFile:\n   "+luxFile);
             }catch (FileSystemException e){
                 System.out.println("I can't replace "+luxFile+" file because it is being used by another process");
+                app.logger.log("Could'nt replace:\n   "+luxFile);
             }
 
     }

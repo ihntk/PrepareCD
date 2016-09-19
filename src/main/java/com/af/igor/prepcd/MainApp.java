@@ -245,13 +245,17 @@ public class MainApp {
         if (use == 4) {
             machine.openLuxFile();
             getInstance().tc("/L=\"" + machine.machineDir.machinePath + "\" /T /R=\"" + machine.I_PLANS + "\"");
+            getInstance().logger.log("Opened in tc: \n   "+machine.machineDir.machinePath+"\n   "+ machine.I_PLANS );
             System.out.println("Copy base installation drawing\nAlready done? (press enter)");
             machine.setMachineType(luxParser.getMachineType(machine.machineDir.machinePath + machine.getLuxFile()));
+            getInstance().logger.log("Machine type is: "+machine.getMachineType());
             new BufferedReader(new InputStreamReader(System.in)).readLine();
             String installationName = "I" + getInstance().getMachineCode() + "-" + machine.getMachineName().substring(2) + ".ckd";
             Files.move(Paths.get(machine.machineDir.machinePath + machine.machineDir.getCkdFiles().get(0)), Paths.get(machine.machineDir.machinePath + installationName));  //rename installation
             desktop.open(new File(machine.machineDir.machinePath + installationName));
+            getInstance().logger.log("Installation "+ installationName+" opened");
             getInstance().tc("/R=" + machine.hMachinePath + "\"");
+            getInstance().logger.log("Opened in tc :\n   "+machine.hMachinePath);
         }
 
         /*
