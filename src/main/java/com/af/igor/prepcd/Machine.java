@@ -67,10 +67,16 @@ public class Machine {
     }
 
     /*
-        plugs!!!!!!!!!!!!!!!!
-         */
-    public void getMachineXls() throws IOException {
-        machineDir.getMachineXls();
+    getMachineXls() chec machineXls exist, if no copy and launch it in excel
+    also copy Luxemburd xls and launch it too
+     */
+    public boolean getMachineXls() throws IOException {
+        boolean isXlsCreated = false;
+        if (!new File(machineDir.machinePath + machineDir.machineXls).exists()) {
+            machineDir.copyXls();
+            isXlsCreated=true;
+        }
+        return isXlsCreated;
     }
 
     public void prepareCd() throws IOException {

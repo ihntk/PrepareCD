@@ -18,7 +18,7 @@ public class MachineDir {
     private Machine machine;
     private final File machinePathDir;
     protected String machinePath;
-    private final String machineXls;
+    protected final String machineXls;
     private String hMachine = null;
     protected String luxFile = null;
 
@@ -67,21 +67,7 @@ public class MachineDir {
         return ckd;
     }
 
-    /*
-    getMachineXls() chec machineXls exist, if no copy and launch it in excel
-    also copy Luxemburd xls and launch it too
-     */
-    public void getMachineXls() throws IOException {
-        if (!new File(machinePath + machineXls).exists()) {
-            copyXls();
-            app.desktop.open(new File(machinePath + machineXls));
-            app.desktop.open(new File(machinePath + luxFile));
-        } else {
-            app.desktop.open(new File(machinePath + machineXls));
-        }
-    }
-
-    private void copyXls() throws IOException {
+    protected void copyXls() throws IOException {
         Files.copy(Paths.get(app.XLS), Paths.get(machinePath + machineXls));
 
         copyLuxFile();
