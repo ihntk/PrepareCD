@@ -11,6 +11,7 @@ else it can rename base .ckd to machine files, alike I...ckd -> I5500-GA1881.ckd
 і автоматичного видалення зайвих директорій, відкриття пдф'ів інсттрукцій для ручного додаваня самих інструкцій.
  */
 
+import com.af.igor.prepcd.log.SimpleLogger;
 import com.af.igor.prepcd.util.LuxParser;
 import com.af.igor.prepcd.util.MachineExcelParser;
 import com.af.igor.prepcd.util.MachinesCode;
@@ -25,6 +26,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class MainApp {
+    public static final String LOGFILE = "d:\\my_docs\\workDir\\PrepareCD.log";
     private static MainApp instance;
     private static String version = "0.2.3";
     private static Machine machine;         //in future this field will replace static ArrayList<Machine>
@@ -39,8 +41,10 @@ public class MainApp {
     static final String totalCommander = "C:\\Program Files\\totalcmd\\TOTALCMD64";
     static public LuxParser luxParser;
     static MachineExcelParser machineExcelParser;
+    private final SimpleLogger logger;
 
     private MainApp() {
+        logger=new SimpleLogger();
     }
 
     public static MainApp getInstance() {
@@ -87,7 +91,7 @@ public class MainApp {
         return "\nPrepareCD version " + version;
     }
 
-    public String searchFileName(String path, String pattern) throws IOException {
+    public String searchFileName(String path, String pattern) throws IOException    {
         String fileName = null;
         int count = 0;
         String[] files = new File(path).list();
@@ -206,21 +210,33 @@ public class MainApp {
             getInstance().tc("/l=" + machine.machineDir.machinePath);
             getInstance().help();
         }
-        if (use == 1) getInstance().machine.getMachineXls();
+        if (use == 1) {
+            if (!machine.getMachineXls())
+                desktop.open(new File(machine.machineDir.machinePath+machine.machineDir.machineXls));
+            else {
+                machine.setMachineType(luxParser.getMachineType(machine.machineDir.machinePath + machine.getLuxFile()));
+                luxParser.getMachineData();
+
+                System.out.println(machine.getMachineType());
+
+//                desktop.open(new File(machine.machineDir.machinePath+machine.machineDir.machineXls));
+//                desktop.open(new File(machine.machineDir.machinePath+machine.machineDir.luxFile));
+            }
+        }
 //        if (use == 2) getInstance().machine.prepareCd();
 //        if (use == 3) {
 //            getInstance().machine.getMachineXls();
 //            getInstance().machine.prepareCd();
 //        }
         if (use == 4) {
-            getInstance().machine.openLuxFile();
+            machine.openLuxFile();
             getInstance().tc("/L=\"" + machine.machineDir.machinePath+"\" /T /R=\"" + machine.I_PLANS+"\"");
             System.out.println("Copy base installation drawing\nAlready done? (press enter)");
             machine.setMachineType(luxParser.getMachineType(machine.machineDir.machinePath + machine.getLuxFile()));
             new BufferedReader(new InputStreamReader(System.in)).readLine();
             String installationName = "I" + getInstance().getMachineCode() + "-" + machine.getMachineName().substring(2) + ".ckd";
             Files.move(Paths.get(machine.machineDir.machinePath + machine.machineDir.getCkdFiles().get(0)), Paths.get(machine.machineDir.machinePath + installationName));  //rename installation
-            getInstance().desktop.open(new File(machine.machineDir.machinePath + installationName));
+            desktop.open(new File(machine.machineDir.machinePath + installationName));
             getInstance().tc("/R=" + machine.hMachinePath+"\"");
         }
 
