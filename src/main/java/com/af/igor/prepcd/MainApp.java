@@ -119,7 +119,7 @@ public class MainApp {
                 }
             }
         } catch (Exception e) {
-            logger.log("Error in mainApp.searchFileName\n   path is: " + path + "\n  pattern is: " + pattern+"\n");
+            logger.log("Error in mainApp.searchFileName\n   path is: " + path + "\n     pattern is: " + pattern+"\n");
             logger.log(e.toString());
             logger.stopLogging();
             e.printStackTrace();
@@ -195,7 +195,7 @@ public class MainApp {
 
         getInstance().initializePath(machineName);
         if (machine == null) {
-            getInstance().logger.log("Error in mainApp.initializePath\n machineName is: "+machineName);
+            getInstance().logger.log("Error in mainApp.initializePath\n   machineName is: "+machineName);
             getInstance().logger.stopLogging();
             return;
         }
