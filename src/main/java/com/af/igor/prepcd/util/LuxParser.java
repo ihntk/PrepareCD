@@ -46,4 +46,8 @@ public class LuxParser extends ExcelParser{
         String machineType=String.format("%s", sheet.getRow(1).getCell(2)).replaceAll(" ","").trim();
         return machineType;
     }
+
+    public String getMachineData() {
+        return null;
+    }
 }
