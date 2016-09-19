@@ -44,7 +44,7 @@ public class MainApp {
     private final SimpleLogger logger;
 
     private MainApp() {
-        logger=new SimpleLogger();
+        logger = new SimpleLogger();
     }
 
     public static MainApp getInstance() {
@@ -91,44 +91,50 @@ public class MainApp {
         return "\nPrepareCD version " + version;
     }
 
-    public String searchFileName(String path, String pattern) throws IOException    {
+    public String searchFileName(String path, String pattern) {
         String fileName = null;
         int count = 0;
-        String[] files = new File(path).list();
-        for (String file : files) {
-            if (file.startsWith(pattern)) {
-                fileName = file;
-                count++;
-            }
-        }
-        if (count > 1) {
-            desktop.open(new File(path));
-            System.out.println("Attention! There are " + count + " files for machine " + machine.getMachineName() +
-                    "\ncopy it manually from currently opened directory\n" +
-                    "Already done? (y/N)");           //in future we can copy both (or many) files to machineDir and show message in window
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
-                while (reader.readLine().toLowerCase().equals("y")) {
+        try {
+            String[] files = new File(path).list();
+            for (String file : files) {
+                if (file.startsWith(pattern)) {
+                    fileName = file;
                     count++;
-                    if (count == 5) {
-                        System.out.println("something wrong!");
-                        fileName = null;
-                        break;
+                }
+            }
+            if (count > 1) {
+                desktop.open(new File(path));
+                System.out.println("Attention! There are " + count + " files for machine " + machine.getMachineName() +
+                        "\ncopy it manually from currently opened directory\n" +
+                        "Already done? (y/N)");           //in future we can copy both (or many) files to machineDir and show message in window
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+                    while (reader.readLine().toLowerCase().equals("y")) {
+                        count++;
+                        if (count == 5) {
+                            System.out.println("something wrong!");
+                            fileName = null;
+                            break;
 //                        Thread.currentThread().stop();        // тут лежить какашка. Потрібно це зробити акуратніше
+                        }
                     }
                 }
             }
+        } catch (IOException e) {
+            logger.log("Error in mainApp.searchFileName\n   path is: " + path + "\n  pattern is: " + pattern+"\n");
+            logger.log(e.toString());
+            e.printStackTrace();
         }
         return fileName;
     }
 
     public void tc(String parameters) throws IOException {
         Runtime runtime = Runtime.getRuntime();
-        String command = totalCommander+" /O "+ parameters;
+        String command = totalCommander + " /O " + parameters;
         Process process = runtime.exec(command);
 //        System.out.println("==test==\n"+command+"\n==test==");
     }
 
-    public String getMachineCode(){
+    public String getMachineCode() {
         String machineType = null;
         if (machine.getMachineType().contains("-"))
             machineType = machine.getMachineType().substring(0, machine.getMachineType().indexOf("-"));
@@ -212,7 +218,7 @@ public class MainApp {
         }
         if (use == 1) {
             if (!machine.getMachineXls())
-                desktop.open(new File(machine.machineDir.machinePath+machine.machineDir.machineXls));
+                desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
             else {
                 machine.setMachineType(luxParser.getMachineType(machine.machineDir.machinePath + machine.getLuxFile()));
                 luxParser.getMachineData();
@@ -230,14 +236,14 @@ public class MainApp {
 //        }
         if (use == 4) {
             machine.openLuxFile();
-            getInstance().tc("/L=\"" + machine.machineDir.machinePath+"\" /T /R=\"" + machine.I_PLANS+"\"");
+            getInstance().tc("/L=\"" + machine.machineDir.machinePath + "\" /T /R=\"" + machine.I_PLANS + "\"");
             System.out.println("Copy base installation drawing\nAlready done? (press enter)");
             machine.setMachineType(luxParser.getMachineType(machine.machineDir.machinePath + machine.getLuxFile()));
             new BufferedReader(new InputStreamReader(System.in)).readLine();
             String installationName = "I" + getInstance().getMachineCode() + "-" + machine.getMachineName().substring(2) + ".ckd";
             Files.move(Paths.get(machine.machineDir.machinePath + machine.machineDir.getCkdFiles().get(0)), Paths.get(machine.machineDir.machinePath + installationName));  //rename installation
             desktop.open(new File(machine.machineDir.machinePath + installationName));
-            getInstance().tc("/R=" + machine.hMachinePath+"\"");
+            getInstance().tc("/R=" + machine.hMachinePath + "\"");
         }
 
         /*
