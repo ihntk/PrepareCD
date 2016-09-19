@@ -41,15 +41,14 @@ public class MainApp {
     static final String totalCommander = "C:\\Program Files\\totalcmd\\TOTALCMD64";
     static public LuxParser luxParser;
     static MachineExcelParser machineExcelParser;
-    private final SimpleLogger logger;
+    protected SimpleLogger logger;
 
-    private MainApp() {
-        logger = new SimpleLogger();
-    }
+    private MainApp() {}
 
     public static MainApp getInstance() {
         if (instance == null) {
             instance = new MainApp();
+            instance.logger = new SimpleLogger();
             luxParser = LuxParser.getinstance();
             machineExcelParser = MachineExcelParser.getinstance();
             return instance;
@@ -119,9 +118,10 @@ public class MainApp {
                     }
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.log("Error in mainApp.searchFileName\n   path is: " + path + "\n  pattern is: " + pattern+"\n");
             logger.log(e.toString());
+            logger.stopLogging();
             e.printStackTrace();
         }
         return fileName;
@@ -166,6 +166,8 @@ public class MainApp {
             String flag = args[i];
             if (flag.equals("-v")) {
                 System.out.println(getVersion());
+                getInstance().logger.log("Showed version");
+                getInstance().logger.stopLogging();
                 return;
             }
         }
@@ -185,12 +187,18 @@ public class MainApp {
             } catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println("\nYou must specify the filename after -n flag");
                 getInstance().help();
+                getInstance().logger.log("Machine was not specify");
+                getInstance().logger.stopLogging();
                 return;
             }
         }
 
         getInstance().initializePath(machineName);
-        if (machine == null) return;
+        if (machine == null) {
+            getInstance().logger.log("Error in mainApp.initializePath\n machineName is: "+machineName);
+            getInstance().logger.stopLogging();
+            return;
+        }
 
         /*
         identify target
@@ -256,6 +264,7 @@ public class MainApp {
         case4 if there are .pdf files and used flag prepare CD directory using .xls and copy .pdf to plans directory
             maybe will better combine case3 and case4 together
          */
+        getInstance().logger.stopLogging();
     }
 
 }
