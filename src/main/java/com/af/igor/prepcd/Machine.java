@@ -44,6 +44,7 @@ public class Machine {
 
     public void setMachineType(String machineType) {
         this.machineType = machineType;
+        app.logger.log("Machine type is: "+this.machineType);
     }
 
     public String getMachineType() {
@@ -76,6 +77,7 @@ public class Machine {
             machineDir.copyXls();
             isXlsCreated=true;
         }
+        app.logger.log("isXlsCreated is: "+isXlsCreated);
         return isXlsCreated;
     }
 
