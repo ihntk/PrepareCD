@@ -13,7 +13,7 @@ public class MachineExcelParser extends ExcelParser{
 
     private MachineExcelParser() {}
 
-    public static MachineExcelParser getinstance() {
+    public static MachineExcelParser getInstance() {
         if (instance==null)
             instance=new MachineExcelParser();
         return instance;

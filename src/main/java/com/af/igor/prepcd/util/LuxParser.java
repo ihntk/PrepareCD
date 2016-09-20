@@ -14,7 +14,7 @@ public class LuxParser extends ExcelParser{
 
     private LuxParser(){}
 
-    public static LuxParser getinstance(){
+    public static LuxParser getInstance(){
         if (instance==null)
             instance=new LuxParser();
         return instance;

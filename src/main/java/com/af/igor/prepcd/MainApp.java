@@ -49,8 +49,8 @@ public class MainApp {
         if (instance == null) {
             instance = new MainApp();
             instance.logger = new SimpleLogger();
-            luxParser = LuxParser.getinstance();
-            machineExcelParser = MachineExcelParser.getinstance();
+            luxParser = LuxParser.getInstance();
+            machineExcelParser = MachineExcelParser.getInstance();
             return instance;
         } else return instance;
     }
