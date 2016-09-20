@@ -48,6 +48,7 @@ public class LuxParser extends ExcelParser{
     }
 
     public String getMachineData() {
+        app.logger.log("getMachineData() do nothing");
         return null;
     }
 }
