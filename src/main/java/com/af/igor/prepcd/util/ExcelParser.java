@@ -17,10 +17,8 @@ public abstract class ExcelParser {
 
     public void setExcelFile(String excelFile) {
         this.excelFile= excelFile;
-        try(FileInputStream file=new FileInputStream(excelFile)) {
+        try {
             workbook=new XSSFWorkbook(excelFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
