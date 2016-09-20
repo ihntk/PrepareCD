@@ -259,7 +259,7 @@ public class MainApp {
             Files.move(Paths.get(machine.machineDir.machinePath + machine.machineDir.getCkdFiles().get(0)), Paths.get(machine.machineDir.machinePath + installationName));  //rename installation
             desktop.open(new File(machine.machineDir.machinePath + installationName));
             getInstance().logger.log("Installation "+ installationName+" opened");
-            getInstance().tc("/R=" + machine.hMachinePath + "\"");
+            getInstance().tc("/R=\"" + machine.hMachinePath + "\"");
             getInstance().logger.log("Opened in tc :\n   "+machine.hMachinePath);
         }
 
