@@ -41,7 +41,7 @@ public class MainApp {
     static final String totalCommander = "C:\\Program Files\\totalcmd\\TOTALCMD64";
     static public LuxParser luxParser;
     static MachineExcelParser machineExcelParser;
-    protected SimpleLogger logger;
+    public SimpleLogger logger;
 
     private MainApp() {}
 
@@ -67,13 +67,16 @@ public class MainApp {
             Path path = Paths.get("").toAbsolutePath();
             if (!path.toString().startsWith(MACHINES)) {
                 System.out.println("\nYou are not in \"plans\" directory");
+                logger.log("You are not in \"plans\" directory");
                 getInstance().help();
                 return;
             }
             machineName = path.getFileName().toString().toUpperCase();
+            logger.log("path got from pwd");
         }
 
         machine = new Machine(machineName);
+        logger.log("machine name is: "+machineName);
     }
 
     private void help() throws InterruptedException {
@@ -131,7 +134,7 @@ public class MainApp {
         Runtime runtime = Runtime.getRuntime();
         String command = totalCommander + " /O " + parameters;
         Process process = runtime.exec(command);
-//        System.out.println("==test==\n"+command+"\n==test==");
+        logger.log("total commander got parameters:\n   "+command);
     }
 
     public String getMachineCode() {
@@ -225,16 +228,19 @@ public class MainApp {
             getInstance().help();
         }
         if (use == 1) {
-            if (!machine.getMachineXls())
+            if (!machine.getMachineXls()) {
+                getInstance().tc("/l=\"" + machine.machineDir.machinePath+"\" /t /r=\""+ machine.hMachinePath+"\"");
                 desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
+                getInstance().logger.log("xls is opened");
+            }
             else {
                 machine.setMachineType(luxParser.getMachineType(machine.machineDir.machinePath + machine.getLuxFile()));
                 luxParser.getMachineData();
-
-                System.out.println(machine.getMachineType());
-
-//                desktop.open(new File(machine.machineDir.machinePath+machine.machineDir.machineXls));
-//                desktop.open(new File(machine.machineDir.machinePath+machine.machineDir.luxFile));
+                getInstance().tc("/l=\"" + machine.machineDir.machinePath+"\" /t /r=\""+ machine.hMachinePath+"\"");
+                desktop.open(new File(machine.machineDir.machinePath+machine.machineDir.machineXls));
+                getInstance().logger.log("xls is opened");
+                desktop.open(new File(machine.machineDir.machinePath+machine.machineDir.luxFile));
+                getInstance().logger.log("lux is opened");
             }
         }
 //        if (use == 2) getInstance().machine.prepareCd();
@@ -248,7 +254,6 @@ public class MainApp {
             getInstance().logger.log("Opened in tc: \n   "+machine.machineDir.machinePath+"\n   "+ machine.I_PLANS );
             System.out.println("Copy base installation drawing\nAlready done? (press enter)");
             machine.setMachineType(luxParser.getMachineType(machine.machineDir.machinePath + machine.getLuxFile()));
-            getInstance().logger.log("Machine type is: "+machine.getMachineType());
             new BufferedReader(new InputStreamReader(System.in)).readLine();
             String installationName = "I" + getInstance().getMachineCode() + "-" + machine.getMachineName().substring(2) + ".ckd";
             Files.move(Paths.get(machine.machineDir.machinePath + machine.machineDir.getCkdFiles().get(0)), Paths.get(machine.machineDir.machinePath + installationName));  //rename installation
