@@ -69,6 +69,7 @@ public class MachineDir {
 
     protected void copyXls() throws IOException {
         Files.copy(Paths.get(app.XLS), Paths.get(machinePath + machineXls));
+        app.logger.log("Copied xls");
 
         copyLuxFile();
     }
