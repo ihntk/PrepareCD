@@ -28,7 +28,7 @@ import java.nio.file.Paths;
 public class MainApp {
     public static final String LOGFILE = "d:\\my_docs\\workDir\\PrepareCD.log";
     private static MainApp instance;
-    private static String version = "0.3.0";
+    private static String version = "0.3.1";
     private static Machine machine;         //in future this field will replace static ArrayList<Machine>
     static final String XLS = "d:\\my_docs\\workDir\\XL's\\20XX0000.xlsx";
     static final String MACHINES = "d:\\my_docs\\plans\\";
