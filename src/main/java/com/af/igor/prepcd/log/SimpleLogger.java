@@ -25,7 +25,7 @@ public class SimpleLogger {
 
     public void log(String message) {
         try {
-            outputStream.write(message.getBytes());
+            outputStream.write((message+"\n").getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
