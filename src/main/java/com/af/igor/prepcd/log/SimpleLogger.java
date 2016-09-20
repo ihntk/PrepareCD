@@ -33,7 +33,7 @@ public class SimpleLogger {
 
     public void stopLogging(){
         try {
-            log("\nProgram finished\n-----\n");
+            log("\nProgram finished\n-----\n\n");
             outputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
