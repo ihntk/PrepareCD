@@ -16,7 +16,7 @@ public class SimpleLogger {
 
     public SimpleLogger() {
         try {
-            outputStream=new FileOutputStream(new File(app.LOGFILE));
+            outputStream=new FileOutputStream(app.LOGFILE, true);
             log("=====\nProgram started\n");
         } catch (IOException e) {
             e.printStackTrace();
