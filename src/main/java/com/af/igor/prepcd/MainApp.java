@@ -145,7 +145,7 @@ public class MainApp {
         return MachinesCode.valueOf(machineType).toString();
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public void run(String[] args) throws IOException, InterruptedException{
         /*
         available flags
         -x xls
@@ -169,8 +169,8 @@ public class MainApp {
             String flag = args[i];
             if (flag.equals("-v")) {
                 System.out.println(getVersion());
-                getInstance().logger.log("Showed version");
-                getInstance().logger.stopLogging();
+                logger.log("Showed version");
+                logger.stopLogging();
                 return;
             }
         }
@@ -189,17 +189,17 @@ public class MainApp {
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println("\nYou must specify the filename after -n flag");
-                getInstance().help();
-                getInstance().logger.log("Machine was not specify");
-                getInstance().logger.stopLogging();
+                help();
+                logger.log("Machine was not specify");
+                logger.stopLogging();
                 return;
             }
         }
 
-        getInstance().initializePath(machineName);
+        initializePath(machineName);
         if (machine == null) {
-            getInstance().logger.log("Error in mainApp.initializePath\n   machineName is: "+machineName);
-            getInstance().logger.stopLogging();
+            logger.log("Error in mainApp.initializePath\n   machineName is: "+machineName);
+            logger.stopLogging();
             return;
         }
 
@@ -224,56 +224,49 @@ public class MainApp {
          */
         if (use == 0) {
             System.out.println("\nYou must specify target. Application wont to know what to do");
-            getInstance().tc("/l=" + machine.machineDir.machinePath);
-            getInstance().help();
+            tc("/l=" + machine.machineDir.machinePath);
+            help();
         }
         if (use == 1) {
             if (!machine.getMachineXls()) {
-                getInstance().tc("/l=\"" + machine.machineDir.machinePath+"\" /t /r=\""+ machine.hMachinePath+"\"");
+                tc("/l=\"" + machine.machineDir.machinePath+"\" /t /r=\""+ machine.hMachinePath+"\"");
                 desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
-                getInstance().logger.log("xls is opened");
+                logger.log("xls is opened");
             }
             else {
                 machine.setMachineType(luxParser.getMachineType(machine.machineDir.machinePath + machine.getLuxFile()));
                 luxParser.getMachineData();
-                getInstance().tc("/l=\"" + machine.machineDir.machinePath+"\" /t /r=\""+ machine.hMachinePath+"\"");
+                tc("/l=\"" + machine.machineDir.machinePath+"\" /t /r=\""+ machine.hMachinePath+"\"");
                 desktop.open(new File(machine.machineDir.machinePath+machine.machineDir.machineXls));
-                getInstance().logger.log("xls is opened");
+                logger.log("xls is opened");
                 desktop.open(new File(machine.machineDir.machinePath+machine.machineDir.luxFile));
-                getInstance().logger.log("lux is opened");
+                logger.log("lux is opened");
             }
         }
-//        if (use == 2) getInstance().machine.prepareCd();
+//        if (use == 2) machine.prepareCd();
 //        if (use == 3) {
-//            getInstance().machine.getMachineXls();
-//            getInstance().machine.prepareCd();
+//            machine.getMachineXls();
+//            machine.prepareCd();
 //        }
         if (use == 4) {
             machine.openLuxFile();
-            getInstance().tc("/L=\"" + machine.machineDir.machinePath + "\" /T /R=\"" + machine.I_PLANS + "\"");
-            getInstance().logger.log("Opened in tc: \n   "+machine.machineDir.machinePath+"\n   "+ machine.I_PLANS );
+            tc("/L=\"" + machine.machineDir.machinePath + "\" /T /R=\"" + machine.I_PLANS + "\"");
+            logger.log("Opened in tc: \n   "+machine.machineDir.machinePath+"\n   "+ machine.I_PLANS );
             System.out.println("Copy base installation drawing\nAlready done? (press enter)");
             machine.setMachineType(luxParser.getMachineType(machine.machineDir.machinePath + machine.getLuxFile()));
             new BufferedReader(new InputStreamReader(System.in)).readLine();
-            String installationName = "I" + getInstance().getMachineCode() + "-" + machine.getMachineName().substring(2) + ".ckd";
+            String installationName = "I" + getMachineCode() + "-" + machine.getMachineName().substring(2) + ".ckd";
             Files.move(Paths.get(machine.machineDir.machinePath + machine.machineDir.getCkdFiles().get(0)), Paths.get(machine.machineDir.machinePath + installationName));  //rename installation
             desktop.open(new File(machine.machineDir.machinePath + installationName));
-            getInstance().logger.log("Installation "+ installationName+" opened");
-            getInstance().tc("/R=\"" + machine.hMachinePath + "\"");
-            getInstance().logger.log("Opened in tc :\n   "+machine.hMachinePath);
+            logger.log("Installation "+ installationName+" opened");
+            tc("/R=\"" + machine.hMachinePath + "\"");
+            logger.log("Opened in tc :\n   "+machine.hMachinePath);
         }
 
-        /*
-        create ArrayList<String> files in directory (or other list of files)
-        analize numbers of files and type files
-        case1 if there is only 1 xls file - copy base xls and rename it by the name of directory and (if need)
-        correct type of machine inside it (using dialog) and open it
-        case2 if there are .ckd files rename it according to type of machine (using the previos .xls)
-        case3 if there are .pdf files copy it to the print directory (or to the machine directory using flag)
-        case4 if there are .pdf files and used flag prepare CD directory using .xls and copy .pdf to plans directory
-            maybe will better combine case3 and case4 together
-         */
-        getInstance().logger.stopLogging();
+        logger.stopLogging();
+    }
+    public static void main(String[] args) throws IOException, InterruptedException {
+        getInstance().run(args);
     }
 
 }
