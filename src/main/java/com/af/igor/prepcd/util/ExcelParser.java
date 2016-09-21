@@ -25,6 +25,6 @@ public abstract class ExcelParser {
     }
 
 
-    public abstract String[] getLanguage(String excelFile);
+    public abstract String[] getLanguage();
 
 }

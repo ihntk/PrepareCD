@@ -234,7 +234,8 @@ public class MainApp {
                 logger.log("xls is opened");
             }
             else {
-                machine.setMachineType(luxParser.getMachineType(machine.machineDir.machinePath + machine.getLuxFile()));
+                luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
+                machine.setMachineType(luxParser.getMachineType());
                 luxParser.getMachineData();
                 tc("/l=\"" + machine.machineDir.machinePath+"\" /t /r=\""+ machine.hMachinePath+"\"");
                 desktop.open(new File(machine.machineDir.machinePath+machine.machineDir.machineXls));
@@ -250,10 +251,11 @@ public class MainApp {
 //        }
         if (use == 4) {
             machine.openLuxFile();
+            luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
             tc("/L=\"" + machine.machineDir.machinePath + "\" /T /R=\"" + machine.I_PLANS + "\"");
             logger.log("Opened in tc: \n   "+machine.machineDir.machinePath+"\n   "+ machine.I_PLANS );
             System.out.println("Copy base installation drawing\nAlready done? (press enter)");
-            machine.setMachineType(luxParser.getMachineType(machine.machineDir.machinePath + machine.getLuxFile()));
+            machine.setMachineType(luxParser.getMachineType());
             new BufferedReader(new InputStreamReader(System.in)).readLine();
             String installationName = "I" + getMachineCode() + "-" + machine.getMachineName().substring(2) + ".ckd";
             Files.move(Paths.get(machine.machineDir.machinePath + machine.machineDir.getCkdFiles().get(0)), Paths.get(machine.machineDir.machinePath + installationName));  //rename installation
