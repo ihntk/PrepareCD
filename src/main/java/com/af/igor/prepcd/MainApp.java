@@ -223,6 +223,7 @@ public class MainApp {
         4 - installation
          */
         if (use == 0) {
+            logger.log("target isn't specified");
             System.out.println("\nYou must specify target. Application wont to know what to do");
             tc("/l=\"" + machine.machineDir.machinePath+"\"");
             help();
