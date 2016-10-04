@@ -38,7 +38,7 @@ public class MainApp {
     static final String CDTEMPLATE = "\\\\Serverua\\AF_UA\\1.4.CD\\WEB3_Operator Manual\\";
     static final String PLANS = "\\\\Serverua\\af_ua\\1.2.Plans\\";
     static Desktop desktop = Desktop.getDesktop();
-    static final String totalCommander = "C:\\Program Files\\totalcmd\\TOTALCMD64";
+    static final String TOTALCOMMANDER = "C:\\Program Files\\totalcmd\\TOTALCMD64";
     static public LuxParser luxParser;
     static MachineExcelParser machineExcelParser;
     public SimpleLogger logger;
@@ -132,7 +132,7 @@ public class MainApp {
 
     public void tc(String parameters) throws IOException {
         Runtime runtime = Runtime.getRuntime();
-        String command = totalCommander + " /O " + parameters;
+        String command = TOTALCOMMANDER + " /O " + parameters;
         Process process = runtime.exec(command);
         logger.log("total commander got parameters:\n   "+command);
     }
