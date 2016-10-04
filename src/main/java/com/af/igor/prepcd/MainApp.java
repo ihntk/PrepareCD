@@ -228,6 +228,7 @@ public class MainApp {
             help();
         }
         if (use == 1) {
+            logger.log("target is: xls");
             if (!machine.getMachineXls()) {
                 tc("/l=\"" + machine.machineDir.machinePath+"\" /t /r=\""+ machine.hMachinePath+"\"");
                 desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
@@ -250,6 +251,7 @@ public class MainApp {
 //            machine.prepareCd();
 //        }
         if (use == 4) {
+            logger.log("target is: installation");
             machine.openLuxFile();
             luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
             tc("/L=\"" + machine.machineDir.machinePath + "\" /T /R=\"" + machine.I_PLANS + "\"");
