@@ -112,4 +112,8 @@ public class Machine {
     public void renameAllCkd() {
 
     }
+
+    public void open4CkdFiles() {
+
+    }
 }
