@@ -224,7 +224,7 @@ public class MainApp {
          */
         if (use == 0) {
             System.out.println("\nYou must specify target. Application wont to know what to do");
-            tc("/l=" + machine.machineDir.machinePath);
+            tc("/l=\"" + machine.machineDir.machinePath+"\"");
             help();
         }
         if (use == 1) {
