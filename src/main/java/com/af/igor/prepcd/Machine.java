@@ -12,7 +12,7 @@ public class Machine {
     MainApp app = MainApp.getInstance();
     private final String machineName;
     private String machineType;
-    private final String sm;
+    private final String sm;        //first two symbols in machine name (usually 20)
     private final String machineSeries;
     private final String luxPathString;
     protected final String hMachinePath;
@@ -82,7 +82,7 @@ public class Machine {
     }
 
     public void prepareCd() throws IOException {
-        String[] langs=app.machineExcelParser.getLanguage(machineDir.machinePath + machineDir.luxFile);
+        String[] langs=app.machineExcelParser.getLanguage();
         for (String lang:langs){
             System.out.println(lang);
         }
@@ -104,4 +104,10 @@ public class Machine {
     public String getLuxFile() {
         return machineDir.luxFile;
     }
+
+    public String getXls() {
+        return machineDir.machineXls;
+    }
+
+
 }
