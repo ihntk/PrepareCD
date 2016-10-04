@@ -109,5 +109,7 @@ public class Machine {
         return machineDir.machineXls;
     }
 
+    public void renameAllCkd() {
 
+    }
 }
