@@ -213,6 +213,11 @@ public class MainApp {
             if (flag.equals("-i")) use = (byte) (use | 4);
         }
 
+        for (int i = 0; i < args.length; i++) {
+            String flag = args[i];
+            if (flag.equals("-t"))
+                logger.log("========THIS RECORD IS FOR TEST ONLY========");
+        }
 
         /*
         use - marker control program:
