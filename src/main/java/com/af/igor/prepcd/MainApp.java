@@ -27,6 +27,7 @@ import java.nio.file.Paths;
 
 public class MainApp {
     public static final String LOGFILE = "d:\\my_docs\\workDir\\PrepareCD.log";
+    private static final String ETIQCLAS = "d:\\my_docs\\workDir\\XL's\\Etiqclas.ckd";
     private static MainApp instance;
     private static String version = "0.3.1";
     private static Machine machine;         //in future this field will replace static ArrayList<Machine>
@@ -85,8 +86,10 @@ public class MainApp {
                 "-n [machine name]    Name of machine\n" +
                 "-i                   Make installation\n" +
                 "-x                   Create xls\n" +
-                "-c                   Prepare cd");
-        Thread.sleep(5000);
+                "-c                   Prepare cd\n" +
+                "-m                   Prepare machine files\n" +
+                "-t                   Insert test string to log file");
+        Thread.sleep(7000);
     }
 
     public static String getVersion() {
@@ -220,6 +223,7 @@ public class MainApp {
             if (flag.equals("-x")) use = (byte) (use | 1);
             if (flag.equals("-c")) use = (byte) (use | 2);
             if (flag.equals("-i")) use = (byte) (use | 4);
+            if (flag.equals("-m")) use = (byte) (use | 8);
         }
 
 
@@ -230,6 +234,7 @@ public class MainApp {
         2 - cd
         3 - xls+cd
         4 - installation
+        8 - machine
          */
         if (use == 0) {
             logger.log("target isn't specified");
@@ -255,11 +260,7 @@ public class MainApp {
                 logger.log("lux is opened");
             }
         }
-//        if (use == 2) machine.prepareCd();
-//        if (use == 3) {
-//            machine.getMachineXls();
-//            machine.prepareCd();
-//        }
+
         if (use == 4) {
             logger.log("target is: installation");
             machine.openLuxFile();
@@ -275,6 +276,19 @@ public class MainApp {
             logger.log("Installation "+ installationName+" opened");
             tc("/R=\"" + machine.hMachinePath + "\"");
             logger.log("Opened in tc :\n   "+machine.hMachinePath);
+        }
+
+        if (use==8){
+            logger.log("target is: machine");
+            tc("/L=\"" + machine.machineDir.machinePath + "\" /T /R=\"" + PLANS + "\"");
+            logger.log("Opened in tc: \n   "+machine.machineDir.machinePath+"\n   "+ PLANS );
+            machineExcelParser.setExcelFile(machine.machineDir.machinePath + machine.getXls());
+            String mPlans=machineExcelParser.getMPlans();
+            System.out.println("Copy base drawings\nYou must to copy I, E, FS and "+mPlans.replaceAll("\\+"," ")+"\n" +
+                    "Already done? (press enter)");
+            Files.copy(Paths.get(ETIQCLAS), Paths.get(machine.machineDir.machinePath));
+            machine.renameAllCkd();
+            machine.open4CkdFiles();
         }
 
         logger.stopLogging();
