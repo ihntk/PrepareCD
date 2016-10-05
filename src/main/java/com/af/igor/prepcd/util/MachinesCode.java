@@ -4,7 +4,7 @@ package com.af.igor.prepcd.util;
  * Created by igor on 03.09.16.
  */
 public enum MachinesCode {
-    MC2(700),
+    MC244(700),
     CE2A(1000),
     CE2B(1500),
     CE24A(2000),
