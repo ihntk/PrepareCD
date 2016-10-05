@@ -117,7 +117,7 @@ public class Machine {
                 String renamedCkd = "Etiqclas" + "-" + getMachineName().substring(2) + ".ckd";
                 machineDir.rename(file,renamedCkd);
             }
-            if (file.startsWith("E")){
+            if ((file.startsWith("E"))&&(!file.startsWith("Etiqclas"))){
                 String renamedCkd = "E" + app.getMachineCode() + "-" + getMachineName().substring(2) + ".ckd";
                 machineDir.rename(file,renamedCkd);
             }
@@ -183,7 +183,7 @@ public class Machine {
         for (String file:ckdFiles){
             if (file.startsWith("FS"))app.desktop.open(new File(machineDir.machinePath+file));
             if (file.startsWith("Etiqclas"))app.desktop.open(new File(machineDir.machinePath+file));
-            if (file.startsWith("E"))app.desktop.open(new File(machineDir.machinePath+file));
+            if ((file.startsWith("E"))&&(!file.startsWith("Etiqclas")))app.desktop.open(new File(machineDir.machinePath+file));
             if (file.startsWith("I"))app.desktop.open(new File(machineDir.machinePath+file));
         }
     }
