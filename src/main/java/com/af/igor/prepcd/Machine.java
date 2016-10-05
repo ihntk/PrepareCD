@@ -174,7 +174,13 @@ public class Machine {
         }
     }
 
-    public void open4CkdFiles() {
-
+    public void open4CkdFiles() throws IOException {
+        ArrayList<String>ckdFiles=machineDir.getCkdFiles();
+        for (String file:ckdFiles){
+            if (file.startsWith("FS"))app.desktop.open(new File(machineDir.machinePath+file));
+            if (file.startsWith("Etiqclas"))app.desktop.open(new File(machineDir.machinePath+file));
+            if (file.startsWith("E"))app.desktop.open(new File(machineDir.machinePath+file));
+            if (file.startsWith("I"))app.desktop.open(new File(machineDir.machinePath+file));
+        }
     }
 }
