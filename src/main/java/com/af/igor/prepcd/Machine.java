@@ -17,7 +17,7 @@ public class Machine {
     private final String machineSeries;
     private final String luxPathString;
     protected final String hMachinePath;
-    protected final String I_PLANS=app.PLANS+"002 - Plan d'installation 2008\\";
+    protected final String I_PLANS = app.PLANS + "002 - Plan d'installation 2008\\";
 
     MachineDir machineDir;
     CdDir cdDir;
@@ -25,27 +25,32 @@ public class Machine {
     public Machine(String machineName) throws IOException {
         this.machineName = machineName;
         sm = machineName.substring(0, 2);
-        machineSeries = machineName.substring(2, 4);
+        machineSeries = machineName.substring(2, 3).equals("Y") ? machineName.substring(2, 3) : machineName.substring(2, 4);
         String luxPath = app.LUX_DIR + getSm() + " " + getMachineSeries().substring(0, 1) + "\\";
-        String machSer=machineSeries.substring(0,1);
-        String smMachSer = sm+machineSeries;
-        if (machSer.equals("H")||machSer.equals("I")||machSer.equals("J")) smMachSer=sm+" "+machineSeries;
-        luxPathString = luxPath + app.searchFileName(luxPath, smMachSer) + "\\";
+        String machSer = String.valueOf(machineSeries.charAt(0));
+        String smMachSer = sm + machineSeries;
+        if (!machSer.equals("Y")) {
+            if (machSer.equals("H") || machSer.equals("I") || machSer.equals("J")) {
+                smMachSer = sm + " " + machineSeries;
+                luxPath = luxPath + app.searchFileName(luxPath, smMachSer) + "\\";
+            }
+        }
+        luxPathString = luxPath;
         if (app.searchFileName(getLuxPathString(), getMachineName()) == null) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
                 System.out.println("Are you sure the machine " + machineName + " is exist? (y/N)");
                 if (!reader.readLine().toLowerCase().equals("y")) Thread.currentThread().stop();
             }
         }
-        String hMachPath=app.H_MACHINES+getSm()+getMachineSeries().substring(0,1)+"\\";
-        hMachinePath=hMachPath+app.searchFileName(hMachPath,smMachSer)+"\\";
+        String hMachPath = app.H_MACHINES + getSm() + getMachineSeries().substring(0, 1) + "\\";
+        hMachinePath = hMachPath + app.searchFileName(hMachPath, smMachSer) + "\\";
         machineDir = new MachineDir(this);
         cdDir = new CdDir(this);
     }
 
     public void setMachineType(String machineType) {
         this.machineType = machineType;
-        app.logger.log("Machine type is: "+this.machineType);
+        app.logger.log("Machine type is: " + this.machineType);
     }
 
     public String getMachineType() {
@@ -76,15 +81,15 @@ public class Machine {
         boolean isXlsCreated = false;
         if (!new File(machineDir.machinePath + machineDir.machineXls).exists()) {
             machineDir.copyXls();
-            isXlsCreated=true;
+            isXlsCreated = true;
         }
-        app.logger.log("isXlsCreated is: "+isXlsCreated);
+        app.logger.log("isXlsCreated is: " + isXlsCreated);
         return isXlsCreated;
     }
 
     public void prepareCd() throws IOException {
-        String[] langs=app.machineExcelParser.getLanguage();
-        for (String lang:langs){
+        String[] langs = app.machineExcelParser.getLanguage();
+        for (String lang : langs) {
             System.out.println(lang);
         }
 //        new File(cdDir.cdPathDir).mkdir();
@@ -111,80 +116,81 @@ public class Machine {
     }
 
     public void renameAllCkd() throws IOException {
-        ArrayList<String>ckdFiles=machineDir.getCkdFiles();
-        for (String file:ckdFiles){
-            if (file.startsWith("Etiqclas")){
+        ArrayList<String> ckdFiles = machineDir.getCkdFiles();
+        for (String file : ckdFiles) {
+            if (file.startsWith("Etiqclas")) {
                 String renamedCkd = "Etiqclas" + "-" + getMachineName().substring(2) + ".ckd";
-                machineDir.rename(file,renamedCkd);
+                machineDir.rename(file, renamedCkd);
             }
-            if ((file.startsWith("E"))&&(!file.startsWith("Etiqclas"))){
+            if ((file.startsWith("E")) && (!file.startsWith("Etiqclas"))) {
                 String renamedCkd = "E" + app.getMachineCode() + "-" + getMachineName().substring(2) + ".ckd";
-                machineDir.rename(file,renamedCkd);
+                machineDir.rename(file, renamedCkd);
             }
-            if (file.startsWith("I")){
+            if (file.startsWith("I")) {
                 String renamedCkd = "I" + app.getMachineCode() + "-" + getMachineName().substring(2) + ".ckd";
-                machineDir.rename(file,renamedCkd);
+                machineDir.rename(file, renamedCkd);
             }
-            if (file.startsWith("FS")){
+            if (file.startsWith("FS")) {
                 String renamedCkd = "FS" + app.getMachineCode() + "-" + getMachineName().substring(2) + ".ckd";
-                machineDir.rename(file,renamedCkd);
+                machineDir.rename(file, renamedCkd);
             }
 
-            if (file.startsWith("M10")){
+            if (file.startsWith("M10")) {
                 String renamedCkd = "M10" + "-" + getMachineName().substring(2) + ".ckd";
-                machineDir.rename(file,renamedCkd);
+                machineDir.rename(file, renamedCkd);
             }
-            if (file.startsWith("M20")){
+            if (file.startsWith("M20")) {
                 String renamedCkd = "M20" + "-" + getMachineName().substring(2) + ".ckd";
-                machineDir.rename(file,renamedCkd);
+                machineDir.rename(file, renamedCkd);
             }
-            if (file.startsWith("M30")){
+            if (file.startsWith("M30")) {
                 String renamedCkd = "M30" + "-" + getMachineName().substring(2) + ".ckd";
-                machineDir.rename(file,renamedCkd);
+                machineDir.rename(file, renamedCkd);
             }
-            if (file.startsWith("M40")){
+            if (file.startsWith("M40")) {
                 String renamedCkd = "M40" + "-" + getMachineName().substring(2) + ".ckd";
-                machineDir.rename(file,renamedCkd);
+                machineDir.rename(file, renamedCkd);
             }
-            if (file.startsWith("M50")){
+            if (file.startsWith("M50")) {
                 String renamedCkd = "M50" + "-" + getMachineName().substring(2) + ".ckd";
-                machineDir.rename(file,renamedCkd);
+                machineDir.rename(file, renamedCkd);
             }
-            if (file.startsWith("M60")){
+            if (file.startsWith("M60")) {
                 String renamedCkd = "M60" + "-" + getMachineName().substring(2) + ".ckd";
-                machineDir.rename(file,renamedCkd);
+                machineDir.rename(file, renamedCkd);
             }
-            if (file.startsWith("M70")){
+            if (file.startsWith("M70")) {
                 String renamedCkd = "M70" + "-" + getMachineName().substring(2) + ".ckd";
-                machineDir.rename(file,renamedCkd);
+                machineDir.rename(file, renamedCkd);
             }
-            if (file.startsWith("M80")){
+            if (file.startsWith("M80")) {
                 String renamedCkd = "M80" + "-" + getMachineName().substring(2) + ".ckd";
-                machineDir.rename(file,renamedCkd);
+                machineDir.rename(file, renamedCkd);
             }
-            if (file.startsWith("M90")){
+            if (file.startsWith("M90")) {
                 String renamedCkd = "M90" + "-" + getMachineName().substring(2) + ".ckd";
-                machineDir.rename(file,renamedCkd);
+                machineDir.rename(file, renamedCkd);
             }
-            if (file.startsWith("M100")){
+            if (file.startsWith("M100")) {
                 String renamedCkd = "M100" + "-" + getMachineName().substring(2) + ".ckd";
-                machineDir.rename(file,renamedCkd);
+                machineDir.rename(file, renamedCkd);
             }
-            if (file.startsWith("M110")){
+            if (file.startsWith("M110")) {
                 String renamedCkd = "M110" + "-" + getMachineName().substring(2) + ".ckd";
-                machineDir.rename(file,renamedCkd);
+                machineDir.rename(file, renamedCkd);
             }
 
         }
     }
 
     public void open4CkdFiles() throws IOException {
-        ArrayList<String>ckdFiles=machineDir.getCkdFiles();
-        for (String file:ckdFiles){
-            if (file.startsWith("FS"))app.desktop.open(new File(machineDir.machinePath+file));
-            if (file.startsWith("Etiqclas"))app.desktop.open(new File(machineDir.machinePath+file));
-            if ((file.startsWith("E"))&&(!file.startsWith("Etiqclas")))app.desktop.open(new File(machineDir.machinePath+file));
-            if (file.startsWith("I"))app.desktop.open(new File(machineDir.machinePath+file));
+        ArrayList<String> ckdFiles = machineDir.getCkdFiles();
+        for (String file : ckdFiles) {
+            if (file.startsWith("FS")) app.desktop.open(new File(machineDir.machinePath + file));
+            if (file.startsWith("Etiqclas")) app.desktop.open(new File(machineDir.machinePath + file));
+            if ((file.startsWith("E")) && (!file.startsWith("Etiqclas")))
+                app.desktop.open(new File(machineDir.machinePath + file));
+            if (file.startsWith("I")) app.desktop.open(new File(machineDir.machinePath + file));
         }
     }
 }
