@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 /**
  * Created by ede on 11.08.2016.
@@ -109,8 +110,68 @@ public class Machine {
         return machineDir.machineXls;
     }
 
-    public void renameAllCkd() {
+    public void renameAllCkd() throws IOException {
+        ArrayList<String>ckdFiles=machineDir.getCkdFiles();
+        for (String file:ckdFiles){
+            if (file.startsWith("E")){
+                String renamedCkd = "E" + app.getMachineCode() + "-" + getMachineName().substring(2) + ".ckd";
+                machineDir.rename(file,renamedCkd);
+            }
+            if (file.startsWith("I")){
+                String renamedCkd = "I" + app.getMachineCode() + "-" + getMachineName().substring(2) + ".ckd";
+                machineDir.rename(file,renamedCkd);
+            }
+            if (file.startsWith("FS")){
+                String renamedCkd = "FS" + app.getMachineCode() + "-" + getMachineName().substring(2) + ".ckd";
+                machineDir.rename(file,renamedCkd);
+            }
 
+            if (file.startsWith("M10")){
+                String renamedCkd = "M10" + "-" + getMachineName().substring(2) + ".ckd";
+                machineDir.rename(file,renamedCkd);
+            }
+            if (file.startsWith("M20")){
+                String renamedCkd = "M20" + "-" + getMachineName().substring(2) + ".ckd";
+                machineDir.rename(file,renamedCkd);
+            }
+            if (file.startsWith("M30")){
+                String renamedCkd = "M30" + "-" + getMachineName().substring(2) + ".ckd";
+                machineDir.rename(file,renamedCkd);
+            }
+            if (file.startsWith("M40")){
+                String renamedCkd = "M40" + "-" + getMachineName().substring(2) + ".ckd";
+                machineDir.rename(file,renamedCkd);
+            }
+            if (file.startsWith("M50")){
+                String renamedCkd = "M50" + "-" + getMachineName().substring(2) + ".ckd";
+                machineDir.rename(file,renamedCkd);
+            }
+            if (file.startsWith("M60")){
+                String renamedCkd = "M60" + "-" + getMachineName().substring(2) + ".ckd";
+                machineDir.rename(file,renamedCkd);
+            }
+            if (file.startsWith("M70")){
+                String renamedCkd = "M70" + "-" + getMachineName().substring(2) + ".ckd";
+                machineDir.rename(file,renamedCkd);
+            }
+            if (file.startsWith("M80")){
+                String renamedCkd = "M80" + "-" + getMachineName().substring(2) + ".ckd";
+                machineDir.rename(file,renamedCkd);
+            }
+            if (file.startsWith("M90")){
+                String renamedCkd = "M90" + "-" + getMachineName().substring(2) + ".ckd";
+                machineDir.rename(file,renamedCkd);
+            }
+            if (file.startsWith("M100")){
+                String renamedCkd = "M100" + "-" + getMachineName().substring(2) + ".ckd";
+                machineDir.rename(file,renamedCkd);
+            }
+            if (file.startsWith("M110")){
+                String renamedCkd = "M110" + "-" + getMachineName().substring(2) + ".ckd";
+                machineDir.rename(file,renamedCkd);
+            }
+
+        }
     }
 
     public void open4CkdFiles() {
