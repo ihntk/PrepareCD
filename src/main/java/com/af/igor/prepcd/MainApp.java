@@ -96,6 +96,9 @@ public class MainApp {
         return "\nPrepareCD version " + version;
     }
 
+    /*
+    global method
+     */
     public String searchFileName(String path, String pattern) {
         String fileName = null;
         int count = 0;
@@ -296,5 +299,6 @@ public class MainApp {
     public static void main(String[] args) throws IOException, InterruptedException {
         getInstance().run(args);
     }
+
 
 }
