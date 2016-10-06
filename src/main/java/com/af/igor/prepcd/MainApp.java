@@ -290,6 +290,7 @@ public class MainApp {
             System.out.println("Copy base drawings\nYou must to copy I, E, FS and "+mPlans.replaceAll("\\+"," ")+"\n" +
                     "Already done? (press enter)");
             Files.copy(Paths.get(ETIQCLAS), Paths.get(machine.machineDir.machinePath));
+            new BufferedReader(new InputStreamReader(System.in)).readLine();
             machine.renameAllCkd();
             machine.open4CkdFiles();
         }
