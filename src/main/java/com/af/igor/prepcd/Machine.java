@@ -30,13 +30,13 @@ public class Machine {
         String machSer = String.valueOf(machineSeries.charAt(0));
         String smMachSer = sm + machineSeries;
         if (!machSer.equals("Y")) {
-            if (machSer.equals("H") || machSer.equals("I") || machSer.equals("J")) {
-                smMachSer = sm + " " + machineSeries;
-                luxPath = luxPath + app.searchFileName(luxPath, smMachSer) + "\\";
-            }
+            if (machSer.equals("H") || machSer.equals("I") || machSer.equals("J")) smMachSer = sm + " " + machineSeries;
+            luxPath = luxPath + app.searchFileName(luxPath, smMachSer) + "\\";
         }
         luxPathString = luxPath;
-        if (app.searchFileName(getLuxPathString(), getMachineName()) == null) {
+        if (app.searchFileName(luxPathString, machineName) == null) {
+            app.logger.log("Program can't find luxemburg file\nluxPathString is:\n   "+luxPathString);
+            app.logger.log("machineName is:\n   "+machineName);
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
                 System.out.println("Are you sure the machine " + machineName + " is exist? (y/N)");
                 if (!reader.readLine().toLowerCase().equals("y")) Thread.currentThread().stop();
