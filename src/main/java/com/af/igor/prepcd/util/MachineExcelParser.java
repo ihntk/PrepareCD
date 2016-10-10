@@ -26,7 +26,7 @@ public class MachineExcelParser extends ExcelParser{
 
     public String getMPlans() {
         XSSFSheet sheet=workbook.getSheetAt(0);
-        String mPlans=String.format("%s",sheet.getRow(19).getCell(1));
+        String mPlans=String.format("%s",sheet.getRow(19).getCell(7));
         mPlans=mPlans.substring(0,mPlans.indexOf("-"));
         return mPlans;
     }
