@@ -296,7 +296,7 @@ public class MainApp {
             logger.log(mPlans);
             System.out.println("Copy base drawings\nYou need to copy E, FS and " + mPlans.replaceAll("\\+", " ") + "\n" +
                     "Already done? (press enter)");
-            Files.copy(Paths.get(ETIQCLAS), Paths.get(machine.machineDir.machinePath));
+            Files.copy(Paths.get(ETIQCLAS), Paths.get(machine.machineDir.machinePath+"Etiqclas.ckd"));
             new BufferedReader(new InputStreamReader(System.in)).readLine();
             machine.renameAllCkd();
             logger.log("ckd files renamed");
