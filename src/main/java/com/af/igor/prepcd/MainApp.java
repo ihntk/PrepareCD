@@ -130,7 +130,7 @@ public class MainApp {
                         System.out.println("You input incorrect number, please try again");
                     }
                 }
-            }
+            }else fileName = fileNames.get(0);
         } catch (Exception e) {
             logger.log("Error in mainApp.searchFileName\n   path is: " + path + "\n     pattern is: " + pattern+"\n");
             logger.log(e.toString());
