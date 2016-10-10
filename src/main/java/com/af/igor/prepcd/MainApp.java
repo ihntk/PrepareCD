@@ -293,12 +293,15 @@ public class MainApp {
             luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
             machine.setMachineType(luxParser.getMachineType());
             String mPlans=machineExcelParser.getMPlans();
-            System.out.println("Copy base drawings\nYou must to copy I, E, FS and "+mPlans.replaceAll("\\+"," ")+"\n" +
+            logger.log(mPlans);
+            System.out.println("Copy base drawings\nYou need to copy E, FS and "+mPlans.replaceAll("\\+"," ")+"\n" +
                     "Already done? (press enter)");
             Files.copy(Paths.get(ETIQCLAS), Paths.get(machine.machineDir.machinePath));
             new BufferedReader(new InputStreamReader(System.in)).readLine();
             machine.renameAllCkd();
+            logger.log("ckd files renamed");
             machine.open4CkdFiles();
+            logger.log("ckd files opened");
         }
 
         logger.stopLogging();
