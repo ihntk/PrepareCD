@@ -34,7 +34,8 @@ public class Machine {
             luxPath = luxPath + app.searchFileName(luxPath, smMachSer) + "\\";
         }
         luxPathString = luxPath;
-        if (app.searchFileName(luxPathString, machineName) == null) {
+        machineDir.luxFile=app.searchFileName(luxPathString, machineName);
+        if (machineDir.luxFile == null) {
             app.logger.log("Program can't find luxemburg file\nluxPathString is:\n   "+luxPathString);
             app.logger.log("machineName is:\n   "+machineName);
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
