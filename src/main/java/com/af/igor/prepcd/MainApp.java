@@ -136,7 +136,6 @@ public class MainApp {
         } catch (Exception e) {
             logger.log("Error in mainApp.searchFileName\n   path is: " + path + "\n     pattern is: " + pattern + "\n");
             logger.log(e.toString());
-            logger.stopLogging();
             e.printStackTrace();
         }
         return fileName;
@@ -182,7 +181,6 @@ public class MainApp {
             if (flag.equals("-v")) {
                 System.out.println(getVersion());
                 logger.log("Showed version");
-                logger.stopLogging();
                 return;
             }
         }
@@ -212,7 +210,6 @@ public class MainApp {
                 System.out.println("\nYou must specify the filename after -n flag");
                 help();
                 logger.log("Machine was not specify");
-                logger.stopLogging();
                 return;
             }
         }
@@ -220,7 +217,6 @@ public class MainApp {
         initializePath(machineName);
         if (machine == null) {
             logger.log("Error in mainApp.initializePath\n   machineName is: " + machineName);
-            logger.stopLogging();
             return;
         }
 
