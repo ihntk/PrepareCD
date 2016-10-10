@@ -286,6 +286,8 @@ public class MainApp {
             tc("/L=\"" + machine.machineDir.machinePath + "\" /T /R=\"" + PLANS + "\"");
             logger.log("Opened in tc: \n   "+machine.machineDir.machinePath+"\n   "+ PLANS );
             machineExcelParser.setExcelFile(machine.machineDir.machinePath + machine.getXls());
+            luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
+            machine.setMachineType(luxParser.getMachineType());
             String mPlans=machineExcelParser.getMPlans();
             System.out.println("Copy base drawings\nYou must to copy I, E, FS and "+mPlans.replaceAll("\\+"," ")+"\n" +
                     "Already done? (press enter)");
