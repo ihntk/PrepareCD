@@ -75,20 +75,15 @@ public class MachineDir {
     }
 
     protected void copyLuxFile() throws IOException {
-        /*
-        Searching lux xls file
-         */
-        luxFile = app.searchFileName(machine.getLuxPathString(), machine.getMachineName());
-
-        if (luxFile != null)
+        if (luxFile != null) {
             try {
                 Files.copy(Paths.get(machine.getLuxPathString() + luxFile), Paths.get(machinePath + luxFile), REPLACE_EXISTING);
-                app.logger.log("Copied luxFile:\n   "+luxFile);
-            }catch (FileSystemException e){
-                System.out.println("I can't replace "+luxFile+" file because it is being used by another process");
-                app.logger.log("Could'nt replace:\n   "+luxFile);
+                app.logger.log("Copied luxFile:\n   " + luxFile);
+            } catch (FileSystemException e) {
+                System.out.println("I can't replace " + luxFile + " file because it is being used by another process");
+                app.logger.log("Could'nt replace:\n   " + luxFile);
             }
-
+        }
     }
 
     public void rename(String sourceName, String targetName) throws IOException {
