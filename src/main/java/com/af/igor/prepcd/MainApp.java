@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 public class MainApp {
     public static final String LOGFILE = "d:\\my_docs\\workDir\\PrepareCD.log";
@@ -100,30 +101,33 @@ public class MainApp {
     global method
      */
     public String searchFileName(String path, String pattern) {
+        ArrayList<String>fileNames=new ArrayList<>(3);
         String fileName = null;
         int count = 0;
         try {
             String[] files = new File(path).list();
             for (String file : files) {
                 if (file.startsWith(pattern)) {
-                    fileName = file;
-                    count++;
+                    fileNames.add(file);
                 }
             }
+            count=fileNames.size();
             if (count > 1) {
                 desktop.open(new File(path));
-                System.out.println("Attention! There are " + count + " files for machine " + machine.getMachineName() +
-                        "\ncopy it manually from currently opened directory\n" +
-                        "Already done? (y/N)");           //in future we can copy both (or many) files to machineDir and show message in window
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
-                    while (reader.readLine().toLowerCase().equals("y")) {
-                        count++;
-                        if (count == 5) {
-                            System.out.println("something wrong!");
-                            fileName = null;
-                            break;
-//                        Thread.currentThread().stop();        // тут лежить какашка. Потрібно це зробити акуратніше
-                        }
+                System.out.println("Attention! There are " + count + " files for machine " + machine.getMachineName());
+
+                for (int i = 0; i < count; i++) {
+                    System.out.println("   "+(i+1)+" - "+fileNames.get(i));
+                }
+
+                while (true) {
+                    System.out.print("choose number of correct file ");
+                    try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+                        int number = Integer.parseInt(reader.readLine()) - 1;
+                        fileName = fileNames.get(number);
+                        break;
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        System.out.println("You input incorrect number, please try again");
                     }
                 }
             }
