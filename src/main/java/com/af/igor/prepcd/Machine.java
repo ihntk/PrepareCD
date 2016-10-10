@@ -128,10 +128,6 @@ public class Machine {
                 String renamedCkd = "E" + app.getMachineCode() + "-" + getMachineName().substring(2) + ".ckd";
                 machineDir.rename(file, renamedCkd);
             }
-            if (file.startsWith("I")) {
-                String renamedCkd = "I" + app.getMachineCode() + "-" + getMachineName().substring(2) + ".ckd";
-                machineDir.rename(file, renamedCkd);
-            }
             if (file.startsWith("FS")) {
                 String renamedCkd = "FS" + app.getMachineCode() + "-" + getMachineName().substring(2) + ".ckd";
                 machineDir.rename(file, renamedCkd);
