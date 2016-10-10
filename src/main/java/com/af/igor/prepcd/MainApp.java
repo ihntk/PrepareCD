@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 public class MainApp {
@@ -294,9 +295,9 @@ public class MainApp {
             machine.setMachineType(luxParser.getMachineType());
             String mPlans = machineExcelParser.getMPlans();
             logger.log(mPlans);
-            System.out.println("Copy base drawings\nYou need to copy E, FS and " + mPlans.replaceAll("\\+", " ") + "\n" +
+            System.out.println("Copy base drawings\nYou need to copy E, FS and " + mPlans.replaceAll("\\+", "") + "\n" +
                     "Already done? (press enter)");
-            Files.copy(Paths.get(ETIQCLAS), Paths.get(machine.machineDir.machinePath+"Etiqclas.ckd"));
+            Files.copy(Paths.get(ETIQCLAS), Paths.get(machine.machineDir.machinePath+"Etiqclas.ckd"), StandardCopyOption.REPLACE_EXISTING);
             new BufferedReader(new InputStreamReader(System.in)).readLine();
             machine.renameAllCkd();
             logger.log("ckd files renamed");
