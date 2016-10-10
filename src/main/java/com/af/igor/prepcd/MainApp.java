@@ -45,7 +45,8 @@ public class MainApp {
     static MachineExcelParser machineExcelParser;
     public SimpleLogger logger;
 
-    private MainApp() {}
+    private MainApp() {
+    }
 
     public static MainApp getInstance() {
         if (instance == null) {
@@ -78,7 +79,7 @@ public class MainApp {
         }
 
         machine = new Machine(machineName);
-        logger.log("machine name is: "+machineName);
+        logger.log("machine name is: " + machineName);
     }
 
     private void help() throws InterruptedException {
@@ -101,7 +102,7 @@ public class MainApp {
     global method
      */
     public String searchFileName(String path, String pattern) {
-        ArrayList<String>fileNames=new ArrayList<>(3);
+        ArrayList<String> fileNames = new ArrayList<>(3);
         String fileName = null;
         int count = 0;
         try {
@@ -111,13 +112,13 @@ public class MainApp {
                     fileNames.add(file);
                 }
             }
-            count=fileNames.size();
+            count = fileNames.size();
             if (count > 1) {
                 desktop.open(new File(path));
                 System.out.println("Attention! There are " + count + " files for machine " + machine.getMachineName());
 
                 for (int i = 0; i < count; i++) {
-                    System.out.println("   "+(i+1)+" - "+fileNames.get(i));
+                    System.out.println("   " + (i + 1) + " - " + fileNames.get(i));
                 }
 
                 while (true) {
@@ -130,9 +131,9 @@ public class MainApp {
                         System.out.println("You input incorrect number, please try again");
                     }
                 }
-            }else fileName = fileNames.get(0);
+            } else fileName = fileNames.get(0);
         } catch (Exception e) {
-            logger.log("Error in mainApp.searchFileName\n   path is: " + path + "\n     pattern is: " + pattern+"\n");
+            logger.log("Error in mainApp.searchFileName\n   path is: " + path + "\n     pattern is: " + pattern + "\n");
             logger.log(e.toString());
             logger.stopLogging();
             e.printStackTrace();
@@ -144,7 +145,7 @@ public class MainApp {
         Runtime runtime = Runtime.getRuntime();
         String command = TOTALCOMMANDER + " /O " + parameters;
         Process process = runtime.exec(command);
-        logger.log("total commander got parameters:\n   "+command);
+        logger.log("total commander got parameters:\n   " + command);
     }
 
     public String getMachineCode() {
@@ -155,7 +156,7 @@ public class MainApp {
         return MachinesCode.valueOf(machineType).toString();
     }
 
-    public void run(String[] args) throws IOException, InterruptedException{
+    public void run(String[] args) throws IOException, InterruptedException {
         /*
         available flags
         -x xls
@@ -217,7 +218,7 @@ public class MainApp {
 
         initializePath(machineName);
         if (machine == null) {
-            logger.log("Error in mainApp.initializePath\n   machineName is: "+machineName);
+            logger.log("Error in mainApp.initializePath\n   machineName is: " + machineName);
             logger.stopLogging();
             return;
         }
@@ -246,24 +247,23 @@ public class MainApp {
         if (use == 0) {
             logger.log("target isn't specified");
             System.out.println("\nYou must specify target. Application wont to know what to do");
-            tc("/l=\"" + machine.machineDir.machinePath+"\"");
+            tc("/l=\"" + machine.machineDir.machinePath + "\"");
             help();
         }
         if (use == 1) {
             logger.log("target is: xls");
             if (!machine.getMachineXls()) {
-                tc("/l=\"" + machine.machineDir.machinePath+"\" /t /r=\""+ machine.hMachinePath+"\"");
+                tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + machine.hMachinePath + "\"");
                 desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
                 logger.log("xls is opened");
-            }
-            else {
+            } else {
                 luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
                 machine.setMachineType(luxParser.getMachineType());
                 luxParser.getMachineData();
-                tc("/l=\"" + machine.machineDir.machinePath+"\" /t /r=\""+ machine.hMachinePath+"\"");
-                desktop.open(new File(machine.machineDir.machinePath+machine.machineDir.machineXls));
+                tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + machine.hMachinePath + "\"");
+                desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
                 logger.log("xls is opened");
-                desktop.open(new File(machine.machineDir.machinePath+machine.machineDir.luxFile));
+                desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.luxFile));
                 logger.log("lux is opened");
             }
         }
@@ -273,28 +273,28 @@ public class MainApp {
             machine.openLuxFile();
             luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
             tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + machine.I_PLANS + "\"");
-            logger.log("Opened in tc: \n   "+machine.machineDir.machinePath+"\n   "+ machine.I_PLANS );
+            logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + machine.I_PLANS);
             System.out.println("Copy base installation drawing\nAlready done? (press enter)");
             machine.setMachineType(luxParser.getMachineType());
             new BufferedReader(new InputStreamReader(System.in)).readLine();
             String installationName = "I" + getMachineCode() + "-" + machine.getMachineName().substring(2) + ".ckd";
             Files.move(Paths.get(machine.machineDir.machinePath + machine.machineDir.getCkdFiles().get(0)), Paths.get(machine.machineDir.machinePath + installationName));  //rename installation
             desktop.open(new File(machine.machineDir.machinePath + installationName));
-            logger.log("Installation "+ installationName+" opened");
+            logger.log("Installation " + installationName + " opened");
             tc("/r=\"" + machine.hMachinePath + "\"");
-            logger.log("Opened in tc :\n   "+machine.hMachinePath);
+            logger.log("Opened in tc :\n   " + machine.hMachinePath);
         }
 
-        if (use==8){
+        if (use == 8) {
             logger.log("target is: machine");
             tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + PLANS + "\"");
-            logger.log("Opened in tc: \n   "+machine.machineDir.machinePath+"\n   "+ PLANS );
+            logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + PLANS);
             machineExcelParser.setExcelFile(machine.machineDir.machinePath + machine.getXls());
             luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
             machine.setMachineType(luxParser.getMachineType());
-            String mPlans=machineExcelParser.getMPlans();
+            String mPlans = machineExcelParser.getMPlans();
             logger.log(mPlans);
-            System.out.println("Copy base drawings\nYou need to copy E, FS and "+mPlans.replaceAll("\\+"," ")+"\n" +
+            System.out.println("Copy base drawings\nYou need to copy E, FS and " + mPlans.replaceAll("\\+", " ") + "\n" +
                     "Already done? (press enter)");
             Files.copy(Paths.get(ETIQCLAS), Paths.get(machine.machineDir.machinePath));
             new BufferedReader(new InputStreamReader(System.in)).readLine();
@@ -304,10 +304,15 @@ public class MainApp {
             logger.log("ckd files opened");
         }
 
-        logger.stopLogging();
     }
+
     public static void main(String[] args) throws IOException, InterruptedException {
-        getInstance().run(args);
+        try {
+            getInstance().run(args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        getInstance().logger.stopLogging();
     }
 
 
