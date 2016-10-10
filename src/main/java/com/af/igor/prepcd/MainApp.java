@@ -303,6 +303,8 @@ public class MainApp {
             logger.log("ckd files renamed");
             machine.open4CkdFiles();
             logger.log("ckd files opened");
+            tc("/r=\"" + machine.hMachinePath + "\"");
+            logger.log("Opened in tc :\n   " + machine.hMachinePath);
         }
 
     }
