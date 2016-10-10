@@ -272,7 +272,7 @@ public class MainApp {
             logger.log("target is: installation");
             machine.openLuxFile();
             luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
-            tc("/L=\"" + machine.machineDir.machinePath + "\" /T /R=\"" + machine.I_PLANS + "\"");
+            tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + machine.I_PLANS + "\"");
             logger.log("Opened in tc: \n   "+machine.machineDir.machinePath+"\n   "+ machine.I_PLANS );
             System.out.println("Copy base installation drawing\nAlready done? (press enter)");
             machine.setMachineType(luxParser.getMachineType());
@@ -281,13 +281,13 @@ public class MainApp {
             Files.move(Paths.get(machine.machineDir.machinePath + machine.machineDir.getCkdFiles().get(0)), Paths.get(machine.machineDir.machinePath + installationName));  //rename installation
             desktop.open(new File(machine.machineDir.machinePath + installationName));
             logger.log("Installation "+ installationName+" opened");
-            tc("/R=\"" + machine.hMachinePath + "\"");
+            tc("/r=\"" + machine.hMachinePath + "\"");
             logger.log("Opened in tc :\n   "+machine.hMachinePath);
         }
 
         if (use==8){
             logger.log("target is: machine");
-            tc("/L=\"" + machine.machineDir.machinePath + "\" /T /R=\"" + PLANS + "\"");
+            tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + PLANS + "\"");
             logger.log("Opened in tc: \n   "+machine.machineDir.machinePath+"\n   "+ PLANS );
             machineExcelParser.setExcelFile(machine.machineDir.machinePath + machine.getXls());
             luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
