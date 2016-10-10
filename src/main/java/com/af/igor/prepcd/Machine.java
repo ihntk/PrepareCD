@@ -10,6 +10,7 @@ import java.util.ArrayList;
  * Created by ede on 11.08.2016.
  */
 public class Machine {
+    protected final String luxFile;
     MainApp app = MainApp.getInstance();
     private final String machineName;
     private String machineType;
@@ -24,8 +25,6 @@ public class Machine {
 
     public Machine(String machineName) throws IOException {
         this.machineName = machineName;
-        machineDir = new MachineDir(this);
-        cdDir = new CdDir(this);
         sm = machineName.substring(0, 2);
         machineSeries = machineName.substring(2, 3).equals("Y") ? machineName.substring(2, 3) : machineName.substring(2, 4);
         String luxPath = app.LUX_DIR + getSm() + " " + getMachineSeries().substring(0, 1) + "\\";
@@ -36,7 +35,7 @@ public class Machine {
             luxPath = luxPath + app.searchFileName(luxPath, smMachSer) + "\\";
         }
         luxPathString = luxPath;
-        machineDir.luxFile=app.searchFileName(luxPathString, machineName);
+        luxFile=app.searchFileName(luxPathString, machineName);
         if (machineDir.luxFile == null) {
             app.logger.log("Program can't find luxemburg file\nluxPathString is:\n   "+luxPathString);
             app.logger.log("machineName is:\n   "+machineName);
@@ -47,6 +46,8 @@ public class Machine {
         }
         String hMachPath = app.H_MACHINES + getSm() + getMachineSeries().substring(0, 1) + "\\";
         hMachinePath = hMachPath + app.searchFileName(hMachPath, smMachSer) + "\\";
+        machineDir = new MachineDir(this);
+        cdDir = new CdDir(this);
     }
 
     public void setMachineType(String machineType) {

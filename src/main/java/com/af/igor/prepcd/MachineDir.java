@@ -28,6 +28,7 @@ public class MachineDir {
         machinePath = app.MACHINES + machine.getSm() + machine.getMachineSeries() + "\\" + machine.getMachineName() + "\\";
         machinePathDir = new File(machinePath);
         machineXls = machine.getMachineName() + ".xlsx";
+        luxFile=machine.luxFile;
         machinePathDir.mkdir();
     }
 
