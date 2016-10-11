@@ -37,7 +37,7 @@ public enum MachinesCode {
 
     private String code;
 
-    MachinesCode(int code) {
+    private MachinesCode(int code) {
         this.code = String.valueOf(code);
     }
 
