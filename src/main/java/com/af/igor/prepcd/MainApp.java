@@ -215,8 +215,8 @@ public class MainApp {
         }
 
         initializePath(machineName);
-        if (machine == null) {
-            logger.log("Error in mainApp.initializePath\n   machineName is: " + machineName);
+        if (machine == null||machine.getMachineName()==null) {
+            logger.log("Error in mainApp.initializePath\n   machineName is: " + machineName + " not exist");
             return;
         }
 
