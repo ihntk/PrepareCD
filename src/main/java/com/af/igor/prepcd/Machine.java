@@ -38,6 +38,7 @@ public class Machine {
         if (luxFile == null) {
             app.logger.log("Program can't find luxemburg file\nluxPathString is:\n   " + luxPathString);
             app.logger.log("machineName is:\n   " + machineName);
+            app.desktop.open(new File(luxPathString));
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
                 System.out.println("Are you sure the machine " + machineName + " is exist? (y/N)");
                 if (!reader.readLine().toLowerCase().equals("y")) machineName = null;
