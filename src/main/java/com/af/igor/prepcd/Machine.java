@@ -29,9 +29,10 @@ public class Machine {
         String luxPath = app.LUX_DIR + getSm() + " " + getMachineSeries().substring(0, 1) + "\\";
         String machSer = String.valueOf(machineSeries.charAt(0));
         String smMachSer = sm + machineSeries;
+        String smMachSerLux = smMachSer;
         if (!machSer.equals("Y")) {
-            if (machSer.equals("H") || machSer.equals("I") || machSer.equals("J")) smMachSer = sm + " " + machineSeries;
-            luxPath = luxPath + app.searchFileName(luxPath, smMachSer) + "\\";
+            if (machSer.equals("H") || machSer.equals("I") || machSer.equals("J")) smMachSerLux = sm + " " + machineSeries;
+            luxPath = luxPath + app.searchFileName(luxPath, smMachSerLux) + "\\";
         }
         luxPathString = luxPath;
         luxFile = app.searchFileName(luxPathString, machineName);
