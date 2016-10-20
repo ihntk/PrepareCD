@@ -91,4 +91,7 @@ public class MachineDir {
         Files.move(Paths.get(machine.machineDir.machinePath+sourceName),Paths.get(machine.machineDir.machinePath+targetName));
     }
 
+    public void copy(String sourceFile, String targetFile) throws IOException {
+        Files.copy(Paths.get(sourceFile), Paths.get(targetFile));
+    }
 }

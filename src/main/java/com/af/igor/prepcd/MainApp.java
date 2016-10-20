@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 public class MainApp {
     public static final String LOGFILE = "d:\\my_docs\\workDir\\PrepareCD.log";
-    private static final String ETIQCLAS = "d:\\my_docs\\workDir\\XL's\\Etiqclas.ckd";
+    static final String ETIQCLAS = "d:\\my_docs\\workDir\\XL's\\Etiqclas.ckd";
     private static MainApp instance;
     private static String version = "0.4.4";
     private static Machine machine;         //in future this field will replace static ArrayList<Machine>
@@ -293,7 +293,6 @@ public class MainApp {
             logger.log(mPlans);
             System.out.println("Copy base drawings\nYou need to copy E, FS and " + mPlans.replaceAll("\\+", "") + "\n" +
                     "Already done? (press enter)");
-            Files.copy(Paths.get(ETIQCLAS), Paths.get(machine.machineDir.machinePath+"Etiqclas.ckd"), StandardCopyOption.REPLACE_EXISTING);
             new BufferedReader(new InputStreamReader(System.in)).readLine();
             machine.renameAllCkd();
             logger.log("ckd files renamed");

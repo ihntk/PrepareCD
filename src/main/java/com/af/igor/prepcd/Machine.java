@@ -124,9 +124,9 @@ public class Machine {
     public void renameAllCkd() throws IOException {
         ArrayList<String> ckdFiles = machineDir.getCkdFiles();
         for (String file : ckdFiles) {
-            if (file.startsWith("Etiqclas")) {
+            if (!file.startsWith("Etiqclas")) {
                 String renamedCkd = "Etiqclas" + "-" + getMachineName().substring(2) + ".ckd";
-                machineDir.rename(file, renamedCkd);
+                machineDir.rename(app.ETIQCLAS, renamedCkd);
             }
             if ((file.startsWith("E")) && (!file.startsWith("Etiqclas"))) {
                 String renamedCkd = "E" + app.getMachineCode() + "-" + getMachineName().substring(2) + ".ckd";
