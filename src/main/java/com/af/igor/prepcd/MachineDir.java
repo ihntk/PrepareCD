@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
@@ -69,7 +70,7 @@ public class MachineDir {
     }
 
     protected void copyXls() throws IOException {
-        Files.copy(Paths.get(app.XLS), Paths.get(machinePath + machineXls));
+        copy(app.XLS, machinePath + machineXls);
         app.logger.log("Copied xls");
 
         copyLuxFile();
@@ -78,7 +79,7 @@ public class MachineDir {
     protected void copyLuxFile() throws IOException {
         if (luxFile != null) {
             try {
-                Files.copy(Paths.get(machine.getLuxPathString() + luxFile), Paths.get(machinePath + luxFile), REPLACE_EXISTING);
+                copy(machine.getLuxPathString() + luxFile, machinePath + luxFile, REPLACE_EXISTING);
                 app.logger.log("Copied luxFile:\n   " + luxFile);
             } catch (FileSystemException e) {
                 System.out.println("I can't replace " + luxFile + " file because it is being used by another process");
@@ -93,5 +94,9 @@ public class MachineDir {
 
     public void copy(String sourceFile, String targetFile) throws IOException {
         Files.copy(Paths.get(sourceFile), Paths.get(targetFile));
+    }
+
+    public void copy(String sourceFile, String targetFile, StandardCopyOption copyOption) throws IOException {
+        Files.copy(Paths.get(sourceFile), Paths.get(targetFile),copyOption);
     }
 }
