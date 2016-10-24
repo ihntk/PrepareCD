@@ -126,7 +126,7 @@ public class Machine {
         for (String file : ckdFiles) {
             if (!file.startsWith("Etiqclas")) {
                 String renamedCkd = "Etiqclas" + "-" + getMachineName().substring(2) + ".ckd";
-                machineDir.rename(app.ETIQCLAS, renamedCkd);
+                machineDir.copy(app.ETIQCLAS, machineDir.machinePath+renamedCkd);
             }
             if ((file.startsWith("E")) && (!file.startsWith("Etiqclas"))) {
                 String renamedCkd = "E" + app.getMachineCode() + "-" + getMachineName().substring(2) + ".ckd";
