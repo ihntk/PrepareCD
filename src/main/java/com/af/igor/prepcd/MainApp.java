@@ -296,6 +296,7 @@ public class MainApp {
             new BufferedReader(new InputStreamReader(System.in)).readLine();
             machine.renameAllCkd();
             logger.log("ckd files renamed");
+            machine.copyEtiq();
             machine.open4CkdFiles();
             logger.log("ckd files opened");
             tc("/r=\"" + machine.hMachinePath + "\"");

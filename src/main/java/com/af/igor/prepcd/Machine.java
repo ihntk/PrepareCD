@@ -124,10 +124,6 @@ public class Machine {
     public void renameAllCkd() throws IOException {
         ArrayList<String> ckdFiles = machineDir.getCkdFiles();
         for (String file : ckdFiles) {
-            if (!file.startsWith("Etiqclas")) {
-                String renamedCkd = "Etiqclas" + "-" + getMachineName().substring(2) + ".ckd";
-                machineDir.copy(app.ETIQCLAS, machineDir.machinePath+renamedCkd);
-            }
             if ((file.startsWith("E")) && (!file.startsWith("Etiqclas"))) {
                 String renamedCkd = "E" + app.getMachineCode() + "-" + getMachineName().substring(2) + ".ckd";
                 machineDir.rename(file, renamedCkd);
@@ -194,5 +190,11 @@ public class Machine {
                 app.desktop.open(new File(machineDir.machinePath + file));
             if (file.startsWith("I")) app.desktop.open(new File(machineDir.machinePath + file));
         }
+    }
+
+    public void copyEtiq() throws IOException {
+        String machineEtiq = "Etiqclas" + "-" + getMachineName().substring(2) + ".ckd";
+        if (!new File(machineDir.machinePath+machineEtiq).exists())
+            machineDir.copy(app.ETIQCLAS, machineDir.machinePath+machineEtiq);
     }
 }
