@@ -89,7 +89,7 @@ public class MachineDir {
     }
 
     public void rename(String sourceName, String targetName) throws IOException {
-        Files.move(Paths.get(machine.machineDir.machinePath+sourceName),Paths.get(machine.machineDir.machinePath+targetName));
+        Files.move(Paths.get(machinePath+sourceName),Paths.get(machinePath+targetName));
     }
 
     public void copy(String sourceFile, String targetFile) throws IOException {
