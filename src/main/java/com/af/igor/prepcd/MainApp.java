@@ -17,10 +17,7 @@ import com.af.igor.prepcd.util.MachineExcelParser;
 import com.af.igor.prepcd.util.MachinesCode;
 
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,6 +26,7 @@ import java.util.ArrayList;
 
 public class MainApp {
     public static final String LOGFILE = "d:\\my_docs\\workDir\\PrepareCD.log";
+    public static final String LOGERROR = "d:\\my_docs\\workDir\\PrepareCD.error";
     static final String ETIQCLAS = "d:\\my_docs\\workDir\\XL's\\Etiqclas.ckd";
     private static MainApp instance;
     private static String version = "0.4.6";
@@ -306,11 +304,14 @@ public class MainApp {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
+        PrintStream printStream =new PrintStream(LOGERROR);
         try {
             getInstance().run(args);
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(printStream);
+            getInstance().logger.log("There is an error");
         }
+        printStream.close();
         getInstance().logger.stopLogging();
     }
 
