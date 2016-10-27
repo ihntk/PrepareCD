@@ -23,28 +23,52 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Properties;
 
 public class MainApp {
-    public static final String LOGFILE = "d:\\my_docs\\workDir\\PrepareCD.log";
-    public static final String LOGERROR = "d:\\my_docs\\workDir\\PrepareCD.error";
-    static final String ETIQCLAS = "d:\\my_docs\\workDir\\XL's\\Etiqclas.ckd";
+    public static String LOGFILE;
+    public static String LOGERROR;
+    static String ETIQCLAS;
+    static String XLS;
+    static String MACHINES;
+    static String H_MACHINES;
+    static String CDS;
+    static String LUX_DIR;
+    static String CDTEMPLATE;
+    static String PLANS;
+    static String TOTALCOMMANDER;
+
     private static MainApp instance;
-    private static String version = "0.4.7";
+    private static String version = "0.4.6";
     private static Machine machine;         //in future this field will replace static ArrayList<Machine>
-    static final String XLS = "d:\\my_docs\\workDir\\XL's\\20XX0000.xlsx";
-    static final String MACHINES = "d:\\my_docs\\plans\\";
-    static final String H_MACHINES = "h:\\DATAGEN\\Bt\\1.Client\\1.1.Machines\\";
-    static final String CDS = "d:\\my_docs\\cdrom\\";
-    static final String LUX_DIR = "k:\\Vente\\1. Customer\\1.3. Commandes\\";
-    static final String CDTEMPLATE = "\\\\Serverua\\AF_UA\\1.4.CD\\WEB3_Operator Manual\\";
-    static final String PLANS = "\\\\Serverua\\af_ua\\1.2.Plans\\";
-    static Desktop desktop = Desktop.getDesktop();
-    static final String TOTALCOMMANDER = "C:\\Program Files\\totalcmd\\TOTALCMD64";
     static public LuxParser luxParser;
     static MachineExcelParser machineExcelParser;
+    static Desktop desktop = Desktop.getDesktop();
     public SimpleLogger logger;
+    private Properties properties=new Properties();
+    private static final String PROP_FILE="c:\\Users\\ede\\.PrepareCD\\PrepareCD.conf";
 
     private MainApp() {
+        try {
+            FileInputStream inputStream=new FileInputStream(PROP_FILE);
+            properties.load(inputStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        LOGFILE=properties.getProperty("LOGFILE");
+        LOGERROR=properties.getProperty("");
+        ETIQCLAS=properties.getProperty("");
+        XLS=properties.getProperty("");
+        MACHINES=properties.getProperty("");
+        H_MACHINES=properties.getProperty("");
+        CDS=properties.getProperty("");
+        LUX_DIR=properties.getProperty("");
+        CDTEMPLATE=properties.getProperty("");
+        PLANS=properties.getProperty("");
+        TOTALCOMMANDER=properties.getProperty("");
     }
 
     public static MainApp getInstance() {
@@ -248,16 +272,14 @@ public class MainApp {
         if (use == 1) {
             logger.log("target is: xls");
             if (!machine.getMachineXls()) {
-                tc("/l=\"" + machine.machineDir.machinePath + "\"");
-                tc("/t /r=\"" + machine.hMachinePath + "\"");
+                tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + machine.hMachinePath + "\"");
                 desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
                 logger.log("xls is opened");
             } else {
                 luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
                 machine.setMachineType(luxParser.getMachineType());
                 luxParser.getMachineData();
-                tc("/l=\"" + machine.machineDir.machinePath + "\"");
-                tc("/t /r=\"" + machine.hMachinePath + "\"");
+                tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + machine.hMachinePath + "\"");
                 desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
                 logger.log("xls is opened");
                 desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.luxFile));
@@ -269,8 +291,7 @@ public class MainApp {
             logger.log("target is: installation");
             machine.openLuxFile();
             luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
-            tc("/l=\"" + machine.machineDir.machinePath + "\"");
-            tc("/t /r=\"" + machine.I_PLANS + "\"");
+            tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + machine.I_PLANS + "\"");
             logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + machine.I_PLANS);
             System.out.println("Copy base installation drawing\nAlready done? (press enter)");
             machine.setMachineType(luxParser.getMachineType());
@@ -285,8 +306,7 @@ public class MainApp {
 
         if (use == 8) {
             logger.log("target is: machine");
-            tc("/l=\"" + machine.machineDir.machinePath + "\"");
-            tc("/t /r=\"" + PLANS + "\"");
+            tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + PLANS + "\"");
             logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + PLANS);
             machineExcelParser.setExcelFile(machine.machineDir.machinePath + machine.getXls());
             luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
