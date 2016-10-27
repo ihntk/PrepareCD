@@ -248,14 +248,16 @@ public class MainApp {
         if (use == 1) {
             logger.log("target is: xls");
             if (!machine.getMachineXls()) {
-                tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + machine.hMachinePath + "\"");
+                tc("/l=\"" + machine.machineDir.machinePath + "\"");
+                tc("/t /r=\"" + machine.hMachinePath + "\"");
                 desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
                 logger.log("xls is opened");
             } else {
                 luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
                 machine.setMachineType(luxParser.getMachineType());
                 luxParser.getMachineData();
-                tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + machine.hMachinePath + "\"");
+                tc("/l=\"" + machine.machineDir.machinePath + "\"");
+                tc("/t /r=\"" + machine.hMachinePath + "\"");
                 desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
                 logger.log("xls is opened");
                 desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.luxFile));
@@ -267,7 +269,8 @@ public class MainApp {
             logger.log("target is: installation");
             machine.openLuxFile();
             luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
-            tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + machine.I_PLANS + "\"");
+            tc("/l=\"" + machine.machineDir.machinePath + "\"");
+            tc("/t /r=\"" + machine.I_PLANS + "\"");
             logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + machine.I_PLANS);
             System.out.println("Copy base installation drawing\nAlready done? (press enter)");
             machine.setMachineType(luxParser.getMachineType());
@@ -282,7 +285,8 @@ public class MainApp {
 
         if (use == 8) {
             logger.log("target is: machine");
-            tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + PLANS + "\"");
+            tc("/l=\"" + machine.machineDir.machinePath + "\"");
+            tc("/t /r=\"" + PLANS + "\"");
             logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + PLANS);
             machineExcelParser.setExcelFile(machine.machineDir.machinePath + machine.getXls());
             luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
