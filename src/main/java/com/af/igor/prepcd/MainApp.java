@@ -328,14 +328,14 @@ public class MainApp {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        PrintStream printStream =new PrintStream(LOGERROR);
         try {
             getInstance().run(args);
         } catch (Exception e) {
+            PrintStream printStream =new PrintStream(LOGERROR);
             e.printStackTrace(printStream);
             getInstance().logger.log("There is an error");
+            printStream.close();
         }
-        printStream.close();
         getInstance().logger.stopLogging();
     }
 
