@@ -59,16 +59,16 @@ public class MainApp {
         }
 
         LOGFILE=properties.getProperty("LOGFILE");
-        LOGERROR=properties.getProperty("");
-        ETIQCLAS=properties.getProperty("");
-        XLS=properties.getProperty("");
-        MACHINES=properties.getProperty("");
-        H_MACHINES=properties.getProperty("");
-        CDS=properties.getProperty("");
-        LUX_DIR=properties.getProperty("");
-        CDTEMPLATE=properties.getProperty("");
-        PLANS=properties.getProperty("");
-        TOTALCOMMANDER=properties.getProperty("");
+        LOGERROR=properties.getProperty("LOGERROR");
+        ETIQCLAS=properties.getProperty("ETIQCLAS");
+        XLS=properties.getProperty("XLS");
+        MACHINES=properties.getProperty("MACHINES");
+        H_MACHINES=properties.getProperty("H_MACHINES");
+        CDS=properties.getProperty("CDS");
+        LUX_DIR=properties.getProperty("LUX_DIR");
+        CDTEMPLATE=properties.getProperty("CDTEMPLATE");
+        PLANS=properties.getProperty("PLANS");
+        TOTALCOMMANDER=properties.getProperty("TOTALCOMMANDER");
     }
 
     public static MainApp getInstance() {
