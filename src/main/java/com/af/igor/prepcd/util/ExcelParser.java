@@ -21,6 +21,7 @@ public abstract class ExcelParser {
             workbook=new XSSFWorkbook(excelFile);
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("====\nThere is a problem with machine xls");
         }
     }
 
