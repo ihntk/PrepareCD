@@ -21,7 +21,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -45,12 +44,12 @@ public class MainApp {
     static MachineExcelParser machineExcelParser;
     static Desktop desktop = Desktop.getDesktop();
     public SimpleLogger logger;
-    private Properties properties=new Properties();
-    private static final String PROP_FILE="c:\\Users\\ede\\.PrepareCD\\PrepareCD.conf";
+    private Properties properties = new Properties();
+    private static final String PROP_FILE = "c:\\Users\\ede\\.PrepareCD\\PrepareCD.conf";
 
     private MainApp() {
         try {
-            FileInputStream inputStream=new FileInputStream(PROP_FILE);
+            FileInputStream inputStream = new FileInputStream(PROP_FILE);
             properties.load(inputStream);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -58,17 +57,17 @@ public class MainApp {
             e.printStackTrace();
         }
 
-        LOGFILE=properties.getProperty("LOGFILE");
-        LOGERROR=properties.getProperty("LOGERROR");
-        ETIQCLAS=properties.getProperty("ETIQCLAS");
-        XLS=properties.getProperty("XLS");
-        MACHINES=properties.getProperty("MACHINES");
-        H_MACHINES=properties.getProperty("H_MACHINES");
-        CDS=properties.getProperty("CDS");
-        LUX_DIR=properties.getProperty("LUX_DIR");
-        CDTEMPLATE=properties.getProperty("CDTEMPLATE");
-        PLANS=properties.getProperty("PLANS");
-        TOTALCOMMANDER=properties.getProperty("TOTALCOMMANDER");
+        LOGFILE = properties.getProperty("LOGFILE");
+        LOGERROR = properties.getProperty("LOGERROR");
+        ETIQCLAS = properties.getProperty("ETIQCLAS");
+        XLS = properties.getProperty("XLS");
+        MACHINES = properties.getProperty("MACHINES");
+        H_MACHINES = properties.getProperty("H_MACHINES");
+        CDS = properties.getProperty("CDS");
+        LUX_DIR = properties.getProperty("LUX_DIR");
+        CDTEMPLATE = properties.getProperty("CDTEMPLATE");
+        PLANS = properties.getProperty("PLANS");
+        TOTALCOMMANDER = properties.getProperty("TOTALCOMMANDER");
     }
 
     public static MainApp getInstance() {
@@ -237,7 +236,7 @@ public class MainApp {
         }
 
         initializePath(machineName);
-        if (machine == null||machine.getMachineName()==null) {
+        if (machine == null || machine.getMachineName() == null) {
             logger.log("Error in mainApp.initializePath\n   machineName is: " + machineName + " not exist");
             return;
         }
@@ -310,11 +309,11 @@ public class MainApp {
             logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + PLANS);
             machineExcelParser.setExcelFile(machine.machineDir.machinePath + machine.getXls());
             luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
-            machine.setMachineType(luxParser.getMachineType());
+            String machineType = luxParser.getMachineType();
+            machine.setMachineType(machineType);
             String mPlans = machineExcelParser.getMPlans();
             logger.log(mPlans);
-            System.out.println("Copy base drawings\nYou need to copy E, FS and " + mPlans.replaceAll("\\+", "") + "\n" +
-                    "Already done? (press enter)");
+            System.out.println("Copy base drawings and then press enter\n------\nFor machine " + machineType + "\nYou need to copy E, FS and " + mPlans.replaceAll("\\+", "") + "\n");
             new BufferedReader(new InputStreamReader(System.in)).readLine();
             machine.renameAllCkd();
             logger.log("ckd files renamed");
@@ -331,7 +330,7 @@ public class MainApp {
         try {
             getInstance().run(args);
         } catch (Exception e) {
-            PrintStream printStream =new PrintStream(LOGERROR);
+            PrintStream printStream = new PrintStream(LOGERROR);
             e.printStackTrace(printStream);
             getInstance().logger.log("There is an error");
             printStream.close();
