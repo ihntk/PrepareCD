@@ -18,7 +18,7 @@ public class Machine {
     private final String machineSeries;
     private final String luxPathString;
     protected final String hMachinePath;
-    protected final String I_PLANS = app.PLANS + "002 - Plan d'installation 2008\\";
+    protected final String I_PLANS = app.PLANS + "002 - Plan d'installation\\";
 
     MachineDir machineDir;
     CdDir cdDir;
