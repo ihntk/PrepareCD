@@ -31,7 +31,8 @@ public class Machine {
         String smMachSer = sm + machineSeries;
         String smMachSerLux = smMachSer;
         if (!machSer.equals("Y")) {
-            if (machSer.equals("H") || machSer.equals("I") || machSer.equals("J")) smMachSerLux = sm + " " + machineSeries;
+            if (machSer.equals("H") || machSer.equals("I") || machSer.equals("J"))
+                smMachSerLux = sm + " " + machineSeries;
             luxPath = luxPath + app.searchFileName(luxPath, smMachSerLux) + "\\";
         }
         luxPathString = luxPath;
@@ -133,7 +134,8 @@ public class Machine {
                 machineDir.rename(file, renamedCkd);
             }
 
-            if (file.startsWith("M10")) {
+            if (file.startsWith("M10") &&
+                    !file.startsWith("M100")) {
                 String renamedCkd = "M10" + "-" + getMachineName().substring(2) + ".ckd";
                 machineDir.rename(file, renamedCkd);
             }
@@ -194,7 +196,7 @@ public class Machine {
 
     public void copyEtiq() throws IOException {
         String machineEtiq = "Etiqclas" + "-" + getMachineName().substring(2) + ".ckd";
-        if (!new File(machineDir.machinePath+machineEtiq).exists())
-            machineDir.copy(app.ETIQCLAS, machineDir.machinePath+machineEtiq);
+        if (!new File(machineDir.machinePath + machineEtiq).exists())
+            machineDir.copy(app.ETIQCLAS, machineDir.machinePath + machineEtiq);
     }
 }
