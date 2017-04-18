@@ -17,7 +17,44 @@ public class MainFrame extends JFrame {
     private MainApp app=MainApp.getInstance();
 
     public MainFrame() throws HeadlessException {
+        getContentPane().setLayout(new BorderLayout());
 
+        JPanel topPanel=new JPanel();
+        topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        topPanel.add(new JLabel("Machine"));
+
+        JTextField machineChooser=new JTextField();
+        machineChooser.setColumns(6);
+
+//        JTextArea machineType=new JTextArea(app.getMachine().getMachineType());
+        JTextArea machineType=new JTextArea("L5A");
+        topPanel.add(machineChooser);
+        topPanel.add(machineType);
+
+        JButton instBut=new JButton("Install");
+        instBut.setName(INSTALL);
+
+        JButton xlsBut=new JButton("Xls");
+        xlsBut.setName(XLS);
+
+        JButton machineBut=new JButton("Machine");
+        machineBut.setName(MACHINE);
+
+        JButton cdBut=new JButton("Cd");
+        cdBut.setName(CD);
+
+        JPanel buttonsPanel= new JPanel();
+        buttonsPanel.setLayout(new GridLayout(1,4));
+        buttonsPanel.add(instBut);
+        buttonsPanel.add(xlsBut);
+        buttonsPanel.add(machineBut);
+        buttonsPanel.add(cdBut);
+
+        topPanel.add(buttonsPanel,BorderLayout.CENTER);
+
+
+        getContentPane().add(topPanel,BorderLayout.NORTH);
+        setBounds(100,100,530,800);
     }
 
     public static void main(String[] args) {
@@ -25,7 +62,7 @@ public class MainFrame extends JFrame {
             @Override
             public void run() {
                 MainFrame mainFrame=new MainFrame();
-                mainFrame.setDefaultCloseOperation(HIDE_ON_CLOSE);
+                mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
                 mainFrame.setVisible(true);
             }
         });
