@@ -38,7 +38,7 @@ public class MainApp {
     static String TOTALCOMMANDER;
 
     private static MainApp instance;
-    private static String version = "0.4.6";
+    private static String version = "0.5.0";
     private static Machine machine;         //in future this field will replace static ArrayList<Machine>
     static public LuxParser luxParser;
     static MachineExcelParser machineExcelParser;
