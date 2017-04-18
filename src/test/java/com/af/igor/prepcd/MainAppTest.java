@@ -13,11 +13,15 @@ public class MainAppTest {
 
     public static void main(String[] args) throws IOException {
         mainApp =MainApp.getInstance();
+        mainApp.logger.log("MainAppTest started");
+        mainApp.logger.log("testPart");
         testPath();
+
+        mainApp.logger.log("MainAppTest stopped");
+        mainApp.logger.stopLogging();
     }
 
     private static void testPath() throws IOException {
-        desktop.open(new File(mainApp.LOGFILE));
         mainApp.tc(mainApp.LUX_DIR);
         desktop.open(new File(mainApp.LUX_DIR));
         mainApp.tc(mainApp.MACHINES);
