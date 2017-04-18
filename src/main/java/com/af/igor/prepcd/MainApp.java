@@ -45,7 +45,7 @@ public class MainApp {
     static Desktop desktop = Desktop.getDesktop();
     public SimpleLogger logger;
     private Properties properties = new Properties();
-    private static final String PROP_FILE = "c:\\Users\\ede\\.PrepareCD\\PrepareCD.conf";
+    private static final String PROP_FILE = System.getProperty("user.home")+"\\.PrepareCD\\PrepareCD.conf";
 
     private MainApp() {
         try {
