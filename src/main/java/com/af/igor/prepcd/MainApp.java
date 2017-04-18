@@ -292,8 +292,8 @@ public class MainApp {
             luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
             tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + machine.I_PLANS + "\"");
             logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + machine.I_PLANS);
-            System.out.println("Copy base installation drawing\nAlready done? (press enter)");
             machine.setMachineType(luxParser.getMachineType());
+            System.out.println("Copy base installation drawing for "+machine.getMachineType()+"\nand then press enter");
             new BufferedReader(new InputStreamReader(System.in)).readLine();
             String installationName = "I" + getMachineCode() + "-" + machine.getMachineName().substring(2) + ".ckd";
             Files.move(Paths.get(machine.machineDir.machinePath + machine.machineDir.getCkdFiles().get(0)), Paths.get(machine.machineDir.machinePath + installationName));  //rename installation
