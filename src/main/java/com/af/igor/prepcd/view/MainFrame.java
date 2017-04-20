@@ -24,7 +24,7 @@ public class MainFrame extends JFrame {
         topPanel.add(new JLabel("Machine"));
 
         JTextField machineChooser=new JTextField();
-        machineChooser.setColumns(6);
+        machineChooser.setColumns(7);
 
 //        JTextArea machineType=new JTextArea(app.getMachine().getMachineType());
         JTextArea machineType=new JTextArea("L5A");
@@ -61,6 +61,17 @@ public class MainFrame extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                try {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedLookAndFeelException e) {
+                    e.printStackTrace();
+                }
                 MainFrame mainFrame=new MainFrame();
                 mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
                 mainFrame.setVisible(true);
