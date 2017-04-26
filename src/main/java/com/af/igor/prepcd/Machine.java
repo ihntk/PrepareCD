@@ -31,7 +31,7 @@ public class Machine {
         String smMachSer = sm + machineSeries;
         String smMachSerLux = smMachSer;
         if (!machSer.equals("Y")) {
-            if (machSer.equals("H") || machSer.equals("I") || machSer.equals("J"))
+            if (machSer.equals("H") || machSer.equals("I") || (machSer.equals("J")&&machineSeries.equals("JA")))
                 smMachSerLux = sm + " " + machineSeries;
             luxPath = luxPath + app.searchFileName(luxPath, smMachSerLux) + "\\";
         }
