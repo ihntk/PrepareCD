@@ -34,4 +34,8 @@ public class MachineExcelParser extends ExcelParser{
         String mPlans=String.format("%s",sheet.getRow(19).getCell(7));
         return mPlans;
     }
+
+    public void setMachineType(String machineType) {
+        sheet.getRow(2).getCell(1).setCellValue(machineType);
+    }
 }

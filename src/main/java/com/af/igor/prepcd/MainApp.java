@@ -276,8 +276,11 @@ public class MainApp {
                 logger.log("xls is opened");
             } else {
                 luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
+                machineExcelParser.setExcelFile(machine.machineDir.machinePath + machine.getXls());
                 machine.setMachineType(luxParser.getMachineType());
                 luxParser.getMachineData();
+                machineExcelParser.setMachineType(machine.getMachineType());
+
                 tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + machine.hMachinePath + "\"");
                 desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
                 logger.log("xls is opened");
