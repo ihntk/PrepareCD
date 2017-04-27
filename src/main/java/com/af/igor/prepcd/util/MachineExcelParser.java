@@ -36,8 +36,13 @@ public class MachineExcelParser extends ExcelParser {
         return mPlans;
     }
 
+    public void setMachineName(String machineName) {
+        sheet.getRow(2).createCell(7).setCellValue(machineName);
+    }
+
     public void setMachineType(String machineType) {
         sheet.createRow(4).createCell(7).setCellValue(machineType);
         writeXLS();
     }
+
 }
