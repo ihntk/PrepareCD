@@ -3,9 +3,7 @@ package com.af.igor.prepcd.util;
 import com.af.igor.prepcd.MainApp;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Created by ede on 30.08.2016.
@@ -17,8 +15,9 @@ public abstract class ExcelParser {
 
     public void setExcelFile(String excelFile) {
         this.excelFile= excelFile;
-        try {
-            workbook=new XSSFWorkbook(excelFile);
+        try (FileInputStream inputStream = new FileInputStream(new File(excelFile)))
+        {
+            workbook=new XSSFWorkbook(inputStream);
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("====\nThere is a problem with machine xls");
