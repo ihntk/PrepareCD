@@ -12,8 +12,8 @@ public class MachineExcelParserTest {
     public static void main(String[] args) {
         machineExcelParser=MachineExcelParser.getInstance();
         machineExcelParser.setExcelFile(excelPath);
-        machineExcelParser.setMachineName(machineName);
-        machineExcelParser.setMachineType(machineType);
+//        machineExcelParser.setMachineName(machineName);
+//        machineExcelParser.setMachineType(machineType);
 
     }
 }

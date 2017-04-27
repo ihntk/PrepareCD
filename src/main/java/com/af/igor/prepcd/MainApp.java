@@ -279,7 +279,7 @@ public class MainApp {
                 machineExcelParser.setExcelFile(machine.machineDir.machinePath + machine.getXls());
                 machine.setMachineType(luxParser.getMachineType());
                 luxParser.getMachineData();
-                machineExcelParser.setMachineType(machine.getMachineType());
+//                machineExcelParser.setMachineType(machine.getMachineType());
 
                 tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + machine.hMachinePath + "\"");
                 desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
