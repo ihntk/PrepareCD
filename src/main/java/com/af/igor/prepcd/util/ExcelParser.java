@@ -24,6 +24,16 @@ public abstract class ExcelParser {
         }
     }
 
+    protected void writeXLS() {
+        try (FileOutputStream outputStream=new FileOutputStream(new File(excelFile));)
+        {
+            workbook.write(outputStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public abstract String[] getLanguage();
 
