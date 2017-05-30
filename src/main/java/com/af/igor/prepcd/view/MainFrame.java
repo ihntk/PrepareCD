@@ -53,6 +53,18 @@ public class MainFrame extends JFrame {
         topPanel.add(buttonsPanel,BorderLayout.CENTER);
 
 
+        JPanel mainPanel= new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+
+        JPanel machineDirPanel=new JPanel();
+
+        JPanel machineRemoteDirPanel=new JPanel();
+
+        JPanel baseDrawingDirPanel=new JPanel();
+
+        JPanel cdDirPanel=new JPanel();
+
+
         getContentPane().add(topPanel,BorderLayout.NORTH);
         setBounds(100,100,530,800);
     }
