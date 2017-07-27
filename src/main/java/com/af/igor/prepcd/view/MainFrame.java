@@ -20,23 +20,24 @@ public class MainFrame extends JFrame {
         getContentPane().setLayout(new BorderLayout());
 
         JPanel topPanel=new JPanel();
-        topPanel.setLayout(new BorderLayout());
+        topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-        JPanel machineSelectPanel=new JPanel();
-        machineSelectPanel.setLayout(new FlowLayout());
-        machineSelectPanel.add(new JLabel("Machine"));
+        topPanel.add(new JLabel("Machine"));
 
         JTextField machineChooser=new JTextField();
         machineChooser.setColumns(7);
         machineChooser.setText("20");
-        machineSelectPanel.add(machineChooser);
+        topPanel.add(machineChooser);
 
         JTextArea machineType=new JTextArea();
         machineType.setText("L5A");
 //        machineType.setText(app.getMachine().getMachineType());
-        machineSelectPanel.add(machineType);
+        topPanel.add(machineType);
 
-        topPanel.add(machineSelectPanel,BorderLayout.WEST);
+        JLabel label=new JLabel();
+        label.setText("L5A");
+        topPanel.add(label);
+
 
         JButton instBut=new JButton("Install");
         instBut.setName(INSTALL);
@@ -50,15 +51,10 @@ public class MainFrame extends JFrame {
         JButton cdBut=new JButton("Cd");
         cdBut.setName(CD);
 
-        JPanel buttonsPanel= new JPanel();
-        buttonsPanel.setLayout(new GridLayout(1,4));
-        buttonsPanel.add(instBut);
-        buttonsPanel.add(xlsBut);
-        buttonsPanel.add(machineBut);
-        buttonsPanel.add(cdBut);
-
-        topPanel.add(buttonsPanel,BorderLayout.EAST);
-
+        topPanel.add(instBut);
+        topPanel.add(xlsBut);
+        topPanel.add(machineBut);
+        topPanel.add(cdBut);
 
         JPanel mainPanel= new JPanel();
         mainPanel.setLayout(new BorderLayout());
