@@ -20,16 +20,23 @@ public class MainFrame extends JFrame {
         getContentPane().setLayout(new BorderLayout());
 
         JPanel topPanel=new JPanel();
-        topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        topPanel.add(new JLabel("Machine"));
+        topPanel.setLayout(new BorderLayout());
+
+        JPanel machineSelectPanel=new JPanel();
+        machineSelectPanel.setLayout(new FlowLayout());
+        machineSelectPanel.add(new JLabel("Machine"));
 
         JTextField machineChooser=new JTextField();
         machineChooser.setColumns(7);
+        machineChooser.setText("20");
+        machineSelectPanel.add(machineChooser);
 
-//        JTextArea machineType=new JTextArea(app.getMachine().getMachineType());
-        JTextArea machineType=new JTextArea("L5A");
-        topPanel.add(machineChooser);
-        topPanel.add(machineType);
+        JTextArea machineType=new JTextArea();
+        machineType.setText("L5A");
+//        machineType.setText(app.getMachine().getMachineType());
+        machineSelectPanel.add(machineType);
+
+        topPanel.add(machineSelectPanel,BorderLayout.WEST);
 
         JButton instBut=new JButton("Install");
         instBut.setName(INSTALL);
@@ -50,7 +57,7 @@ public class MainFrame extends JFrame {
         buttonsPanel.add(machineBut);
         buttonsPanel.add(cdBut);
 
-        topPanel.add(buttonsPanel,BorderLayout.CENTER);
+        topPanel.add(buttonsPanel,BorderLayout.EAST);
 
 
         JPanel mainPanel= new JPanel();
