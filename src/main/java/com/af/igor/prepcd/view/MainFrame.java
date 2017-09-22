@@ -14,7 +14,7 @@ public class MainFrame extends JFrame {
     private static final String MACHINE="machine";
     private static final String CD="cd";
 
-    private MainApp app=MainApp.getInstance();
+//    private MainApp app=MainApp.getInstance();
 
     public MainFrame() throws HeadlessException {
         getContentPane().setLayout(new BorderLayout());
@@ -31,12 +31,16 @@ public class MainFrame extends JFrame {
 
         JTextArea machineType=new JTextArea();
         machineType.setText("L5A");
+        machineType.setOpaque(false);
 //        machineType.setText(app.getMachine().getMachineType());
         topPanel.add(machineType);
 
         JLabel label=new JLabel();
         label.setText("L5A");
         topPanel.add(label);
+        JSeparator separator = new JSeparator(SwingConstants.VERTICAL);
+        separator.setPreferredSize(new Dimension(5,20));
+        topPanel.add(separator);
 
 
         JButton instBut=new JButton("Install");
@@ -57,19 +61,34 @@ public class MainFrame extends JFrame {
         topPanel.add(cdBut);
 
         JPanel mainPanel= new JPanel();
-        mainPanel.setLayout(new BorderLayout());
+        mainPanel.setLayout(new GridLayout(2,2));
 
-        JPanel machineDirPanel=new JPanel();
+        String[] data={"dksk;lgj","lksdj","sl;gksfo","spsgfbs","orewoi","sdklfj","dlkfg","sdfsdfadsafa","dksk;lgj","lksdj","sl;gksfo","spsgfbs","orewoi","sdklfj","dlkfg","sdfsdfadsafa","dksk;lgj","lksdj","sl;gksfo","spsgfbs","orewoi","sdklfj","dlkfg","sdfsdfadsafa"};
+        JList machineDirList = new JList(data);
+//        machineDirList.setPreferredSize(new Dimension(260,360));
+        JScrollPane machineDirPanel=new JScrollPane(machineDirList);
 
-        JPanel machineRemoteDirPanel=new JPanel();
+        JList machineRemoteDirList = new JList(data);
+//        machineRemoteDirList.setPreferredSize(new Dimension(260,360));
+        JScrollPane machineRemoteDirPanel=new JScrollPane(machineRemoteDirList);
 
-        JPanel baseDrawingDirPanel=new JPanel();
+        JList baseDrawingDirList = new JList(data);
+//        baseDrawingDirList.setPreferredSize(new Dimension(260,360));
+        JScrollPane baseDrawingDirPanel=new JScrollPane(baseDrawingDirList);
 
-        JPanel cdDirPanel=new JPanel();
+        JList cdDirList = new JList(data);
+//        cdDirList.setPreferredSize(new Dimension(260,360));
+        JScrollPane cdDirPanel=new JScrollPane(cdDirList);
 
+        mainPanel.add(machineDirPanel);
+        mainPanel.add(machineRemoteDirPanel);
+        mainPanel.add(baseDrawingDirPanel);
+        mainPanel.add(cdDirPanel);
 
         getContentPane().add(topPanel,BorderLayout.NORTH);
-        setBounds(100,100,530,800);
+        getContentPane().add(mainPanel,BorderLayout.CENTER);
+
+        pack();
     }
 
     public static void main(String[] args) {
