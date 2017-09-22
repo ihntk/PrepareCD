@@ -12,6 +12,7 @@ else it can rename base .ckd to machine files, alike I...ckd -> I5500-GA1881.ckd
  */
 
 import com.af.igor.prepcd.log.SimpleLogger;
+import com.af.igor.prepcd.util.ConsoleHelper;
 import com.af.igor.prepcd.util.LuxParser;
 import com.af.igor.prepcd.util.MachineExcelParser;
 import com.af.igor.prepcd.util.MachinesCode;
@@ -171,10 +172,19 @@ public class MainApp {
 
     public String getMachineCode() {
         String machineType = null;
+        String machineCode;
         if (machine.getMachineType().contains("-"))
             machineType = machine.getMachineType().substring(0, machine.getMachineType().indexOf("-"));
         else machineType = machine.getMachineType();
-        return MachinesCode.valueOf(machineType).toString();
+
+        try{
+            machineCode=MachinesCode.valueOf(machineType).toString();
+        }catch (IllegalArgumentException e){
+            ConsoleHelper.writeMessage("Input machine's code");
+            machineCode=ConsoleHelper.readString();
+        }
+
+        return machineCode;
     }
 
     public void run(String[] args) throws IOException, InterruptedException {

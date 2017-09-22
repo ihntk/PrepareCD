@@ -123,14 +123,15 @@ public class Machine {
     }
 
     public void renameAllCkd() throws IOException {
+        String machineCode=app.getMachineCode();
         ArrayList<String> ckdFiles = machineDir.getCkdFiles();
         for (String file : ckdFiles) {
             if ((file.startsWith("E")) && (!file.startsWith("Etiqclas"))) {
-                String renamedCkd = "E" + app.getMachineCode() + "-" + getMachineName().substring(2) + ".ckd";
+                String renamedCkd = "E" + machineCode + "-" + getMachineName().substring(2) + ".ckd";
                 machineDir.rename(file, renamedCkd);
             }
             if (file.startsWith("FS")) {
-                String renamedCkd = "FS" + app.getMachineCode() + "-" + getMachineName().substring(2) + ".ckd";
+                String renamedCkd = "FS" + machineCode + "-" + getMachineName().substring(2) + ".ckd";
                 machineDir.rename(file, renamedCkd);
             }
 
