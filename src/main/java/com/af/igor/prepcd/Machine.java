@@ -1,5 +1,7 @@
 package com.af.igor.prepcd;
 
+import com.af.igor.prepcd.util.ConsoleHelper;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +33,7 @@ public class Machine {
         String smMachSer = sm + machineSeries;
         String smMachSerLux = smMachSer;
         if (!machSer.equals("Y")) {
-            if (machSer.equals("H") || machSer.equals("I") || (machSer.equals("J")&&machineSeries.equals("JA")))
+            if (machSer.equals("H") || machSer.equals("I") || (machSer.equals("J") && machineSeries.equals("JA")))
                 smMachSerLux = sm + " " + machineSeries;
             luxPath = luxPath + app.searchFileName(luxPath, smMachSerLux) + "\\";
         }
@@ -42,7 +44,7 @@ public class Machine {
             app.logger.log("machineName is:\n   " + machineName);
             app.desktop.open(new File(luxPathString));
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
-                System.out.println("Are you sure the machine " + machineName + " is exist? (y/N)");
+                ConsoleHelper.writeMessage("Are you sure the machine " + machineName + " is exist? (y/N)");
                 if (!reader.readLine().toLowerCase().equals("y")) machineName = null;
             }
         }
@@ -97,7 +99,7 @@ public class Machine {
     public void prepareCd() throws IOException {
         String[] langs = app.machineExcelParser.getLanguage();
         for (String lang : langs) {
-            System.out.println(lang);
+            ConsoleHelper.writeMessage(lang);
         }
 //        new File(cdDir.cdPathDir).mkdir();
 //        Files.copy(Paths.get(app.CDTEMPLATE),Paths.get(cdDir.cdPathDir));           //вибрати потрібні мови і файли
@@ -123,7 +125,7 @@ public class Machine {
     }
 
     public void renameAllCkd() throws IOException {
-        String machineCode=app.getMachineCode();
+        String machineCode = app.getMachineCode();
         ArrayList<String> ckdFiles = machineDir.getCkdFiles();
         for (String file : ckdFiles) {
             if ((file.startsWith("E")) && (!file.startsWith("Etiqclas"))) {

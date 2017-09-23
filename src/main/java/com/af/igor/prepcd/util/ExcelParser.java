@@ -14,19 +14,17 @@ public abstract class ExcelParser {
     protected XSSFWorkbook workbook;
 
     public void setExcelFile(String excelFile) {
-        this.excelFile= excelFile;
-        try (FileInputStream inputStream = new FileInputStream(new File(excelFile)))
-        {
-            workbook=new XSSFWorkbook(inputStream);
+        this.excelFile = excelFile;
+        try (FileInputStream inputStream = new FileInputStream(new File(excelFile))) {
+            workbook = new XSSFWorkbook(inputStream);
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("====\nThere is a problem with machine xls");
+            ConsoleHelper.writeMessage("====\nThere is a problem with machine xls");
         }
     }
 
     protected void writeXLS() {
-        try (FileOutputStream outputStream=new FileOutputStream(new File(excelFile));)
-        {
+        try (FileOutputStream outputStream = new FileOutputStream(new File(excelFile));) {
             workbook.write(outputStream);
         } catch (FileNotFoundException e) {
             e.printStackTrace();

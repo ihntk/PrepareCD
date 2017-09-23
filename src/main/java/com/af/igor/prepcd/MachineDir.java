@@ -1,5 +1,7 @@
 package com.af.igor.prepcd;
 
+import com.af.igor.prepcd.util.ConsoleHelper;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystemException;
@@ -29,7 +31,7 @@ public class MachineDir {
         machinePath = app.MACHINES + machine.getSm() + machine.getMachineSeries() + "\\" + machine.getMachineName() + "\\";
         machinePathDir = new File(machinePath);
         machineXls = machine.getMachineName() + ".xlsx";
-        luxFile=machine.luxFile;
+        luxFile = machine.luxFile;
         machinePathDir.mkdir();
     }
 
@@ -82,14 +84,14 @@ public class MachineDir {
                 copy(machine.getLuxPathString() + luxFile, machinePath + luxFile, REPLACE_EXISTING);
                 app.logger.log("Copied luxFile:\n   " + luxFile);
             } catch (FileSystemException e) {
-                System.out.println("I can't replace " + luxFile + " file because it is being used by another process");
+                ConsoleHelper.writeMessage("I can't replace " + luxFile + " file because it is being used by another process");
                 app.logger.log("Could'nt replace:\n   " + luxFile);
             }
         }
     }
 
     public void rename(String sourceName, String targetName) throws IOException {
-        Files.move(Paths.get(machinePath+sourceName),Paths.get(machinePath+targetName));
+        Files.move(Paths.get(machinePath + sourceName), Paths.get(machinePath + targetName));
     }
 
     public void copy(String sourceFile, String targetFile) throws IOException {
@@ -97,6 +99,6 @@ public class MachineDir {
     }
 
     public void copy(String sourceFile, String targetFile, StandardCopyOption copyOption) throws IOException {
-        Files.copy(Paths.get(sourceFile), Paths.get(targetFile),copyOption);
+        Files.copy(Paths.get(sourceFile), Paths.get(targetFile), copyOption);
     }
 }

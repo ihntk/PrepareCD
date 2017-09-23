@@ -46,7 +46,7 @@ public class MainApp {
     static Desktop desktop = Desktop.getDesktop();
     public SimpleLogger logger;
     private Properties properties = new Properties();
-    private static final String PROP_FILE = System.getProperty("user.home")+"/.PrepareCD/PrepareCD.conf";
+    private static final String PROP_FILE = System.getProperty("user.home") + "/.PrepareCD/PrepareCD.conf";
 
     private MainApp() {
         try {
@@ -92,7 +92,7 @@ public class MainApp {
         if (machineName == null) {
             Path path = Paths.get("").toAbsolutePath();
             if (!path.toString().startsWith(MACHINES)) {
-                System.out.println("\nYou are not in \"plans\" directory");
+                ConsoleHelper.writeMessage("\nYou are not in \"plans\" directory");
                 logger.log("You are not in \"plans\" directory");
                 getInstance().help();
                 return;
@@ -106,7 +106,7 @@ public class MainApp {
     }
 
     private void help() throws InterruptedException {
-        System.out.println("_________________\n" +
+        ConsoleHelper.writeMessage("_________________\n" +
                 "Available parameters:\n" +
                 "-n [machine name]    Name of machine\n" +
                 "-i                   Make installation\n" +
@@ -138,20 +138,20 @@ public class MainApp {
             count = fileNames.size();
             if (count > 1) {
                 desktop.open(new File(path));
-                System.out.println("Attention! There are " + count + " files for machine " + machine.getMachineName());
+                ConsoleHelper.writeMessage("Attention! There are " + count + " files for machine " + machine.getMachineName());
 
                 for (int i = 0; i < count; i++) {
-                    System.out.println("   " + (i + 1) + " - " + fileNames.get(i));
+                    ConsoleHelper.writeMessage("   " + (i + 1) + " - " + fileNames.get(i));
                 }
 
                 while (true) {
-                    System.out.print("choose number of correct file ");
-                    try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
-                        int number = Integer.parseInt(reader.readLine()) - 1;
+                    ConsoleHelper.writeMessage("choose number of correct file ");
+                    try {
+                        int number = Integer.parseInt(ConsoleHelper.readString()) - 1;
                         fileName = fileNames.get(number);
                         break;
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        System.out.println("You input incorrect number, please try again");
+                        ConsoleHelper.writeMessage("You input incorrect number, please try again");
                     }
                 }
             } else fileName = fileNames.get(0);
@@ -177,11 +177,11 @@ public class MainApp {
             machineType = machine.getMachineType().substring(0, machine.getMachineType().indexOf("-"));
         else machineType = machine.getMachineType();
 
-        try{
-            machineCode=MachinesCode.valueOf(machineType).toString();
-        }catch (IllegalArgumentException e){
+        try {
+            machineCode = MachinesCode.valueOf(machineType).toString();
+        } catch (IllegalArgumentException e) {
             ConsoleHelper.writeMessage("Input machine's code");
-            machineCode=ConsoleHelper.readString();
+            machineCode = ConsoleHelper.readString();
         }
 
         return machineCode;
@@ -210,7 +210,7 @@ public class MainApp {
         for (int i = 0; i < args.length; i++) {
             String flag = args[i];
             if (flag.equals("-v")) {
-                System.out.println(getVersion());
+                ConsoleHelper.writeMessage(getVersion());
                 logger.log("Showed version");
                 return;
             }
@@ -238,7 +238,7 @@ public class MainApp {
                     break;
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
-                System.out.println("\nYou must specify the filename after -n flag");
+                ConsoleHelper.writeMessage("\nYou must specify the filename after -n flag");
                 help();
                 logger.log("Machine was not specify");
                 return;
@@ -274,7 +274,7 @@ public class MainApp {
          */
         if (use == 0) {
             logger.log("target isn't specified");
-            System.out.println("\nYou must specify target. Application wont to know what to do");
+            ConsoleHelper.writeMessage("\nYou must specify target. Application wont to know what to do");
             tc("/l=\"" + machine.machineDir.machinePath + "\"");
             help();
         }
@@ -306,8 +306,8 @@ public class MainApp {
             tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + machine.I_PLANS + "\"");
             logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + machine.I_PLANS);
             machine.setMachineType(luxParser.getMachineType());
-            System.out.println("Copy base installation drawing for "+machine.getMachineType()+"\nand then press enter");
-            new BufferedReader(new InputStreamReader(System.in)).readLine();
+            ConsoleHelper.writeMessage("Copy base installation drawing for " + machine.getMachineType() + "\nand then press enter");
+            ConsoleHelper.readString();
             String installationName = "I" + getMachineCode() + "-" + machine.getMachineName().substring(2) + ".ckd";
             Files.move(Paths.get(machine.machineDir.machinePath + machine.machineDir.getCkdFiles().get(0)), Paths.get(machine.machineDir.machinePath + installationName));  //rename installation
             desktop.open(new File(machine.machineDir.machinePath + installationName));
@@ -326,8 +326,8 @@ public class MainApp {
             machine.setMachineType(machineType);
             String mPlans = machineExcelParser.getMPlans();
             logger.log(mPlans);
-            System.out.println("Copy base drawings and then press enter\n------\nFor machine " + machineType + "\nYou need to copy E, FS and " + mPlans.replaceAll("\\+", "") + "\n");
-            new BufferedReader(new InputStreamReader(System.in)).readLine();
+            ConsoleHelper.writeMessage("Copy base drawings and then press enter\n------\nFor machine " + machineType + "\nYou need to copy E, FS and " + mPlans.replaceAll("\\+", "") + "\n");
+            ConsoleHelper.readString();
             machine.renameAllCkd();
             logger.log("ckd files renamed");
             machine.copyEtiq();
