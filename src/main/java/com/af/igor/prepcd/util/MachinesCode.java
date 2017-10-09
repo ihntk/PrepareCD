@@ -17,7 +17,7 @@ public enum MachinesCode {
     CE24S(2000),
     CE24A(2400),
     CE24B(2500),
-    CE24C(2250),
+    CE24C(2550),
 
     L3A(2600),
     L3B(2700),
