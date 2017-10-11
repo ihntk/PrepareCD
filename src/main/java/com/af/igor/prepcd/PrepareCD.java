@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -48,6 +49,7 @@ public class PrepareCD extends Application {
             loader.setLocation(getClass().getResource("/view/MainFrame.fxml"));
             BorderPane mainFrame = (BorderPane) loader.load();
 
+            VBox.setVgrow(mainFrame, Priority.ALWAYS);
             rootLayout.getChildren().add(mainFrame);
 
         } catch (IOException e) {
