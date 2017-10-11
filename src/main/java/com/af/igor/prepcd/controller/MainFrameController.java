@@ -1,6 +1,7 @@
 package com.af.igor.prepcd.controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -32,6 +33,19 @@ public class MainFrameController {
 
     @FXML
     private ListView<String> cdDir;
+
+    @FXML
+    private Button installButton;
+
+    @FXML
+    private Button xlsButton;
+
+    @FXML
+    private Button machineButton;
+
+    @FXML
+    private Button cdButton;
+
 
 
     public MainFrameController() {
