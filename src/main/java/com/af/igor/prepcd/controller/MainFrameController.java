@@ -17,6 +17,9 @@ public class MainFrameController {
     private Label status;
 
     @FXML
+    private Label target;
+
+    @FXML
     private TextField machineName;
 
     @FXML
