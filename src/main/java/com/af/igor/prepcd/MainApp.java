@@ -85,11 +85,18 @@ public class MainApp {
         return machine;
     }
 
-    void initializePath(String machineName) throws IOException, InterruptedException {
+    private void initializeMachine(String machineName) throws IOException, InterruptedException {
+        if (machineName == null) initializePath(machineName);
+
+        machine = new Machine(machineName);
+        logger.log("machine name is: " + machineName);
+    }
+
+    private void initializePath(String machineName) throws IOException, InterruptedException {
         /*
         Use current dir as path to machine
          */
-        if (machineName == null) {
+
             Path path = Paths.get("").toAbsolutePath();
             if (!path.toString().startsWith(MACHINES)) {
                 ConsoleHelper.writeMessage("\nYou are not in \"plans\" directory");
@@ -99,10 +106,6 @@ public class MainApp {
             }
             machineName = path.getFileName().toString().toUpperCase();
             logger.log("path got from pwd");
-        }
-
-        machine = new Machine(machineName);
-        logger.log("machine name is: " + machineName);
     }
 
     private void help() throws InterruptedException {
@@ -245,7 +248,7 @@ public class MainApp {
             }
         }
 
-        initializePath(machineName);
+        initializeMachine(machineName);
         if (machine == null || machine.getMachineName() == null) {
             logger.log("Error in mainApp.initializePath\n   machineName is: " + machineName + " not exist");
             return;
