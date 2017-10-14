@@ -26,6 +26,8 @@ public class PrepareCD extends Application {
         initRootLayout();
 
         showMainFrame();
+
+        MainApp app=MainApp.getInstance();
     }
 
     public void initRootLayout() {
