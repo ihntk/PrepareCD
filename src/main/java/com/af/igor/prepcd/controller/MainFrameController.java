@@ -58,4 +58,34 @@ public class MainFrameController {
         machineName.setText("20GA2869");
         machineCode.setText("5000");
     }
+
+    @FXML
+    private void handleSetMachine(){
+        status.setText("Machine is "+machineName.getText());
+    }
+
+    @FXML
+    private void handleSetMachineCode(){
+        status.setText("Machine code is "+machineCode.getText());
+    }
+
+    @FXML
+    private void handleInstall(){
+        target.setText("Install");
+    }
+
+    @FXML
+    private void handleXls(){
+        target.setText("Xls");
+    }
+
+    @FXML
+    private void handleMachine(){
+        target.setText("Machine");
+    }
+
+    @FXML
+    private void handleCD(){
+        target.setText("CD");
+    }
 }
