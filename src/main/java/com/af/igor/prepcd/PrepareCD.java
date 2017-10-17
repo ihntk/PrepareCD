@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class PrepareCD extends Application {
+    MainApp app;
     private Stage primaryStage;
     private VBox rootLayout;
 
@@ -23,11 +24,11 @@ public class PrepareCD extends Application {
         this.primaryStage = primaryStage;
         primaryStage.setTitle("PrepareCD");
 
+        app=MainApp.getInstance();
+
         initRootLayout();
 
         showMainFrame();
-
-        MainApp app=MainApp.getInstance();
     }
 
     public void initRootLayout() {
