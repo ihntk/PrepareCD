@@ -85,7 +85,7 @@ public class MainApp {
         return machine;
     }
 
-    private void initializeMachine(String machineName) throws IOException, InterruptedException {
+    public void initializeMachine(String machineName) throws IOException, InterruptedException {
         if (machineName == null) initializePath(machineName);
 
         machine = new Machine(machineName);
