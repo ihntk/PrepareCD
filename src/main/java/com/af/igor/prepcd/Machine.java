@@ -20,22 +20,30 @@ public class Machine {
     private final String machineSeries;
     private final String luxPathString;
     protected final String hMachinePath;
-    protected final String I_PLANS = app.PLANS + "002 - Plan d'installation\\";
+    protected final String I_PLANS = app.PLANS + "002 - Plan d'installation/";
 
     MachineDir machineDir;
     CdDir cdDir;
 
+    public MachineDir getMachineDir() {
+        return machineDir;
+    }
+
+    public String gethMachinePath() {
+        return hMachinePath;
+    }
+
     public Machine(String machineName) throws IOException {
         sm = machineName.substring(0, 2);
         machineSeries = machineName.substring(2, 3).equals("Y") ? machineName.substring(2, 3) : machineName.substring(2, 4);
-        String luxPath = app.LUX_DIR + getSm() + " " + getMachineSeries().substring(0, 1) + "\\";
+        String luxPath = app.LUX_DIR + getSm() + " " + getMachineSeries().substring(0, 1) + "/";
         String machSer = String.valueOf(machineSeries.charAt(0));
         String smMachSer = sm + machineSeries;
         String smMachSerLux = smMachSer;
         if (!machSer.equals("Y")) {
             if (machSer.equals("H") || machSer.equals("I") || (machSer.equals("J") && machineSeries.equals("JA")))
                 smMachSerLux = sm + " " + machineSeries;
-            luxPath = luxPath + app.searchFileName(luxPath, smMachSerLux) + "\\";
+            luxPath = luxPath + app.searchFileName(luxPath, smMachSerLux) + "/";
         }
         luxPathString = luxPath;
         luxFile = app.searchFileName(luxPathString, machineName);
@@ -49,8 +57,8 @@ public class Machine {
             }
         }
         this.machineName = machineName;
-        String hMachPath = app.H_MACHINES + getSm() + getMachineSeries().substring(0, 1) + "\\";
-        hMachinePath = hMachPath + app.searchFileName(hMachPath, smMachSer) + "\\";
+        String hMachPath = app.H_MACHINES + getSm() + getMachineSeries().substring(0, 1) + "/";
+        hMachinePath = hMachPath + app.searchFileName(hMachPath, smMachSer) + "/";
         if (machineName != null) {
             machineDir = new MachineDir(this);
             cdDir = new CdDir(this);
@@ -113,11 +121,11 @@ public class Machine {
 
     public void openLuxFile() throws IOException {
         machineDir.copyLuxFile();
-        app.desktop.open(new File(machineDir.machinePath + machineDir.luxFile));
+        app.desktop.open(new File(machineDir.machinePath + luxFile));
     }
 
     public String getLuxFile() {
-        return machineDir.luxFile;
+        return luxFile;
     }
 
     public String getXls() {

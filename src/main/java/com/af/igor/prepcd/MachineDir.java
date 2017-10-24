@@ -25,10 +25,13 @@ public class MachineDir {
     private String hMachine = null;
     protected String luxFile = null;
 
+    public String getMachinePath() {
+        return machinePath;
+    }
 
     public MachineDir(Machine machine) {
         this.machine = machine;
-        machinePath = app.MACHINES + machine.getSm() + machine.getMachineSeries() + "\\" + machine.getMachineName() + "\\";
+        machinePath = app.MACHINES + machine.getSm() + machine.getMachineSeries() + "/" + machine.getMachineName() + "/";
         machinePathDir = new File(machinePath);
         machineXls = machine.getMachineName() + ".xlsx";
         luxFile = machine.luxFile;
@@ -38,7 +41,7 @@ public class MachineDir {
     /*
     list of exist files
      */
-    private String[] getFiles() {
+    public String[] getFiles() {
         return machinePathDir.list();
     }
 
