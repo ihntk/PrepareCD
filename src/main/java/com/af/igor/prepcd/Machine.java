@@ -19,7 +19,7 @@ public class Machine {
     private final String sm;        //first two symbols in machine name (usually 20)
     private final String machineSeries;
     private final String luxPathString;
-    protected final String hMachinePath;
+    private final String remoteMachinePath;
     protected final String I_PLANS = app.PLANS + "002 - Plan d'installation/";
 
     MachineDir machineDir;
@@ -29,8 +29,8 @@ public class Machine {
         return machineDir;
     }
 
-    public String gethMachinePath() {
-        return hMachinePath;
+    public String getRemoteMachinePath() {
+        return remoteMachinePath;
     }
 
     public Machine(String machineName) throws IOException {
@@ -58,7 +58,7 @@ public class Machine {
         }
         this.machineName = machineName;
         String hMachPath = app.H_MACHINES + getSm() + getMachineSeries().substring(0, 1) + "/";
-        hMachinePath = hMachPath + app.searchFileName(hMachPath, smMachSer) + "/";
+        remoteMachinePath = hMachPath + app.searchFileName(hMachPath, smMachSer) + "/";
         if (machineName != null) {
             machineDir = new MachineDir(this);
             cdDir = new CdDir(this);

@@ -284,7 +284,7 @@ public class MainApp {
         if (use == 1) {
             logger.log("target is: xls");
             if (!machine.getMachineXls()) {
-                tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + machine.hMachinePath + "\"");
+                tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + machine.getRemoteMachinePath() + "\"");
                 desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
                 logger.log("xls is opened");
             } else {
@@ -294,7 +294,7 @@ public class MainApp {
                 luxParser.getMachineData();
 //                machineExcelParser.setMachineType(machine.getMachineType());
 
-                tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + machine.hMachinePath + "\"");
+                tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + machine.getRemoteMachinePath() + "\"");
                 desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
                 logger.log("xls is opened");
                 desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.luxFile));
@@ -315,8 +315,8 @@ public class MainApp {
             Files.move(Paths.get(machine.machineDir.machinePath + machine.machineDir.getCkdFiles().get(0)), Paths.get(machine.machineDir.machinePath + installationName));  //rename installation
             desktop.open(new File(machine.machineDir.machinePath + installationName));
             logger.log("Installation " + installationName + " opened");
-            tc("/r=\"" + machine.hMachinePath + "\"");
-            logger.log("Opened in tc :\n   " + machine.hMachinePath);
+            tc("/r=\"" + machine.getRemoteMachinePath() + "\"");
+            logger.log("Opened in tc :\n   " + machine.getRemoteMachinePath());
         }
 
         if (use == 8) {
@@ -336,8 +336,8 @@ public class MainApp {
             machine.copyEtiq();
             machine.open4CkdFiles();
             logger.log("ckd files opened");
-            tc("/r=\"" + machine.hMachinePath + "\"");
-            logger.log("Opened in tc :\n   " + machine.hMachinePath);
+            tc("/r=\"" + machine.getRemoteMachinePath() + "\"");
+            logger.log("Opened in tc :\n   " + machine.getRemoteMachinePath());
         }
 
     }
