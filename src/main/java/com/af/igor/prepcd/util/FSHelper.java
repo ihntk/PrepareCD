@@ -3,12 +3,15 @@ package com.af.igor.prepcd.util;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class FSHelper {
-    private ObservableList<Path> list= FXCollections.observableArrayList();
+    private ObservableList<Path> list = FXCollections.observableArrayList();
 
-    public static FSHelper getInstance(){
+    public static FSHelper getInstance() {
         return new FSHelper();
     }
 
@@ -16,12 +19,18 @@ public class FSHelper {
         return list;
     }
 
-    public void getFiles(Path path){
+    public void getFiles(Path path) throws IOException {
+        DirectoryStream<Path> stream = Files.newDirectoryStream(path);
+        for (Path pathSt : stream) {
+            if (!Files.isHidden(pathSt))
+                list.add(pathSt);
+        }
+
     }
 
-    public void getCkdFiles(Path path){
+    public void getCkdFiles(Path path) {
     }
 
-    public void getPdfFiles(Path path){
+    public void getPdfFiles(Path path) {
     }
 }
