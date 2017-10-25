@@ -12,6 +12,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -141,8 +142,14 @@ public class MainFrameController {
         remoteMachineDir.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Path>() {
             @Override
             public void changed(ObservableValue<? extends Path> observable, Path oldValue, Path newValue) {
-                if (!newValue.getParent().getFileName().toString().startsWith(getMachine().getMachineName())) {
-                    remoteMachineDirFS.getFiles(newValue);
+                if (Files.isDirectory(newValue) &&
+                        !newValue.getParent().getFileName().toString().startsWith(getMachine().getMachineName())) {
+                    try {
+                        remoteMachineDirFS.getFiles(newValue);
+                    } catch (IOException e) {
+
+
+                    }
                 }
             }
         });
