@@ -120,7 +120,7 @@ public class Machine {
     }
 
     public void openLuxFile() throws IOException {
-        machineDir.copyLuxFile();
+        copyLuxFile();
         app.desktop.open(new File(machineDir.machinePath + luxFile));
     }
 
@@ -209,5 +209,9 @@ public class Machine {
         String machineEtiq = "Etiqclas" + "-" + getMachineName().substring(2) + ".ckd";
         if (!new File(machineDir.machinePath + machineEtiq).exists())
             machineDir.copy(app.ETIQCLAS, machineDir.machinePath + machineEtiq);
+    }
+
+    public void copyLuxFile() throws IOException {
+        machineDir.copyLuxFile();
     }
 }
