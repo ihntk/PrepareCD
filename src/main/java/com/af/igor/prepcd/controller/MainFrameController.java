@@ -4,15 +4,17 @@ import com.af.igor.prepcd.MainApp;
 import com.af.igor.prepcd.util.FSHelper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -63,31 +65,41 @@ public class MainFrameController {
     @FXML
     private Button cdButton;
 
+    private ObservableList<Path> machineDirList;
+    private ObservableList<Path> remoteMachineDirList;
+    private ObservableList<Path> basePlanDirList;
+    private ObservableList<Path> cdDirList;
+
     private FSHelper machineDirFS;
     private FSHelper remoteMachineDirFS;
     private FSHelper basePlanDirFS;
     private FSHelper cdDirFS;
 
 
-
     public MainFrameController() {
     }
 
-    public void initialize(){
+    @FXML
+    private void initialize() {
         target.setText("Ready");
         status.setText("Select the machine");
 
-        machineDirFS=FSHelper.getInstance();
-        remoteMachineDirFS=FSHelper.getInstance();
+        machineDirList = FXCollections.observableArrayList();
+        machineDir.setItems(machineDirList);
+        machineDirFS = FSHelper.getInstance(machineDirList);
+
+        remoteMachineDirList = FXCollections.observableArrayList();
+        remoteMachineDir.setItems(remoteMachineDirList);
+        remoteMachineDirFS = FSHelper.getInstance(remoteMachineDirList);
     }
 
     @FXML
-    private void handleSetMachine(){
+    private void handleSetMachine() {
         try {
             target.setText("Processing machine");
             status.setText("Waiting");
             machineInit(machineName.getText().toUpperCase());
-            status.setText("Machine is "+ getMachine().getMachineName());
+            status.setText("Machine is " + getMachine().getMachineName());
             target.setText("Ready");
             machineName.setText(getMachine().getMachineName());
         } catch (IOException e) {
@@ -98,34 +110,34 @@ public class MainFrameController {
     }
 
     @FXML
-    private void handleSetMachineCode(){
-        status.setText("Machine code is "+machineCode.getText());
+    private void handleSetMachineCode() {
+        status.setText("Machine code is " + machineCode.getText());
     }
 
     @FXML
-    private void handleInstall(){
+    private void handleInstall() {
         target.setText("Install");
     }
 
     @FXML
-    private void handleXls(){
+    private void handleXls() {
         target.setText("Xls");
     }
 
     @FXML
-    private void handleMachine(){
+    private void handleMachine() {
         target.setText("Machine");
     }
 
     @FXML
-    private void handleCD(){
+    private void handleCD() {
         target.setText("CD");
     }
 
 
     public void machineInit(String machineName) throws IOException, InterruptedException {
         app.initializeMachine(machineName);
-        status.setText("Copying "+getMachine().getLuxFile());
+        status.setText("Copying " + getMachine().getLuxFile());
 
         getMachine().copyLuxFile();
         luxParser.setExcelFile(getMachine().getMachineDir().getMachinePath() + getMachine().getLuxFile());
@@ -133,25 +145,38 @@ public class MainFrameController {
         machineType.setText(getMachine().getMachineType());
         machineCode.setText(app.getMachineCode());
 
-        machineDir.setItems(machineDirFS.getList());
-        remoteMachineDir.setItems(remoteMachineDirFS.getList());
-
         machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePath()));
+//        machineDir.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+//                status.setText(String.valueOf(newValue));
+//            }
+//        });
+
         remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath()));
-
-        remoteMachineDir.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Path>() {
+        remoteMachineDir.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void changed(ObservableValue<? extends Path> observable, Path oldValue, Path newValue) {
-                if (Files.isDirectory(newValue) &&
-                        !newValue.getParent().getFileName().toString().startsWith(getMachine().getMachineName())) {
-                    try {
-                        remoteMachineDirFS.getFiles(newValue);
-                    } catch (IOException e) {
-
-
-                    }
+            public void handle(MouseEvent event) {
+                try {
+                    remoteMachineDirFS.getFiles(remoteMachineDir.getSelectionModel().getSelectedItem());
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+
             }
         });
+
+//        remoteMachineDir.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Path>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Path> observable, Path oldValue, Path newValue) {
+////                if (!newValue.getParent().getFileName().toString().startsWith(getMachine().getMachineName())) {
+//                    try {
+//                        remoteMachineDirFS.getFiles(newValue);
+//                    } catch (IOException e) {
+//
+//                    }
+////                }
+//            }
+//        });
     }
 }
