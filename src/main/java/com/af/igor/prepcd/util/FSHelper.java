@@ -20,12 +20,14 @@ public class FSHelper {
     }
 
     public void getFiles(Path path) throws IOException {
-        DirectoryStream<Path> stream = Files.newDirectoryStream(path);
-        for (Path pathSt : stream) {
-            if (!Files.isHidden(pathSt))
-                list.add(pathSt);
+        if (Files.isDirectory(path)) {
+            DirectoryStream<Path> stream = Files.newDirectoryStream(path);
+            for (Path pathSt : stream) {
+                if (!Files.isHidden(pathSt))
+                    list.add(pathSt.getFileName());
+            }
         }
-
+        // else call alert window with message: path is not directory
     }
 
     public void getCkdFiles(Path path) {
