@@ -2,11 +2,12 @@ package com.af.igor.prepcd;
 
 import com.af.igor.prepcd.util.ConsoleHelper;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Properties;
 
 /**
  * Created by ede on 11.08.2016.
@@ -19,8 +20,11 @@ public class Machine {
     private final String sm;        //first two symbols in machine name (usually 20)
     private final String machineSeries;
     private final String luxPathString;
-    private final String remoteMachinePath;
+    private String remoteMachinePath;
     protected final String I_PLANS = app.PLANS + "002 - Plan d'installation/";
+    private Path confFile;
+    private Properties confFileProperty = new Properties();
+    private String machineCode;
 
     MachineDir machineDir;
     CdDir cdDir;
@@ -31,6 +35,10 @@ public class Machine {
 
     public String getRemoteMachinePath() {
         return remoteMachinePath;
+    }
+
+    public String getMachineCode() {
+        return machineCode;
     }
 
     public Machine(String machineName) throws IOException {
@@ -57,11 +65,46 @@ public class Machine {
             }
         }
         this.machineName = machineName;
-        String hMachPath = app.H_MACHINES + getSm() + getMachineSeries().substring(0, 1) + "/";
-        remoteMachinePath = hMachPath + app.searchFileName(hMachPath, smMachSer) + "/";
         if (machineName != null) {
             machineDir = new MachineDir(this);
             cdDir = new CdDir(this);
+
+            confFile = Paths.get(machineDir.getMachinePath(), machineName+".conf");
+            if (!Files.exists(confFile)){
+                Files.setAttribute(confFile, "dos:hidden",true);
+                Files.createFile(confFile);
+            }
+            loadFromConfigFile(confFile);
+        }
+        if (remoteMachinePath.isEmpty()) {
+            String hMachPath = app.H_MACHINES + getSm() + getMachineSeries().substring(0, 1) + "/";
+            remoteMachinePath = hMachPath + app.searchFileName(hMachPath, smMachSer) + "/";
+        }
+    }
+
+    private void loadFromConfigFile(Path confFile) {
+        try(InputStream stream = new FileInputStream(confFile.toFile())) {
+            confFileProperty.load(stream);
+            if (confFileProperty.containsKey(remoteMachinePath))
+                remoteMachinePath=confFileProperty.getProperty(remoteMachinePath);
+            if (confFileProperty.containsKey(machineCode))
+                machineCode = confFileProperty.getProperty(machineCode);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveConfigFile(){
+        try(OutputStream stream = new FileOutputStream(confFile.toFile())) {
+            confFileProperty.store(stream,null);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
