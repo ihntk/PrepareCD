@@ -41,6 +41,18 @@ public class Machine {
         return machineCode;
     }
 
+    public void setRemoteMachinePath(String remoteMachinePath) {
+        this.remoteMachinePath = remoteMachinePath;
+        confFileProperty.setProperty("remoteMachinePath", remoteMachinePath);
+        saveConfigFile();
+    }
+
+    public void setMachineCode(String machineCode) {
+        this.machineCode = machineCode;
+        confFileProperty.setProperty("machineCode", machineCode);
+        saveConfigFile();
+    }
+
     public Machine(String machineName) throws IOException {
         sm = machineName.substring(0, 2);
         machineSeries = machineName.substring(2, 3).equals("Y") ? machineName.substring(2, 3) : machineName.substring(2, 4);
@@ -69,9 +81,9 @@ public class Machine {
             machineDir = new MachineDir(this);
             cdDir = new CdDir(this);
 
-            confFile = Paths.get(machineDir.getMachinePath(), machineName+".conf");
-            if (!Files.exists(confFile)){
-                Files.setAttribute(confFile, "dos:hidden",true);
+            confFile = Paths.get(machineDir.getMachinePath(), machineName + ".conf");
+            if (!Files.exists(confFile)) {
+                Files.setAttribute(confFile, "dos:hidden", true);
                 Files.createFile(confFile);
             }
             loadFromConfigFile(confFile);
@@ -83,10 +95,10 @@ public class Machine {
     }
 
     private void loadFromConfigFile(Path confFile) {
-        try(InputStream stream = new FileInputStream(confFile.toFile())) {
+        try (InputStream stream = new FileInputStream(confFile.toFile())) {
             confFileProperty.load(stream);
             if (confFileProperty.containsKey(remoteMachinePath))
-                remoteMachinePath=confFileProperty.getProperty(remoteMachinePath);
+                remoteMachinePath = confFileProperty.getProperty(remoteMachinePath);
             if (confFileProperty.containsKey(machineCode))
                 machineCode = confFileProperty.getProperty(machineCode);
 
@@ -97,9 +109,9 @@ public class Machine {
         }
     }
 
-    public void saveConfigFile(){
-        try(OutputStream stream = new FileOutputStream(confFile.toFile())) {
-            confFileProperty.store(stream,null);
+    public void saveConfigFile() {
+        try (OutputStream stream = new FileOutputStream(confFile.toFile())) {
+            confFileProperty.store(stream, null);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
