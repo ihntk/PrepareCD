@@ -11,6 +11,10 @@ public class FSHelper {
     private ObservableList<Path> list;
     private Path currentPath;
 
+    public Path getCurrentPath() {
+        return currentPath;
+    }
+
     public static FSHelper getInstance(ObservableList<Path> list) {
         return new FSHelper(list);
     }

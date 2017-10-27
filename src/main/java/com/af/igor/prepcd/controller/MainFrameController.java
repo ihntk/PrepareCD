@@ -111,7 +111,8 @@ public class MainFrameController {
 
     @FXML
     private void handleSetMachineCode() {
-        status.setText("Machine code is " + machineCode.getText());
+        getMachine().setMachineCode(machineCode.getText());
+        status.setText("Machine code is " + machineCode.getText() + " saved");
     }
 
     @FXML
@@ -158,7 +159,10 @@ public class MainFrameController {
             @Override
             public void handle(MouseEvent event) {
                 try {
-                    remoteMachineDirFS.getFiles(remoteMachineDir.getSelectionModel().getSelectedItem());
+                    Path selectedFile=remoteMachineDir.getSelectionModel().getSelectedItem();
+                    remoteMachineDirFS.getFiles(selectedFile);
+//                    if (selectedFile.startsWith(getMachine().getMachineName()))
+//                        getMachine().setRemoteMachinePath(remoteMachineDirFS.getCurrentPath());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
