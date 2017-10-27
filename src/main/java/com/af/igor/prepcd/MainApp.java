@@ -176,16 +176,18 @@ public class MainApp {
     public String getMachineCode() {
         String machineType = null;
         String machineCode;
-        if (machine.getMachineType().contains("-"))
-            machineType = machine.getMachineType().substring(0, machine.getMachineType().indexOf("-"));
-        else machineType = machine.getMachineType();
+        if (machine.getMachineCode().isEmpty()) {
+            if (machine.getMachineType().contains("-"))
+                machineType = machine.getMachineType().substring(0, machine.getMachineType().indexOf("-"));
+            else machineType = machine.getMachineType();
 
-        try {
-            machineCode = MachinesCode.valueOf(machineType).toString();
-        } catch (IllegalArgumentException e) {
-            ConsoleHelper.writeMessage("Input machine's code");
-            machineCode = ConsoleHelper.readString();
-        }
+            try {
+                machineCode = MachinesCode.valueOf(machineType).toString();
+            } catch (IllegalArgumentException e) {
+                ConsoleHelper.writeMessage("Input machine's code");
+                machineCode = ConsoleHelper.readString();
+            }
+        }else machineCode=machine.getMachineCode();
 
         return machineCode;
     }
