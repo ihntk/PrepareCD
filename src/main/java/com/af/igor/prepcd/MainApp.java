@@ -176,7 +176,7 @@ public class MainApp {
     public String getMachineCode() {
         String machineType = null;
         String machineCode;
-        if (machine.getMachineCode().isEmpty()) {
+        if (machine.getMachineCode()==null) {
             if (machine.getMachineType().contains("-"))
                 machineType = machine.getMachineType().substring(0, machine.getMachineType().indexOf("-"));
             else machineType = machine.getMachineType();

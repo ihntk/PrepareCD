@@ -83,12 +83,12 @@ public class Machine {
 
             confFile = Paths.get(machineDir.getMachinePath(), machineName + ".conf");
             if (!Files.exists(confFile)) {
-                Files.setAttribute(confFile, "dos:hidden", true);
                 Files.createFile(confFile);
+                Files.setAttribute(confFile, "dos:hidden", true);
             }
             loadFromConfigFile(confFile);
         }
-        if (remoteMachinePath.isEmpty()) {
+        if (remoteMachinePath==null) {
             String hMachPath = app.H_MACHINES + getSm() + getMachineSeries().substring(0, 1) + "/";
             remoteMachinePath = hMachPath + app.searchFileName(hMachPath, smMachSer) + "/";
         }
@@ -97,10 +97,10 @@ public class Machine {
     private void loadFromConfigFile(Path confFile) {
         try (InputStream stream = new FileInputStream(confFile.toFile())) {
             confFileProperty.load(stream);
-            if (confFileProperty.containsKey(remoteMachinePath))
-                remoteMachinePath = confFileProperty.getProperty(remoteMachinePath);
-            if (confFileProperty.containsKey(machineCode))
-                machineCode = confFileProperty.getProperty(machineCode);
+            if (confFileProperty.containsKey("remoteMachinePath"))
+                remoteMachinePath = confFileProperty.getProperty("remoteMachinePath");
+            if (confFileProperty.containsKey("machineCode"))
+                machineCode = confFileProperty.getProperty("machineCode");
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
