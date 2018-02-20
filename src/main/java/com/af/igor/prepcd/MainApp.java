@@ -39,7 +39,7 @@ public class MainApp {
     static String TOTALCOMMANDER;
 
     private static MainApp instance;
-    private static String version = "0.6.0.a01";
+    private static String version = "0.6.0.a02";
     private static Machine machine;         //in future this field will replace static ArrayList<Machine>
     static public LuxParser luxParser;
     static MachineExcelParser machineExcelParser;
@@ -166,9 +166,16 @@ public class MainApp {
         return fileName;
     }
 
-    public void tc(String parameters) throws IOException {
+    /**
+     * tc("--l=path/to/dir/")
+     * parameter change /l=path\to\dir\
+     * @param pathParameters
+     * @throws IOException
+     */
+    public void tc(String pathParameters) throws IOException {
+        pathParameters=pathParameters.replaceAll("/","\\\\").replaceAll("--","/");
         Runtime runtime = Runtime.getRuntime();
-        String command = TOTALCOMMANDER + " /O " + parameters;
+        String command = TOTALCOMMANDER + " /O " + pathParameters;
         Process process = runtime.exec(command);
         logger.log("total commander got parameters:\n   " + command);
     }
@@ -280,13 +287,13 @@ public class MainApp {
         if (use == 0) {
             logger.log("target isn't specified");
             ConsoleHelper.writeMessage("\nYou must specify target. Application wont to know what to do");
-            tc("/l=\"" + machine.machineDir.machinePath + "\"");
+            tc("--l=\"" + machine.machineDir.machinePath + "\"");
             help();
         }
         if (use == 1) {
             logger.log("target is: xls");
             if (!machine.getMachineXls()) {
-                tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + machine.getRemoteMachinePath() + "\"");
+                tc("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + machine.getRemoteMachinePath() + "\"");
                 desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
                 logger.log("xls is opened");
             } else {
@@ -296,7 +303,7 @@ public class MainApp {
                 luxParser.getMachineData();
 //                machineExcelParser.setMachineType(machine.getMachineType());
 
-                tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + machine.getRemoteMachinePath() + "\"");
+                tc("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + machine.getRemoteMachinePath() + "\"");
                 desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
                 logger.log("xls is opened");
                 desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.luxFile));
@@ -308,7 +315,7 @@ public class MainApp {
             logger.log("target is: installation");
             machine.openLuxFile();
             luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
-            tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + machine.I_PLANS + "\"");
+            tc("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + machine.I_PLANS + "\"");
             logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + machine.I_PLANS);
             machine.setMachineType(luxParser.getMachineType());
             ConsoleHelper.writeMessage("Copy base installation drawing for " + machine.getMachineType() + "\nand then press enter");
@@ -317,13 +324,13 @@ public class MainApp {
             Files.move(Paths.get(machine.machineDir.machinePath + machine.machineDir.getCkdFiles().get(0)), Paths.get(machine.machineDir.machinePath + installationName));  //rename installation
             desktop.open(new File(machine.machineDir.machinePath + installationName));
             logger.log("Installation " + installationName + " opened");
-            tc("/r=\"" + machine.getRemoteMachinePath() + "\"");
+            tc("--r=\"" + machine.getRemoteMachinePath() + "\"");
             logger.log("Opened in tc :\n   " + machine.getRemoteMachinePath());
         }
 
         if (use == 8) {
             logger.log("target is: machine");
-            tc("/l=\"" + machine.machineDir.machinePath + "\" /t /r=\"" + PLANS + "\"");
+            tc("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + PLANS + "\"");
             logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + PLANS);
             machineExcelParser.setExcelFile(machine.machineDir.machinePath + machine.getXls());
             luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
@@ -338,7 +345,7 @@ public class MainApp {
             machine.copyEtiq();
             machine.open4CkdFiles();
             logger.log("ckd files opened");
-            tc("/r=\"" + machine.getRemoteMachinePath() + "\"");
+            tc("--r=\"" + machine.getRemoteMachinePath() + "\"");
             logger.log("Opened in tc :\n   " + machine.getRemoteMachinePath());
         }
 
