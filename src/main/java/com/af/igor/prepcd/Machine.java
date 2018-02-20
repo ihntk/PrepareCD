@@ -96,7 +96,12 @@ public class Machine {
 
     private void loadFromConfigFile(Path confFile) {
         try (InputStream stream = new FileInputStream(confFile.toFile())) {
-            confFileProperty.load(stream);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(stream.available());
+            baos.write(stream.read(new byte[stream.available()]));
+            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+            baos.close();
+
+            confFileProperty.load(bais);
             if (confFileProperty.containsKey("remoteMachinePath"))
                 remoteMachinePath = confFileProperty.getProperty("remoteMachinePath");
             if (confFileProperty.containsKey("machineCode"))
