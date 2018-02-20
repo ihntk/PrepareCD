@@ -2,8 +2,6 @@ package com.af.igor.prepcd.controller;
 
 import com.af.igor.prepcd.MainApp;
 import com.af.igor.prepcd.util.FSHelper;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -111,8 +109,9 @@ public class MainFrameController {
 
     @FXML
     private void handleSetMachineCode() {
-        getMachine().setMachineCode(machineCode.getText());
-        status.setText("Machine code is " + machineCode.getText() + " saved");
+        if (getMachine().setMachineCode(machineCode.getText()))
+            status.setText("Machine code " + machineCode.getText() + " is saved");
+        else status.setText("Impossible to save machine code " + machineCode.getText());
     }
 
     @FXML
@@ -159,7 +158,7 @@ public class MainFrameController {
             @Override
             public void handle(MouseEvent event) {
                 try {
-                    Path selectedFile=remoteMachineDir.getSelectionModel().getSelectedItem();
+                    Path selectedFile = remoteMachineDir.getSelectionModel().getSelectedItem();
                     remoteMachineDirFS.getFiles(selectedFile);
 //                    if (selectedFile.startsWith(getMachine().getMachineName()))
 //                        getMachine().setRemoteMachinePath(remoteMachineDirFS.getCurrentPath());

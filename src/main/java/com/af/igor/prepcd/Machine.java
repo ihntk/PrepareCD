@@ -47,10 +47,10 @@ public class Machine {
         saveConfigFile();
     }
 
-    public void setMachineCode(String machineCode) {
+    public boolean setMachineCode(String machineCode) {
         this.machineCode = machineCode;
         confFileProperty.setProperty("machineCode", machineCode);
-        saveConfigFile();
+        return saveConfigFile();
     }
 
     public Machine(String machineName) throws IOException {
@@ -88,7 +88,7 @@ public class Machine {
             }
             loadFromConfigFile(confFile);
         }
-        if (remoteMachinePath==null) {
+        if (remoteMachinePath == null) {
             String hMachPath = app.H_MACHINES + getSm() + getMachineSeries().substring(0, 1) + "/";
             remoteMachinePath = hMachPath + app.searchFileName(hMachPath, smMachSer) + "/";
         }
@@ -114,15 +114,19 @@ public class Machine {
         }
     }
 
-    public void saveConfigFile() {
+    public boolean saveConfigFile() {
+        boolean result = false;
+
         try (OutputStream stream = new FileOutputStream(confFile.toFile())) {
             confFileProperty.store(stream, null);
+            result = true;
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return result;
     }
 
     public void setMachineType(String machineType) {
