@@ -84,9 +84,9 @@ public class Machine {
             confFile = Paths.get(machineDir.getMachinePath(), machineName + ".conf");
             if (!Files.exists(confFile)) {
                 Files.createFile(confFile);
-                Files.setAttribute(confFile, "dos:hidden", true);
+//                Files.setAttribute(confFile, "dos:hidden", true);
             }
-            loadFromConfigFile(confFile);
+            loadFromConfigFile();
         }
         if (remoteMachinePath == null) {
             String hMachPath = app.H_MACHINES + getSm() + getMachineSeries().substring(0, 1) + "/";
@@ -94,18 +94,19 @@ public class Machine {
         }
     }
 
-    private void loadFromConfigFile(Path confFile) {
-        try (InputStream stream = new FileInputStream(confFile.toFile())) {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream(stream.available());
-            baos.write(stream.read(new byte[stream.available()]));
-            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-            baos.close();
+    private void loadFromConfigFile() {
+        try (FileInputStream stream = new FileInputStream(confFile.toFile())) {
+            Properties confFileProperty=new Properties();
 
-            confFileProperty.load(bais);
-            if (confFileProperty.containsKey("remoteMachinePath"))
+            confFileProperty.load(stream);
+            if (confFileProperty.containsKey("remoteMachinePath")) {
                 remoteMachinePath = confFileProperty.getProperty("remoteMachinePath");
-            if (confFileProperty.containsKey("machineCode"))
+                confFileProperty.setProperty("remoteMachinePath",remoteMachinePath);
+            }
+            if (confFileProperty.containsKey("machineCode")) {
                 machineCode = confFileProperty.getProperty("machineCode");
+                confFileProperty.setProperty("machineCode",machineCode);
+            }
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -117,7 +118,7 @@ public class Machine {
     public boolean saveConfigFile() {
         boolean result = false;
 
-        try (OutputStream stream = new FileOutputStream(confFile.toFile())) {
+        try (FileOutputStream stream = new FileOutputStream(confFile.toFile())) {
             confFileProperty.store(stream, null);
             result = true;
 
