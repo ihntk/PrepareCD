@@ -1,5 +1,6 @@
 package com.af.igor.prepcd;
 
+import com.af.igor.prepcd.controller.MainFrameController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,6 +15,7 @@ public class PrepareCD extends Application {
     MainApp app;
     private Stage primaryStage;
     private VBox rootLayout;
+    private static final String APP_NAME="PrepareCD";
 
     public static void main(String[] args) {
         launch(args);
@@ -22,7 +24,7 @@ public class PrepareCD extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        primaryStage.setTitle("PrepareCD");
+        primaryStage.setTitle(APP_NAME);
 
         app=MainApp.getInstance();
 
@@ -51,6 +53,8 @@ public class PrepareCD extends Application {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/view/MainFrame.fxml"));
             BorderPane mainFrame = (BorderPane) loader.load();
+            MainFrameController controller = loader.getController();
+            controller.setApplication(this);
 
             VBox.setVgrow(mainFrame, Priority.ALWAYS);
             rootLayout.getChildren().add(mainFrame);
@@ -58,5 +62,9 @@ public class PrepareCD extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setTitle(String machineName) {
+        primaryStage.setTitle(APP_NAME+" - "+machineName);
     }
 }

@@ -1,6 +1,7 @@
 package com.af.igor.prepcd.controller;
 
 import com.af.igor.prepcd.MainApp;
+import com.af.igor.prepcd.PrepareCD;
 import com.af.igor.prepcd.util.FSHelper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,7 +21,9 @@ import static com.af.igor.prepcd.MainApp.getMachine;
 import static com.af.igor.prepcd.MainApp.luxParser;
 
 public class MainFrameController {
-    MainApp app = MainApp.getInstance();
+    private MainApp app = MainApp.getInstance();
+    private PrepareCD application;
+
     @FXML
     private Label machine;
 
@@ -63,6 +66,10 @@ public class MainFrameController {
     @FXML
     private Button cdButton;
 
+    public void setApplication(PrepareCD application) {
+        this.application = application;
+    }
+
     private ObservableList<Path> machineDirList;
     private ObservableList<Path> remoteMachineDirList;
     private ObservableList<Path> basePlanDirList;
@@ -99,6 +106,7 @@ public class MainFrameController {
             machineInit(machineName.getText().toUpperCase());
             status.setText("Machine is " + getMachine().getMachineName());
             target.setText("Ready");
+            application.setTitle(getMachine().getMachineName());
             machineName.setText(getMachine().getMachineName());
         } catch (IOException e) {
             e.printStackTrace();
