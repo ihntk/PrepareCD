@@ -37,6 +37,9 @@ public class MainFrameController {
     private Label target;
 
     @FXML
+    private Label currentMachine;
+
+    @FXML
     private TextField machineName;
 
     @FXML
@@ -107,6 +110,7 @@ public class MainFrameController {
             status.setText("Machine is " + getMachine().getMachineName());
             target.setText("Ready");
             application.setTitle(getMachine().getMachineName());
+            currentMachine.setText(getMachine().getMachineName());
             machineName.setText(getMachine().getMachineName());
         } catch (IOException e) {
             e.printStackTrace();
