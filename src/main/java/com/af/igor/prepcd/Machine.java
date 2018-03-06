@@ -6,8 +6,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by ede on 11.08.2016.
@@ -25,6 +24,7 @@ public class Machine {
     private Path confFile;
     private Properties confFileProperty = new Properties();
     private String machineCode;
+    private HashMap<String,String> propertyElements =new HashMap<>();
 
     MachineDir machineDir;
     CdDir cdDir;
@@ -41,15 +41,17 @@ public class Machine {
         return machineCode;
     }
 
-    public void setRemoteMachinePath(String remoteMachinePath) {
+    public boolean setRemoteMachinePath(String remoteMachinePath) {
         this.remoteMachinePath = remoteMachinePath;
-        confFileProperty.setProperty("remoteMachinePath", remoteMachinePath);
-        saveConfigFile();
+        if (propertyElements.containsKey("remoteMachinePath"))
+            propertyElements.put("remoteMachinePath",remoteMachinePath);
+        return saveConfigFile();
     }
 
     public boolean setMachineCode(String machineCode) {
         this.machineCode = machineCode;
-        confFileProperty.setProperty("machineCode", machineCode);
+        if (!propertyElements.containsKey("machineCode"))
+            propertyElements.put("machineCode",machineCode);
         return saveConfigFile();
     }
 
@@ -102,10 +104,12 @@ public class Machine {
             if (confFileProperty.containsKey("remoteMachinePath")) {
                 remoteMachinePath = confFileProperty.getProperty("remoteMachinePath");
                 confFileProperty.setProperty("remoteMachinePath",remoteMachinePath);
+                propertyElements.put("remoteMachinePath",remoteMachinePath);
             }
             if (confFileProperty.containsKey("machineCode")) {
                 machineCode = confFileProperty.getProperty("machineCode");
                 confFileProperty.setProperty("machineCode",machineCode);
+                propertyElements.put("machineCode",machineCode);
             }
 
         } catch (FileNotFoundException e) {
@@ -119,6 +123,9 @@ public class Machine {
         boolean result = false;
 
         try (FileOutputStream stream = new FileOutputStream(confFile.toFile())) {
+            for (Map.Entry<String,String> element: propertyElements.entrySet()) {
+                confFileProperty.setProperty(element.getKey(),element.getValue());
+            }
             confFileProperty.store(stream, null);
             result = true;
 
