@@ -6,7 +6,10 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * Created by ede on 11.08.2016.
@@ -58,6 +61,11 @@ public class Machine {
     public Machine(String machineName) throws IOException {
         sm = machineName.substring(0, 2);
         machineSeries = machineName.substring(2, 3).equals("Y") ? machineName.substring(2, 3) : machineName.substring(2, 4);
+
+        Path machineSeriesPath = Paths.get(app.MACHINES + sm + machineSeries);
+        if (!Files.exists(machineSeriesPath))
+            Files.createDirectory(machineSeriesPath);
+
         String luxPath = app.LUX_DIR + getSm() + " " + getMachineSeries().substring(0, 1) + "/";
         String machSer = String.valueOf(machineSeries.charAt(0));
         String smMachSer = sm + machineSeries;
