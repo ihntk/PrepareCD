@@ -27,7 +27,7 @@ public class Machine {
     private Path confFile;
     private Properties confFileProperty = new Properties();
     private String machineCode;
-    private HashMap<String,String> propertyElements =new HashMap<>();
+    private HashMap<String, String> propertyElements = new HashMap<>();
 
     MachineDir machineDir;
     CdDir cdDir;
@@ -47,14 +47,14 @@ public class Machine {
     public boolean setRemoteMachinePath(String remoteMachinePath) {
         this.remoteMachinePath = remoteMachinePath;
         if (propertyElements.containsKey("remoteMachinePath"))
-            propertyElements.put("remoteMachinePath",remoteMachinePath);
+            propertyElements.put("remoteMachinePath", remoteMachinePath);
         return saveConfigFile();
     }
 
     public boolean setMachineCode(String machineCode) {
         this.machineCode = machineCode;
         if (!propertyElements.containsKey("machineCode"))
-            propertyElements.put("machineCode",machineCode);
+            propertyElements.put("machineCode", machineCode);
         return saveConfigFile();
     }
 
@@ -87,17 +87,15 @@ public class Machine {
             }
         }
         this.machineName = machineName;
+
         if (machineName != null) {
             machineDir = new MachineDir(this);
             cdDir = new CdDir(this);
 
             confFile = Paths.get(machineDir.getMachinePath(), machineName + ".conf");
-            if (!Files.exists(confFile)) {
-                Files.createFile(confFile);
-//                Files.setAttribute(confFile, "dos:hidden", true);
-            }
             loadFromConfigFile();
         }
+
         if (remoteMachinePath == null) {
             String hMachPath = app.H_MACHINES + getSm() + getMachineSeries().substring(0, 1) + "/";
             remoteMachinePath = hMachPath + app.searchFileName(hMachPath, smMachSer) + "/";
@@ -105,19 +103,22 @@ public class Machine {
     }
 
     private void loadFromConfigFile() {
+        if (!Files.exists(confFile))
+            return;
+
         try (FileInputStream stream = new FileInputStream(confFile.toFile())) {
-            Properties confFileProperty=new Properties();
+            Properties confFileProperty = new Properties();
 
             confFileProperty.load(stream);
             if (confFileProperty.containsKey("remoteMachinePath")) {
                 remoteMachinePath = confFileProperty.getProperty("remoteMachinePath");
-                confFileProperty.setProperty("remoteMachinePath",remoteMachinePath);
-                propertyElements.put("remoteMachinePath",remoteMachinePath);
+                confFileProperty.setProperty("remoteMachinePath", remoteMachinePath);
+                propertyElements.put("remoteMachinePath", remoteMachinePath);
             }
             if (confFileProperty.containsKey("machineCode")) {
                 machineCode = confFileProperty.getProperty("machineCode");
-                confFileProperty.setProperty("machineCode",machineCode);
-                propertyElements.put("machineCode",machineCode);
+                confFileProperty.setProperty("machineCode", machineCode);
+                propertyElements.put("machineCode", machineCode);
             }
 
         } catch (FileNotFoundException e) {
@@ -130,9 +131,17 @@ public class Machine {
     public boolean saveConfigFile() {
         boolean result = false;
 
+        if (!Files.exists(confFile)) {
+            try {
+                Files.createFile(confFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         try (FileOutputStream stream = new FileOutputStream(confFile.toFile())) {
-            for (Map.Entry<String,String> element: propertyElements.entrySet()) {
-                confFileProperty.setProperty(element.getKey(),element.getValue());
+            for (Map.Entry<String, String> element : propertyElements.entrySet()) {
+                confFileProperty.setProperty(element.getKey(), element.getValue());
             }
             confFileProperty.store(stream, null);
             result = true;
