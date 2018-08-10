@@ -47,14 +47,14 @@ public class Machine {
     public boolean setRemoteMachinePath(String remoteMachinePath) {
         this.remoteMachinePath = remoteMachinePath;
         if (propertyElements.containsKey("remoteMachinePath"))
-            propertyElements.put("remoteMachinePath", remoteMachinePath);
+            propertyElements.put("remoteMachinePath", this.remoteMachinePath);
         return saveConfigFile();
     }
 
     public boolean setMachineCode(String machineCode) {
-        this.machineCode = machineCode;
+        this.machineCode = machineCode.equals("")?null:machineCode;     //if null, next call app.getMachineCode() calculates right code
         if (!propertyElements.containsKey("machineCode"))
-            propertyElements.put("machineCode", machineCode);
+            propertyElements.put("machineCode", this.machineCode);
         return saveConfigFile();
     }
 
@@ -141,7 +141,10 @@ public class Machine {
 
         try (FileOutputStream stream = new FileOutputStream(confFile.toFile())) {
             for (Map.Entry<String, String> element : propertyElements.entrySet()) {
-                confFileProperty.setProperty(element.getKey(), element.getValue());
+                if (element.getValue().equals(""))
+                    confFileProperty.remove(element.getKey());
+                else
+                    confFileProperty.setProperty(element.getKey(), element.getValue());
             }
             confFileProperty.store(stream, null);
             result = true;
