@@ -33,7 +33,6 @@ public class MainApp {
     static String MACHINES;
     static String H_MACHINES;
     static String CDS;
-    static String LUX_DIR;
     static String CDTEMPLATE;
     static String PLANS;
     static String TOTALCOMMANDER;
@@ -65,7 +64,6 @@ public class MainApp {
         MACHINES = properties.getProperty("MACHINES");
         H_MACHINES = properties.getProperty("H_MACHINES");
         CDS = properties.getProperty("CDS");
-        LUX_DIR = properties.getProperty("LUX_DIR");
         CDTEMPLATE = properties.getProperty("CDTEMPLATE");
         PLANS = properties.getProperty("PLANS");
         TOTALCOMMANDER = properties.getProperty("TOTALCOMMANDER");
@@ -297,7 +295,7 @@ public class MainApp {
                 desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
                 logger.log("xls is opened");
             } else {
-                luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
+                luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile().getName());
                 machineExcelParser.setExcelFile(machine.machineDir.machinePath + machine.getXls());
                 machine.setMachineType(luxParser.getMachineType());
                 luxParser.getMachineData();
@@ -314,7 +312,7 @@ public class MainApp {
         if (use == 4) {
             logger.log("target is: installation");
             machine.openLuxFile();
-            luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
+            luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile().getName());
             tc("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + machine.I_PLANS + "\"");
             logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + machine.I_PLANS);
             machine.setMachineType(luxParser.getMachineType());
@@ -333,7 +331,7 @@ public class MainApp {
             tc("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + PLANS + "\"");
             logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + PLANS);
             machineExcelParser.setExcelFile(machine.machineDir.machinePath + machine.getXls());
-            luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile());
+            luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile().getName());
             String machineType = luxParser.getMachineType();
             machine.setMachineType(machineType);
             String mPlans = machineExcelParser.getMPlans();

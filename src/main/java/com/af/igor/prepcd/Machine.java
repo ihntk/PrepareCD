@@ -15,13 +15,12 @@ import java.util.Properties;
  * Created by ede on 11.08.2016.
  */
 public class Machine {
-    protected final String luxFile;
+    protected final File luxFile;
     MainApp app = MainApp.getInstance();
     private final String machineName;
     private String machineType;
     private final String sm;        //first two symbols in machine name (usually 20)
     private final String machineSeries;
-    private final String luxPathString;
     private String remoteMachinePath;
     protected final String I_PLANS = app.PLANS + "002 - Plan d'installation/";
     private Path confFile;
@@ -59,6 +58,9 @@ public class Machine {
     }
 
     public Machine(String machineName) throws IOException {
+        this.machineName = machineName;
+        remoteMachinePath = app.H_MACHINES + machineName + "/";
+
         sm = machineName.substring(0, 2);
         machineSeries = machineName.substring(2, 3).equals("Y") ? machineName.substring(2, 3) : machineName.substring(2, 4);
 
@@ -66,17 +68,8 @@ public class Machine {
         if (!Files.exists(machineSeriesPath))
             Files.createDirectory(machineSeriesPath);
 
-        String luxPath = app.LUX_DIR + getSm() + " " + getMachineSeries().substring(0, 1) + "/";
-        String machSer = String.valueOf(machineSeries.charAt(0));
-        String smMachSer = sm + machineSeries;
-        String smMachSerLux = smMachSer;
-        if (!machSer.equals("Y")) {
-            if (machSer.equals("H") || machSer.equals("I") || (machSer.equals("J") && machineSeries.equals("JA")))
-                smMachSerLux = sm + " " + machineSeries;
-            luxPath = luxPath + app.searchFileName(luxPath, smMachSerLux) + "/";
-        }
-        luxPathString = luxPath;
-        luxFile = app.searchFileName(luxPathString, machineName);
+        String luxPathString = remoteMachinePath + "010 Order/";
+        luxFile = new File(app.searchFileName(luxPathString, machineName));
         if (luxFile == null) {
             app.logger.log("Program can't find luxemburg file\nluxPathString is:\n   " + luxPathString);
             app.logger.log("machineName is:\n   " + machineName);
@@ -86,7 +79,6 @@ public class Machine {
                 if (!reader.readLine().toLowerCase().equals("y")) machineName = null;
             }
         }
-        this.machineName = machineName;
 
         if (machineName != null) {
             machineDir = new MachineDir(this);
@@ -96,9 +88,6 @@ public class Machine {
             loadFromConfigFile();
         }
 
-        if (remoteMachinePath == null) {
-            remoteMachinePath = app.H_MACHINES + machineName + "/";
-        }
     }
 
     private void loadFromConfigFile() {
@@ -177,13 +166,9 @@ public class Machine {
         return sm;
     }
 
-    public String getLuxPathString() {
-        return luxPathString;
-    }
-
     /*
-    getMachineXls() chec machineXls exist, if no copy and launch it in excel
-    also copy Luxemburd xls and launch it too
+    getMachineXls() check machineXls exist, if no copy and launch it in excel
+    also copy Luxemburg xls and launch it too
      */
     public boolean getMachineXls() throws IOException {
         boolean isXlsCreated = false;
@@ -215,7 +200,7 @@ public class Machine {
         app.desktop.open(new File(machineDir.machinePath + luxFile));
     }
 
-    public String getLuxFile() {
+    public File getLuxFile() {
         return luxFile;
     }
 

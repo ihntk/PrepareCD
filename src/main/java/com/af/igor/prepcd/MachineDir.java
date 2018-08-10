@@ -22,8 +22,7 @@ public class MachineDir {
     private final File machinePathDir;
     protected String machinePath;
     protected final String machineXls;
-    private String hMachine = null;
-    protected String luxFile = null;
+    protected File luxFile = null;
 
     public String getMachinePath() {
         return machinePath;
@@ -84,11 +83,12 @@ public class MachineDir {
     protected void copyLuxFile() throws IOException {
         if (luxFile != null) {
             try {
-                copy(machine.getLuxPathString() + luxFile, machinePath + luxFile, REPLACE_EXISTING);
-                app.logger.log("Copied luxFile:\n   " + luxFile);
+                copy(luxFile.getPath(), machinePath + luxFile, REPLACE_EXISTING);
+                app.logger.log("Copied luxFile:\n   " + luxFile.getName());
+                luxFile = new File(machinePath + luxFile.getName());
             } catch (FileSystemException e) {
-                ConsoleHelper.writeMessage("I can't replace " + luxFile + " file because it is being used by another process");
-                app.logger.log("Could'nt replace:\n   " + luxFile);
+                ConsoleHelper.writeMessage("I can't replace " + luxFile.getName() + " file because it is being used by another process");
+                app.logger.log("Could'nt replace:\n   " + luxFile.getName());
             }
         }
     }

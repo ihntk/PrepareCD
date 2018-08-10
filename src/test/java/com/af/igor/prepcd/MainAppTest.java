@@ -22,8 +22,6 @@ public class MainAppTest {
     }
 
     private static void testPath() throws IOException {
-        mainApp.tc(mainApp.LUX_DIR);
-        desktop.open(new File(mainApp.LUX_DIR));
         mainApp.tc(mainApp.MACHINES);
         desktop.open(new File(mainApp.XLS));
     }
