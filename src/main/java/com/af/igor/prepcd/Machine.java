@@ -97,8 +97,7 @@ public class Machine {
         }
 
         if (remoteMachinePath == null) {
-            String hMachPath = app.H_MACHINES + getSm() + getMachineSeries().substring(0, 1) + "/";
-            remoteMachinePath = hMachPath + app.searchFileName(hMachPath, smMachSer) + "/";
+            remoteMachinePath = app.H_MACHINES + machineName + "/";
         }
     }
 
