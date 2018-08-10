@@ -69,7 +69,7 @@ public class Machine {
             Files.createDirectory(machineSeriesPath);
 
         String luxPathString = remoteMachinePath + "010 Order/";
-        luxFile = new File(app.searchFileName(luxPathString, machineName));
+        luxFile = new File(luxPathString + app.searchFileName(luxPathString, machineName));
         if (luxFile == null) {
             app.logger.log("Program can't find luxemburg file\nluxPathString is:\n   " + luxPathString);
             app.logger.log("machineName is:\n   " + machineName);
