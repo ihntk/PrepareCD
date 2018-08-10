@@ -124,6 +124,7 @@ public class MainFrameController {
         if (getMachine().setMachineCode(machineCode.getText()))
             status.setText("Machine code " + machineCode.getText() + " is saved");
         else status.setText("Impossible to save machine code " + machineCode.getText());
+        machineCode.setText(app.getMachineCode());
     }
 
     @FXML
