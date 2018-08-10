@@ -197,7 +197,7 @@ public class Machine {
 
     public void openLuxFile() throws IOException {
         copyLuxFile();
-        app.desktop.open(new File(machineDir.machinePath + luxFile));
+        app.desktop.open(new File(machineDir.machinePath + luxFile.getName()));
     }
 
     public File getLuxFile() {

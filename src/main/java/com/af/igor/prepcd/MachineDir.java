@@ -83,7 +83,7 @@ public class MachineDir {
     protected void copyLuxFile() throws IOException {
         if (luxFile != null) {
             try {
-                copy(luxFile.getPath(), machinePath + luxFile, REPLACE_EXISTING);
+                copy(luxFile.getPath(), machinePath + luxFile.getName(), REPLACE_EXISTING);
                 app.logger.log("Copied luxFile:\n   " + luxFile.getName());
                 luxFile = new File(machinePath + luxFile.getName());
             } catch (FileSystemException e) {
