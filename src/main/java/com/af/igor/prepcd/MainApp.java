@@ -38,7 +38,7 @@ public class MainApp {
     static String TOTALCOMMANDER;
 
     private static MainApp instance;
-    private static String version = "0.6.0.a04.1";
+    private static String version = "0.6.0.a05";
     private static Machine machine;         //in future this field will replace static ArrayList<Machine>
     static public LuxParser luxParser;
     static MachineExcelParser machineExcelParser;
@@ -288,26 +288,8 @@ public class MainApp {
             tc("--l=\"" + machine.machineDir.machinePath + "\"");
             help();
         }
-        if (use == 1) {
-            logger.log("target is: xls");
-            if (!machine.getMachineXls()) {
-                tc("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + machine.getRemoteMachinePath() + "\"");
-                desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
-                logger.log("xls is opened");
-            } else {
-                luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFileName());
-                machineExcelParser.setExcelFile(machine.machineDir.machinePath + machine.getXls());
-                machine.setMachineType(luxParser.getMachineType());
-                luxParser.getMachineData();
-//                machineExcelParser.setMachineType(machine.getMachineType());
-
-                tc("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + machine.getRemoteMachinePath() + "\"");
-                desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
-                logger.log("xls is opened");
-                desktop.open(new File(machine.machineDir.machinePath + machine.getLuxFileName()));
-                logger.log("lux is opened");
-            }
-        }
+        if (use == 1)
+            xlsTarget();
 
         if (use == 4) {
             logger.log("target is: installation");
@@ -328,6 +310,8 @@ public class MainApp {
 
         if (use == 8) {
             logger.log("target is: machine");
+            if (!Files.exists(Paths.get(machine.machineDir.machinePath + machine.machineDir.machineXls)))
+                xlsTarget();
             tc("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + PLANS + "\"");
             logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + PLANS);
             machineExcelParser.setExcelFile(machine.machineDir.machinePath + machine.getXls());
@@ -347,6 +331,26 @@ public class MainApp {
             logger.log("Opened in tc :\n   " + machine.getRemoteMachinePath());
         }
 
+    }
+
+    private void xlsTarget() throws IOException {
+        logger.log("target is: xls");
+        tc("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + machine.getRemoteMachinePath() + "\"");
+        if (!machine.getMachineXls()) {
+            desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
+            logger.log("xls is opened");
+        } else {
+            luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFileName());
+            machineExcelParser.setExcelFile(machine.machineDir.machinePath + machine.getXls());
+            machine.setMachineType(luxParser.getMachineType());
+            luxParser.getMachineData();
+//                machineExcelParser.setMachineType(machine.getMachineType());
+
+            desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
+            logger.log("xls is opened");
+            desktop.open(new File(machine.machineDir.machinePath + machine.getLuxFileName()));
+            logger.log("lux is opened");
+        }
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
