@@ -150,10 +150,10 @@ public class MainFrameController {
 
     public void machineInit(String machineName) throws IOException, InterruptedException {
         app.initializeMachine(machineName);
-        status.setText("Copying " + getMachine().getLuxFile().getName());
+        status.setText("Copying " + getMachine().getLuxFileName());
 
         getMachine().copyLuxFile();
-        luxParser.setExcelFile(getMachine().getMachineDir().getMachinePath() + getMachine().getLuxFile().getName());
+        luxParser.setExcelFile(getMachine().getMachineDir().getMachinePath() + getMachine().getLuxFileName());
         getMachine().setMachineType(luxParser.getMachineType());
         machineType.setText(getMachine().getMachineType());
         machineCode.setText(app.getMachineCode());

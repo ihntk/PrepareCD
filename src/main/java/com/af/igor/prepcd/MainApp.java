@@ -295,7 +295,7 @@ public class MainApp {
                 desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
                 logger.log("xls is opened");
             } else {
-                luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile().getName());
+                luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFileName());
                 machineExcelParser.setExcelFile(machine.machineDir.machinePath + machine.getXls());
                 machine.setMachineType(luxParser.getMachineType());
                 luxParser.getMachineData();
@@ -304,7 +304,7 @@ public class MainApp {
                 tc("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + machine.getRemoteMachinePath() + "\"");
                 desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
                 logger.log("xls is opened");
-                desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.luxFile));
+                desktop.open(new File(machine.machineDir.machinePath + machine.getLuxFileName()));
                 logger.log("lux is opened");
             }
         }
@@ -312,7 +312,7 @@ public class MainApp {
         if (use == 4) {
             logger.log("target is: installation");
             machine.openLuxFile();
-            luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile().getName());
+            luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFileName());
             tc("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + machine.I_PLANS + "\"");
             logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + machine.I_PLANS);
             machine.setMachineType(luxParser.getMachineType());
@@ -331,7 +331,7 @@ public class MainApp {
             tc("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + PLANS + "\"");
             logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + PLANS);
             machineExcelParser.setExcelFile(machine.machineDir.machinePath + machine.getXls());
-            luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFile().getName());
+            luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFileName());
             String machineType = luxParser.getMachineType();
             machine.setMachineType(machineType);
             String mPlans = machineExcelParser.getMPlans();
