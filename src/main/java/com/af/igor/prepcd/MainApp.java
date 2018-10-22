@@ -38,7 +38,7 @@ public class MainApp {
     static String TOTALCOMMANDER;
 
     private static MainApp instance;
-    private static String version = "0.6.0.a05";
+    private static String version = "0.6.0.a06";
     private static Machine machine;         //in future this field will replace static ArrayList<Machine>
     static public LuxParser luxParser;
     static MachineExcelParser machineExcelParser;
@@ -139,7 +139,7 @@ public class MainApp {
             count = fileNames.size();
             if (count > 1) {
                 desktop.open(new File(path));
-                ConsoleHelper.writeMessage("Attention! There are " + count + " files for machine " + machine.getMachineName());
+                ConsoleHelper.writeMessage("Attention! There are " + count + " files for this machine");
 
                 for (int i = 0; i < count; i++) {
                     ConsoleHelper.writeMessage("   " + (i + 1) + " - " + fileNames.get(i));
