@@ -34,14 +34,14 @@ public class MainApp {
     static String H_MACHINES;
     static String CDS;
     static String CDTEMPLATE;
-    static String PLANS;
+    public static String PLANS;
     static String TOTALCOMMANDER;
 
     private static MainApp instance;
     private static String version = "0.6.0.a06";
     private static Machine machine;         //in future this field will replace static ArrayList<Machine>
-    static public LuxParser luxParser;
-    static MachineExcelParser machineExcelParser;
+    public static LuxParser luxParser;
+    public static MachineExcelParser machineExcelParser;
     static Desktop desktop = Desktop.getDesktop();
     public SimpleLogger logger;
     private Properties properties = new Properties();
@@ -104,15 +104,15 @@ public class MainApp {
         Use current dir as path to machine
          */
 
-            Path path = Paths.get("").toAbsolutePath();
-            if (!path.toString().startsWith(MACHINES)) {
-                ConsoleHelper.writeMessage("\nYou are not in \"plans\" directory");
-                logger.log("You are not in \"plans\" directory");
-                getInstance().help();
-                return;
-            }
-            machineName = path.getFileName().toString().toUpperCase();
-            logger.log("path got from pwd");
+        Path path = Paths.get("").toAbsolutePath();
+        if (!path.toString().startsWith(MACHINES)) {
+            ConsoleHelper.writeMessage("\nYou are not in \"plans\" directory");
+            logger.log("You are not in \"plans\" directory");
+            getInstance().help();
+            return;
+        }
+        machineName = path.getFileName().toString().toUpperCase();
+        logger.log("path got from pwd");
     }
 
     private void help() throws InterruptedException {
@@ -147,7 +147,7 @@ public class MainApp {
             }
             count = fileNames.size();
             if (count > 1) {
-                if (gui == null){
+                if (gui == null) {
                     desktop.open(new File(path));
                     ConsoleHelper.writeMessage("Attention! There are " + count + " files for this machine");
 
@@ -165,8 +165,7 @@ public class MainApp {
                             ConsoleHelper.writeMessage("You input incorrect number, please try again");
                         }
                     }
-                }
-                else {
+                } else {
                     fileName = gui.getController().processChooseFile(fileNames);
                 }
             } else fileName = fileNames.get(0);
@@ -181,11 +180,12 @@ public class MainApp {
     /**
      * tc("--l=path/to/dir/")
      * parameter change /l=path\to\dir\
+     *
      * @param pathParameters
      * @throws IOException
      */
     public void tc(String pathParameters) throws IOException {
-        pathParameters=pathParameters.replaceAll("/","\\\\").replaceAll("--","/");
+        pathParameters = pathParameters.replaceAll("/", "\\\\").replaceAll("--", "/");
         Runtime runtime = Runtime.getRuntime();
         String command = TOTALCOMMANDER + " /O " + pathParameters;
         Process process = runtime.exec(command);
@@ -195,7 +195,7 @@ public class MainApp {
     public String getMachineCode() {
         String machineType = null;
         String machineCode;
-        if (machine.getMachineCode()==null) {
+        if (machine.getMachineCode() == null) {
             if (machine.getMachineType().contains("-"))
                 machineType = machine.getMachineType().substring(0, machine.getMachineType().indexOf("-"));
             else machineType = machine.getMachineType();
@@ -206,7 +206,7 @@ public class MainApp {
                 ConsoleHelper.writeMessage("Input machine's code");
                 machineCode = ConsoleHelper.readString();
             }
-        }else machineCode=machine.getMachineCode();
+        } else machineCode = machine.getMachineCode();
 
         return machineCode;
     }
@@ -328,7 +328,7 @@ public class MainApp {
                 xlsTarget();
             tc("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + PLANS + "\"");
             logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + PLANS);
-            machineExcelParser.setExcelFile(machine.machineDir.machinePath + machine.getXls());
+            initMachineExcelParser();
             initLuxParser();
             String machineType = luxParser.getMachineType();
             machine.setMachineType(machineType);
@@ -367,8 +367,12 @@ public class MainApp {
         }
     }
 
-    public void initLuxParser(){
+    public void initLuxParser() {
         luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFileName());
+    }
+
+    public void initMachineExcelParser() {
+        machineExcelParser.setExcelFile(machine.machineDir.machinePath + machine.getXls());
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {

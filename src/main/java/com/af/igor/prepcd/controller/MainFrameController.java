@@ -18,10 +18,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.af.igor.prepcd.MainApp.getMachine;
-import static com.af.igor.prepcd.MainApp.luxParser;
+import static com.af.igor.prepcd.MainApp.*;
 
 public class MainFrameController {
     private MainApp app = MainApp.getInstance();
@@ -55,10 +55,10 @@ public class MainFrameController {
     private ListView<Path> remoteMachineDir;
 
     @FXML
-    private ListView<String> basePlanDir;
+    private ListView<Path> basePlanDir;
 
     @FXML
-    private ListView<String> cdDir;
+    private ListView<Path> cdDir;
 
     @FXML
     private Button installButton;
@@ -111,6 +111,14 @@ public class MainFrameController {
         remoteMachineDirList = FXCollections.observableArrayList();
         remoteMachineDir.setItems(remoteMachineDirList);
         remoteMachineDirFS = FSHelper.getInstance(remoteMachineDirList);
+
+        basePlanDirList = FXCollections.observableArrayList();
+        basePlanDir.setItems(basePlanDirList);
+        basePlanDirFS = FSHelper.getInstance(basePlanDirList);
+
+        cdDirList = FXCollections.observableArrayList();
+        cdDir.setItems(cdDirList);
+        cdDirFS = FSHelper.getInstance(cdDirList);
     }
 
     @FXML
@@ -156,17 +164,42 @@ public class MainFrameController {
     private void handleXls() throws IOException {
         target.setText("Xls");
         if (!getMachine().getMachineXls())
-            hostServices.showDocument(getMachine().getMachineDir().getMachinePathString()+getMachine().getMachineDir().getMachineXls());
-        else{
-            hostServices.showDocument(getMachine().getMachineDir().getMachinePathString()+getMachine().getMachineDir().getMachineXls());
-            hostServices.showDocument(getMachine().getMachineDir().getMachinePathString()+ getMachine().getLuxFileName());
+            hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getMachineDir().getMachineXls());
+        else {
+            hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getMachineDir().getMachineXls());
+            hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getLuxFileName());
         }
 
     }
 
     @FXML
-    private void handleMachine() {
+    private void handleMachine() throws IOException {
         target.setText("Machine");
+        if (!Files.exists(Paths.get(getMachine().getMachineDir().getMachinePathString() + getMachine().getMachineDir().getMachineXls()))) {
+            status.setText("You haven't xls file yet! You could correct this now");
+            handleXls();
+            status.setText("You can continue process machine just pressing Machine button");
+        } else {
+            cdDirFS.getFiles(Paths.get(machinePathString));
+            basePlanDirFS.getFiles(Paths.get(app.PLANS));
+            remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath()));
+
+            app.initMachineExcelParser();
+            String mPlans = machineExcelParser.getMPlans();
+            ArrayList<String> machinePlansList = new ArrayList<>();
+
+            machinePlansList.add("\tI" + app.getMachineCode());
+            machinePlansList.add("\tE" + app.getMachineCode());
+            machinePlansList.add("\tFS" + app.getMachineCode());
+
+            for (String s : mPlans.split(",")) {
+                machinePlansList.add("\t" + s.trim());
+            }
+
+            machineDirFS.getFiles(machinePlansList);
+        }
+
+        status.setText("Ready");
     }
 
     @FXML
