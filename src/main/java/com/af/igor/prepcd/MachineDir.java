@@ -22,6 +22,10 @@ public class MachineDir {
         return machinePath;
     }
 
+    public String getMachineXls() {
+        return machineXls;
+    }
+
     public MachineDir(Machine machine) {
         this.machine = machine;
         machinePath = app.MACHINES + machine.getSm() + machine.getMachineSeries() + "/" + machine.getMachineName() + "/";

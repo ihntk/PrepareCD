@@ -153,8 +153,15 @@ public class MainFrameController {
     }
 
     @FXML
-    private void handleXls() {
+    private void handleXls() throws IOException {
         target.setText("Xls");
+        if (!getMachine().getMachineXls())
+            hostServices.showDocument(getMachine().getMachineDir().getMachinePathString()+getMachine().getMachineDir().getMachineXls());
+        else{
+            hostServices.showDocument(getMachine().getMachineDir().getMachinePathString()+getMachine().getMachineDir().getMachineXls());
+            hostServices.showDocument(getMachine().getMachineDir().getMachinePathString()+ getMachine().getLuxFileName());
+        }
+
     }
 
     @FXML
