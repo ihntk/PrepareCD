@@ -16,6 +16,11 @@ public class PrepareCD extends Application {
     private Stage primaryStage;
     private VBox rootLayout;
     private static final String APP_NAME="PrepareCD";
+    MainFrameController controller;
+
+    public MainFrameController getController() {
+        return controller;
+    }
 
     public static void main(String[] args) {
         launch(args);
@@ -27,6 +32,7 @@ public class PrepareCD extends Application {
         primaryStage.setTitle(APP_NAME);
 
         app=MainApp.getInstance();
+        app.setGui(this);
 
         initRootLayout();
 
@@ -53,7 +59,7 @@ public class PrepareCD extends Application {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/view/MainFrame.fxml"));
             BorderPane mainFrame = (BorderPane) loader.load();
-            MainFrameController controller = loader.getController();
+            controller = loader.getController();
             controller.setApplication(this);
 
             VBox.setVgrow(mainFrame, Priority.ALWAYS);

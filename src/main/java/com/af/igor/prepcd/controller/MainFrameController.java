@@ -16,6 +16,7 @@ import javafx.scene.input.MouseEvent;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import static com.af.igor.prepcd.MainApp.getMachine;
 import static com.af.igor.prepcd.MainApp.luxParser;
@@ -173,8 +174,6 @@ public class MainFrameController {
                 try {
                     Path selectedFile = remoteMachineDir.getSelectionModel().getSelectedItem();
                     remoteMachineDirFS.getFiles(selectedFile);
-//                    if (selectedFile.startsWith(getMachine().getMachineName()))
-//                        getMachine().setRemoteMachinePath(remoteMachineDirFS.getCurrentPath());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -194,5 +193,13 @@ public class MainFrameController {
 ////                }
 //            }
 //        });
+    }
+
+    public String processChooseFile(List<String> list) throws IOException {
+        remoteMachineDirFS.getFiles(list);
+        final int[] index = new int[1];
+        remoteMachineDir.setOnMouseClicked(event -> index[0] = remoteMachineDir.getSelectionModel().getSelectedIndex());
+        String fileName = list.get(index[0]);
+        return fileName;
     }
 }

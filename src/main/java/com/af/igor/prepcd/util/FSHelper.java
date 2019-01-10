@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 public class FSHelper {
     private ObservableList<Path> list;
@@ -35,6 +37,13 @@ public class FSHelper {
                     list.add(pathSt.getFileName());
             }
         } else currentPath = previousPath;
+    }
+
+    public void getFiles(List<String> stringList){
+        list.clear();
+        for (int i = 0; i < stringList.size(); i++) {
+            list.add(Paths.get(stringList.get(i)).getFileName());
+        }
     }
 
     public void getCkdFiles(Path path) {

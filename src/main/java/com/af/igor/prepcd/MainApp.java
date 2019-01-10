@@ -46,6 +46,7 @@ public class MainApp {
     public SimpleLogger logger;
     private Properties properties = new Properties();
     private static final String PROP_FILE = System.getProperty("user.home") + "/.PrepareCD/PrepareCD.conf";
+    private static PrepareCD gui = null;
 
     private MainApp() {
         try {
@@ -77,6 +78,14 @@ public class MainApp {
             machineExcelParser = MachineExcelParser.getInstance();
             return instance;
         } else return instance;
+    }
+
+    public static String getPropFile() {
+        return PROP_FILE;
+    }
+
+    public static void setGui(PrepareCD gui) {
+        MainApp.gui = gui;
     }
 
     public static Machine getMachine() {
@@ -138,22 +147,27 @@ public class MainApp {
             }
             count = fileNames.size();
             if (count > 1) {
-                desktop.open(new File(path));
-                ConsoleHelper.writeMessage("Attention! There are " + count + " files for this machine");
+                if (gui == null){
+                    desktop.open(new File(path));
+                    ConsoleHelper.writeMessage("Attention! There are " + count + " files for this machine");
 
-                for (int i = 0; i < count; i++) {
-                    ConsoleHelper.writeMessage("   " + (i + 1) + " - " + fileNames.get(i));
-                }
-
-                while (true) {
-                    ConsoleHelper.writeMessage("choose number of correct file ");
-                    try {
-                        int number = Integer.parseInt(ConsoleHelper.readString()) - 1;
-                        fileName = fileNames.get(number);
-                        break;
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        ConsoleHelper.writeMessage("You input incorrect number, please try again");
+                    for (int i = 0; i < count; i++) {
+                        ConsoleHelper.writeMessage("   " + (i + 1) + " - " + fileNames.get(i));
                     }
+
+                    while (true) {
+                        ConsoleHelper.writeMessage("choose number of correct file ");
+                        try {
+                            int number = Integer.parseInt(ConsoleHelper.readString()) - 1;
+                            fileName = fileNames.get(number);
+                            break;
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            ConsoleHelper.writeMessage("You input incorrect number, please try again");
+                        }
+                    }
+                }
+                else {
+                    fileName = gui.getController().processChooseFile(fileNames);
                 }
             } else fileName = fileNames.get(0);
         } catch (Exception e) {
