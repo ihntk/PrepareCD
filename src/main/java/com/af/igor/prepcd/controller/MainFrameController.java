@@ -154,7 +154,7 @@ public class MainFrameController {
         status.setText("Copying " + getMachine().getLuxFileName());
 
         getMachine().copyLuxFile();
-        luxParser.setExcelFile(getMachine().getMachineDir().getMachinePath() + getMachine().getLuxFileName());
+        app.initLuxParser();
         getMachine().setMachineType(luxParser.getMachineType());
         machineType.setText(getMachine().getMachineType());
         machineCode.setText(app.getMachineCode());
