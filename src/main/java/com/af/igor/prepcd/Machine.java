@@ -64,6 +64,10 @@ public class Machine {
         return sm;
     }
 
+    public String getI_PLANS() {
+        return I_PLANS;
+    }
+
     public boolean setRemoteMachinePath(String remoteMachinePath) {
         this.remoteMachinePath = remoteMachinePath;
         if (propertyElements.containsKey("remoteMachinePath"))
@@ -105,7 +109,7 @@ public class Machine {
             machineDir = new MachineDir(this);
             cdDir = new CdDir(this);
 
-            confFile = Paths.get(machineDir.getMachinePath(), machineName + ".conf");
+            confFile = Paths.get(machineDir.getMachinePathString(), machineName + ".conf");
             loadFromConfigFile();
         }
 

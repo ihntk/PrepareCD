@@ -3,6 +3,7 @@ package com.af.igor.prepcd.controller;
 import com.af.igor.prepcd.MainApp;
 import com.af.igor.prepcd.PrepareCD;
 import com.af.igor.prepcd.util.FSHelper;
+import javafx.application.HostServices;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -14,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -70,6 +72,12 @@ public class MainFrameController {
     @FXML
     private Button cdButton;
 
+    @FXML
+    private Button copyHere;
+
+    @FXML
+    private Button copyThere;
+
     public void setApplication(PrepareCD application) {
         this.application = application;
     }
@@ -84,6 +92,9 @@ public class MainFrameController {
     private FSHelper basePlanDirFS;
     private FSHelper cdDirFS;
 
+    private String machinePathString = getMachine().getMachineDir().getMachinePathString();
+    private HostServices hostServices = application.getHostServices();
+    String installationName = "I" + getMachine().getMachineCode() + "-" + getMachine().getMachineName().substring(2) + ".ckd";
 
     public MainFrameController() {
     }
@@ -129,8 +140,16 @@ public class MainFrameController {
     }
 
     @FXML
-    private void handleInstall() {
+    private void handleInstall() throws IOException {
         target.setText("Install");
+        machineDirFS.getFiles(Paths.get(machinePathString));
+        remoteMachineDirFS.getFiles(Paths.get(getMachine().getI_PLANS()));
+        status.setText("Copy base installation drawing for " + getMachine().getMachineType());
+        copyHere.setDisable(false);
+        while (!copyHere.isDisable()) {
+        }
+        hostServices.showDocument(machinePathString + installationName);
+        remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath()));
     }
 
     @FXML
@@ -148,6 +167,14 @@ public class MainFrameController {
         target.setText("CD");
     }
 
+    @FXML
+    private void handleCopyHere() throws IOException {
+        Path sourceInstFile = remoteMachineDir.getSelectionModel().getSelectedItem();
+        Path targetInstFile = Paths.get(machinePathString + installationName);
+        Files.copy(sourceInstFile, targetInstFile);
+        copyHere.setDisable(true);
+    }
+
 
     public void machineInit(String machineName) throws IOException, InterruptedException {
         app.initializeMachine(machineName);
@@ -159,7 +186,7 @@ public class MainFrameController {
         machineType.setText(getMachine().getMachineType());
         machineCode.setText(app.getMachineCode());
 
-        machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePath()));
+        machineDirFS.getFiles(Paths.get(machinePathString));
 //        machineDir.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 //            @Override
 //            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {

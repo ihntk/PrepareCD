@@ -18,7 +18,7 @@ public class MachineDir {
     protected String machinePath;
     protected final String machineXls;
 
-    public String getMachinePath() {
+    public String getMachinePathString() {
         return machinePath;
     }
 
