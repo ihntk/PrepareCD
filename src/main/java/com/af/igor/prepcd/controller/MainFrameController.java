@@ -80,6 +80,7 @@ public class MainFrameController {
 
     public void setApplication(PrepareCD application) {
         this.application = application;
+         hostServices = application.getHostServices();
     }
 
     private ObservableList<Path> machineDirList;
@@ -92,9 +93,8 @@ public class MainFrameController {
     private FSHelper basePlanDirFS;
     private FSHelper cdDirFS;
 
-    private String machinePathString = getMachine().getMachineDir().getMachinePathString();
-    private HostServices hostServices = application.getHostServices();
-    String installationName = "I" + getMachine().getMachineCode() + "-" + getMachine().getMachineName().substring(2) + ".ckd";
+    private HostServices hostServices;
+    String installationName;
 
     public MainFrameController() {
     }
@@ -150,13 +150,13 @@ public class MainFrameController {
     @FXML
     private void handleInstall() throws IOException {
         target.setText("Install");
-        machineDirFS.getFiles(Paths.get(machinePathString));
+        machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
         remoteMachineDirFS.getFiles(Paths.get(getMachine().getI_PLANS()));
         status.setText("Copy base installation drawing for " + getMachine().getMachineType());
         copyHere.setDisable(false);
         while (!copyHere.isDisable()) {
         }
-        hostServices.showDocument(machinePathString + installationName);
+        hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + installationName);
         remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath()));
     }
 
@@ -180,7 +180,7 @@ public class MainFrameController {
             handleXls();
             status.setText("You can continue process machine just pressing Machine button");
         } else {
-            cdDirFS.getFiles(Paths.get(machinePathString));
+            cdDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
             basePlanDirFS.getFiles(Paths.get(app.PLANS));
             remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath()));
 
@@ -210,7 +210,7 @@ public class MainFrameController {
     @FXML
     private void handleCopyHere() throws IOException {
         Path sourceInstFile = remoteMachineDir.getSelectionModel().getSelectedItem();
-        Path targetInstFile = Paths.get(machinePathString + installationName);
+        Path targetInstFile = Paths.get(getMachine().getMachineDir().getMachinePathString() + installationName);
         Files.copy(sourceInstFile, targetInstFile);
         copyHere.setDisable(true);
     }
@@ -225,8 +225,9 @@ public class MainFrameController {
         getMachine().setMachineType(luxParser.getMachineType());
         machineType.setText(getMachine().getMachineType());
         machineCode.setText(app.getMachineCode());
+        installationName = "I" + getMachine().getMachineCode() + "-" + getMachine().getMachineName().substring(2) + ".ckd";
 
-        machineDirFS.getFiles(Paths.get(machinePathString));
+        machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
 //        machineDir.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 //            @Override
 //            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
