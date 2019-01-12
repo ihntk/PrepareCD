@@ -8,10 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
@@ -20,6 +17,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.af.igor.prepcd.MainApp.*;
 
@@ -80,7 +79,7 @@ public class MainFrameController {
 
     public void setApplication(PrepareCD application) {
         this.application = application;
-         hostServices = application.getHostServices();
+        hostServices = application.getHostServices();
     }
 
     private ObservableList<Path> machineDirList;
@@ -264,10 +263,21 @@ public class MainFrameController {
     }
 
     public String processChooseFile(List<String> list) throws IOException {
-        remoteMachineDirFS.getFiles(list);
-        final int[] index = new int[1];
-        remoteMachineDir.setOnMouseClicked(event -> index[0] = remoteMachineDir.getSelectionModel().getSelectedIndex());
-        String fileName = list.get(index[0]);
+        String fileName = null;
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Choose file");
+        alert.setHeaderText("Attention! There are " + list.size() + " files for this machine\n" +
+                "Choose the correct file please");
+        ListView<String> listView = new ListView<>();
+        listView.setItems(FXCollections.observableArrayList(list));
+        alert.getDialogPane().setContent(listView);
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get() == ButtonType.OK)
+            fileName = list.get(listView.getSelectionModel().getSelectedIndex());
+
         return fileName;
     }
 }
