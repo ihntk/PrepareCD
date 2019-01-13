@@ -84,6 +84,10 @@ public class MainApp {
         return PROP_FILE;
     }
 
+    public static PrepareCD getGui() {
+        return gui;
+    }
+
     public static void setGui(PrepareCD gui) {
         MainApp.gui = gui;
     }

@@ -12,11 +12,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class PrepareCD extends Application {
-    MainApp app;
+    private MainApp app;
     private Stage primaryStage;
     private VBox rootLayout;
     private static final String APP_NAME="PrepareCD";
-    MainFrameController controller;
+    private MainFrameController controller;
 
     public MainFrameController getController() {
         return controller;
