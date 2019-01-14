@@ -245,6 +245,17 @@ public class MainApp {
         }
 
         /*
+        start GUI
+         */
+        for (int i = 0; i < args.length; i++) {
+            String flag = args[i];
+            if (flag.equals("-g")){
+                logger.log("GUI started");
+                PrepareCD.main(args);
+            }
+        }
+
+        /*
         test record
          */
         for (int i = 0; i < args.length; i++) {
