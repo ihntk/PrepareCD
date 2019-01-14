@@ -265,12 +265,13 @@ public class MainFrameController {
     public String processChooseFile(List<String> list) throws IOException {
         String fileName = null;
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Choose file");
         alert.setHeaderText("Attention! There are " + list.size() + " files for this machine\n" +
                 "Choose the correct file please");
         ListView<String> listView = new ListView<>();
         listView.setItems(FXCollections.observableArrayList(list));
+        listView.setPrefHeight(120);
         alert.getDialogPane().setContent(listView);
 
         Optional<ButtonType> result = alert.showAndWait();
