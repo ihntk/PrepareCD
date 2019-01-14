@@ -12,13 +12,13 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
+import java.lang.annotation.Target;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static com.af.igor.prepcd.MainApp.*;
 
@@ -75,7 +75,7 @@ public class MainFrameController {
     private Button copyHere;
 
     @FXML
-    private Button copyThere;
+    private Button ok;
 
     public void setApplication(PrepareCD application) {
         this.application = application;
@@ -93,7 +93,9 @@ public class MainFrameController {
     private FSHelper cdDirFS;
 
     private HostServices hostServices;
-    String installationName;
+    private String installationName;
+    private String targetFileName;
+    private Targets currenttarget;
 
     public MainFrameController() {
     }
@@ -152,11 +154,11 @@ public class MainFrameController {
         machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
         remoteMachineDirFS.getFiles(Paths.get(getMachine().getI_PLANS()));
         status.setText("Copy base installation drawing for " + getMachine().getMachineType());
+        targetFileName = installationName;
+        currenttarget = Targets.INSTALL;
         copyHere.setDisable(false);
-        while (!copyHere.isDisable()) {
-        }
-        hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + installationName);
-        remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath()));
+        ok.setDisable(false);
+
     }
 
     @FXML
@@ -208,10 +210,13 @@ public class MainFrameController {
 
     @FXML
     private void handleCopyHere() throws IOException {
-        Path sourceInstFile = remoteMachineDir.getSelectionModel().getSelectedItem();
-        Path targetInstFile = Paths.get(getMachine().getMachineDir().getMachinePathString() + installationName);
-        Files.copy(sourceInstFile, targetInstFile);
-        copyHere.setDisable(true);
+        Path sourcePath = remoteMachineDir.getSelectionModel().getSelectedItem();
+        String filename;
+        filename = (targetFileName == null)?
+            getMachine().defineFileName(machineDir.getSelectionModel().getSelectedItem()): targetFileName;
+        Path targetPath = Paths.get(getMachine().getMachineDir().getMachinePathString() + filename);
+        Files.copy(sourcePath, targetPath);
+        status.setText("When you finish to copy, press ok button");
     }
 
 
@@ -281,4 +286,32 @@ public class MainFrameController {
 
         return fileName;
     }
+
+    @FXML
+    private void handleOk() throws IOException {
+        copyHere.setDisable(true);
+        ok.setDisable(true);
+        endCurrentTarget();
+    }
+
+    private void endCurrentTarget() throws IOException {
+        switch (currenttarget){
+            case INSTALL:{
+                hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + installationName);
+                remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath()));
+                status.setText(installationName + " is opened");
+            }break;
+            case XLS:break;
+            case MACHINE:break;
+            case CD:break;
+        }
+    }
+
+    public enum Targets{
+        INSTALL,
+        XLS,
+        MACHINE,
+        CD;
+    }
+
 }

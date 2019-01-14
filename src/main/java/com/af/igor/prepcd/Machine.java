@@ -326,4 +326,56 @@ public class Machine {
     public void copy(String sourceFile, String targetFile, StandardCopyOption copyOption) throws IOException {
         Files.copy(Paths.get(sourceFile), Paths.get(targetFile), copyOption);
     }
+
+    public String defineFileName(Path selectedItem) {
+        String item = selectedItem.getFileName().toString();
+        String fileName = null;
+
+        if (item.startsWith("I")) {
+            fileName = "I" + machineCode + "-" + getMachineName().substring(2) + ".ckd";
+        }
+        if ((item.startsWith("E")) && (!item.startsWith("Etiqclas"))) {
+            fileName = "E" + machineCode + "-" + getMachineName().substring(2) + ".ckd";
+        }
+        if (item.startsWith("FS")) {
+            fileName = "FS" + machineCode + "-" + getMachineName().substring(2) + ".ckd";
+        }
+
+        if (item.startsWith("M10") &&
+                !item.startsWith("M100")) {
+            fileName = "M10" + "-" + getMachineName().substring(2) + ".ckd";
+        }
+        if (item.startsWith("M20")) {
+            fileName = "M20" + "-" + getMachineName().substring(2) + ".ckd";
+        }
+        if (item.startsWith("M30")) {
+            fileName = "M30" + "-" + getMachineName().substring(2) + ".ckd";
+        }
+        if (item.startsWith("M40")) {
+            fileName = "M40" + "-" + getMachineName().substring(2) + ".ckd";
+        }
+        if (item.startsWith("M50")) {
+            fileName = "M50" + "-" + getMachineName().substring(2) + ".ckd";
+        }
+        if (item.startsWith("M60")) {
+            fileName = "M60" + "-" + getMachineName().substring(2) + ".ckd";
+        }
+        if (item.startsWith("M70")) {
+            fileName = "M70" + "-" + getMachineName().substring(2) + ".ckd";
+        }
+        if (item.startsWith("M80")) {
+            fileName = "M80" + "-" + getMachineName().substring(2) + ".ckd";
+        }
+        if (item.startsWith("M90")) {
+            fileName = "M90" + "-" + getMachineName().substring(2) + ".ckd";
+        }
+        if (item.startsWith("M100")) {
+            fileName = "M100" + "-" + getMachineName().substring(2) + ".ckd";
+        }
+        if (item.startsWith("M110")) {
+            fileName = "M110" + "-" + getMachineName().substring(2) + ".ckd";
+        }
+
+        return fileName;
+    }
 }
