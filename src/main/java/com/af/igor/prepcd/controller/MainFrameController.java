@@ -153,12 +153,12 @@ public class MainFrameController {
         target.setText("Install");
         machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
         remoteMachineDirFS.getFiles(Paths.get(getMachine().getI_PLANS()));
-        status.setText("Copy base installation drawing for " + getMachine().getMachineType());
+
         targetFileName = installationName;
         currenttarget = Targets.INSTALL;
         copyHere.setDisable(false);
         ok.setDisable(false);
-
+        status.setText("Copy base installation drawing for " + getMachine().getMachineType() + ". Then press ok");
     }
 
     @FXML
@@ -170,7 +170,7 @@ public class MainFrameController {
             hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getMachineDir().getMachineXls());
             hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getLuxFileName());
         }
-
+        status.setText("You are can processing xls file");
     }
 
     @FXML
@@ -196,11 +196,15 @@ public class MainFrameController {
             for (String s : mPlans.split(",")) {
                 machinePlansList.add("\t" + s.trim());
             }
-
             machineDirFS.getFiles(machinePlansList);
+
+            targetFileName = null;
+            currenttarget = Targets.MACHINE;
+            copyHere.setDisable(false);
+            ok.setDisable(false);
+            status.setText("Copy base drawings for " + getMachine().getMachineType() + ". Then press ok");
         }
 
-        status.setText("Ready");
     }
 
     @FXML
@@ -212,13 +216,18 @@ public class MainFrameController {
     private void handleCopyHere() throws IOException {
         Path sourcePath = remoteMachineDir.getSelectionModel().getSelectedItem();
         String filename;
-        filename = (targetFileName == null)?
-            getMachine().defineFileName(machineDir.getSelectionModel().getSelectedItem()): targetFileName;
+        filename = (targetFileName == null) ?
+                getMachine().defineFileName(machineDir.getSelectionModel().getSelectedItem()) : targetFileName;
         Path targetPath = Paths.get(getMachine().getMachineDir().getMachinePathString() + filename);
         Files.copy(sourcePath, targetPath);
-        status.setText("When you finish to copy, press ok button");
     }
 
+    @FXML
+    private void handleOk() throws IOException {
+        copyHere.setDisable(true);
+        ok.setDisable(true);
+        endCurrentTarget();
+    }
 
     public void machineInit(String machineName) throws IOException, InterruptedException {
         app.initializeMachine(machineName);
@@ -287,27 +296,31 @@ public class MainFrameController {
         return fileName;
     }
 
-    @FXML
-    private void handleOk() throws IOException {
-        copyHere.setDisable(true);
-        ok.setDisable(true);
-        endCurrentTarget();
-    }
-
     private void endCurrentTarget() throws IOException {
-        switch (currenttarget){
-            case INSTALL:{
+        switch (currenttarget) {
+            case INSTALL: {
                 hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + installationName);
                 remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath()));
                 status.setText(installationName + " is opened");
-            }break;
-            case XLS:break;
-            case MACHINE:break;
-            case CD:break;
+            }
+            break;
+
+            case MACHINE:{
+                getMachine().copyEtiq();
+                getMachine().open4CkdFiles();
+                status.setText("Ready");
+            }
+                break;
+
+            case CD:
+                break;
+
+            case XLS:
+                break;
         }
     }
 
-    public enum Targets{
+    public enum Targets {
         INSTALL,
         XLS,
         MACHINE,
