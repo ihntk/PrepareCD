@@ -216,14 +216,36 @@ public class MainFrameController {
     private void handleCopyHere() throws IOException {
         Path sourcePath = remoteMachineDir.getSelectionModel().getSelectedItem();
         String filename;
-        filename = (targetFileName == null) ?
-                getMachine().defineFileName(machineDir.getSelectionModel().getSelectedItem()) : targetFileName;
-        Path targetPath = Paths.get(getMachine().getMachineDir().getMachinePathString() + filename);
+        Path targetPath;
+        if (targetFileName != null) {
+            filename = targetFileName;
+            targetPath = Paths.get(getMachine().getMachineDir().getMachinePathString() + filename);
+        }
+        else {
+            int index = machineDir.getSelectionModel().getSelectedIndex();
+            filename = getMachine().defineFileName(machineDir.getSelectionModel().getSelectedItem());
+            targetPath = Paths.get(getMachine().getMachineDir().getMachinePathString() + filename);
+            machineDirList.set(index,targetPath);
+        }
         Files.copy(sourcePath, targetPath);
     }
 
     @FXML
     private void handleOk() throws IOException {
+        for (Path item:machineDirList){
+            if (item.getFileName().toString().startsWith("\t")){
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Attention");
+                alert.setHeaderText("There is uncopied files");
+                alert.setContentText("You didn't copy " + getMachine().defineFileName(item) + " file\n"
+                        +"Are you sure you want to continue ");
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if (result.get() == ButtonType.OK)
+                    continue;
+                else return;
+            }
+        }
         copyHere.setDisable(true);
         ok.setDisable(true);
         endCurrentTarget();

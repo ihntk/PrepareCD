@@ -328,7 +328,7 @@ public class Machine {
     }
 
     public String defineFileName(Path selectedItem) {
-        String item = selectedItem.getFileName().toString();
+        String item = selectedItem.getFileName().toString().trim();
         String fileName = null;
 
         if (item.startsWith("I")) {
