@@ -267,7 +267,7 @@ public class MainFrameController {
         getMachine().setMachineType(luxParser.getMachineType());
         machineType.setText(getMachine().getMachineType());
         machineCode.setText(app.getMachineCode());
-        installationName = "I" + getMachine().getMachineCode() + "-" + getMachine().getMachineName().substring(2) + ".ckd";
+        installationName = "I" + app.getMachineCode() + "-" + getMachine().getMachineName().substring(2) + ".ckd";
 
         machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
 //        machineDir.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
