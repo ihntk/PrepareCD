@@ -12,7 +12,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
-import java.lang.annotation.Target;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -196,6 +195,15 @@ public class MainFrameController {
             for (String s : mPlans.split("\\+")) {
                 machinePlansList.add("   " + s.trim());
             }
+            for (int i = 0; i < machinePlansList.size(); i++) {
+                String name = getMachine().defineFileName(Paths.get(machinePlansList.get(i)));
+                if (name != null)
+                    for (Path file : basePlanDirList) {
+                        if (file.toString().startsWith(name.substring(0, name.indexOf("."))) && file.toString().endsWith(".ckd"))
+                            machinePlansList.set(i, file.toString());
+                    }
+            }
+
             machineDirFS.getFiles(machinePlansList);
 
             targetFileName = null;
@@ -220,25 +228,24 @@ public class MainFrameController {
         if (targetFileName != null) {
             filename = targetFileName;
             targetPath = Paths.get(getMachine().getMachineDir().getMachinePathString() + filename);
-        }
-        else {
+        } else {
             int index = machineDir.getSelectionModel().getSelectedIndex();
             filename = getMachine().defineFileName(machineDir.getSelectionModel().getSelectedItem());
             targetPath = Paths.get(getMachine().getMachineDir().getMachinePathString() + filename);
-            machineDirList.set(index,targetPath.getFileName());
+            machineDirList.set(index, targetPath.getFileName());
         }
         Files.copy(sourcePath, targetPath);
     }
 
     @FXML
     private void handleOk() throws IOException {
-        for (Path item:machineDirList){
-            if (item.getFileName().toString().startsWith("   ")){
+        for (Path item : machineDirList) {
+            if (item.getFileName().toString().startsWith("   ")) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Attention");
                 alert.setHeaderText("There is uncopied files");
                 alert.setContentText("You didn't copy " + getMachine().defineFileName(item) + " file\n"
-                        +"Are you sure you want to continue ");
+                        + "Are you sure you want to continue ");
                 Optional<ButtonType> result = alert.showAndWait();
 
                 if (result.get() == ButtonType.OK)
@@ -327,12 +334,12 @@ public class MainFrameController {
             }
             break;
 
-            case MACHINE:{
+            case MACHINE: {
                 getMachine().copyEtiq();
                 getMachine().open4CkdFiles();
                 status.setText("Ready");
             }
-                break;
+            break;
 
             case CD:
                 break;
