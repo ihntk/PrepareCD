@@ -328,6 +328,7 @@ public class MainFrameController {
     private void endCurrentTarget() throws IOException {
         switch (currenttarget) {
             case INSTALL: {
+                hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getLuxFileName());
                 hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + installationName);
                 remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath()));
                 status.setText(installationName + " is opened");
