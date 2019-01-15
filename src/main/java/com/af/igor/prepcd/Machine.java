@@ -25,7 +25,7 @@ public class Machine {
     protected final String I_PLANS = app.PLANS + "002 - Plan d'installation/";
     private Path confFile;
     private Properties confFileProperty = new Properties();
-    private String machineCode;
+    private String machineCode;     //is used for save to parameter only!!!
     private HashMap<String, String> propertyElements = new HashMap<>();
     private String luxPathString;
 
@@ -328,6 +328,7 @@ public class Machine {
     }
 
     public String defineFileName(Path selectedItem) {
+        String machineCode = app.getMachineCode();
         String item = selectedItem.getFileName().toString().trim();
         String fileName = null;
 

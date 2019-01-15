@@ -181,20 +181,20 @@ public class MainFrameController {
             handleXls();
             status.setText("You can continue process machine just pressing Machine button");
         } else {
-            cdDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
-            basePlanDirFS.getFiles(Paths.get(app.PLANS));
-            remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath()));
+            basePlanDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
+            remoteMachineDirFS.getFiles(Paths.get(app.PLANS));
+            cdDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath()));
 
             app.initMachineExcelParser();
             String mPlans = machineExcelParser.getMPlans();
             ArrayList<String> machinePlansList = new ArrayList<>();
 
-            machinePlansList.add("\tI" + app.getMachineCode());
-            machinePlansList.add("\tE" + app.getMachineCode());
-            machinePlansList.add("\tFS" + app.getMachineCode());
+            machinePlansList.add("   I" + app.getMachineCode());
+            machinePlansList.add("   E" + app.getMachineCode());
+            machinePlansList.add("   FS" + app.getMachineCode());
 
-            for (String s : mPlans.split(",")) {
-                machinePlansList.add("\t" + s.trim());
+            for (String s : mPlans.split("\\+")) {
+                machinePlansList.add("   " + s.trim());
             }
             machineDirFS.getFiles(machinePlansList);
 
@@ -214,7 +214,7 @@ public class MainFrameController {
 
     @FXML
     private void handleCopyHere() throws IOException {
-        Path sourcePath = remoteMachineDir.getSelectionModel().getSelectedItem();
+        Path sourcePath = remoteMachineDirFS.getCurrentPath().resolve(remoteMachineDir.getSelectionModel().getSelectedItem());
         String filename;
         Path targetPath;
         if (targetFileName != null) {
@@ -225,7 +225,7 @@ public class MainFrameController {
             int index = machineDir.getSelectionModel().getSelectedIndex();
             filename = getMachine().defineFileName(machineDir.getSelectionModel().getSelectedItem());
             targetPath = Paths.get(getMachine().getMachineDir().getMachinePathString() + filename);
-            machineDirList.set(index,targetPath);
+            machineDirList.set(index,targetPath.getFileName());
         }
         Files.copy(sourcePath, targetPath);
     }
@@ -233,7 +233,7 @@ public class MainFrameController {
     @FXML
     private void handleOk() throws IOException {
         for (Path item:machineDirList){
-            if (item.getFileName().toString().startsWith("\t")){
+            if (item.getFileName().toString().startsWith("   ")){
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Attention");
                 alert.setHeaderText("There is uncopied files");
@@ -242,7 +242,7 @@ public class MainFrameController {
                 Optional<ButtonType> result = alert.showAndWait();
 
                 if (result.get() == ButtonType.OK)
-                    continue;
+                    break;
                 else return;
             }
         }

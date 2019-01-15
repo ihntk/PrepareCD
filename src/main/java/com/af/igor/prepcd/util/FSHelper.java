@@ -26,6 +26,8 @@ public class FSHelper {
     }
 
     public void getFiles(Path path) throws IOException {
+        if (path==null)
+            return;
         Path previousPath = currentPath;
         currentPath = path.isAbsolute() ? path : currentPath.resolve(path);
         if (Files.isDirectory(currentPath)) {
@@ -42,7 +44,7 @@ public class FSHelper {
     public void getFiles(List<String> stringList){
         list.clear();
         for (int i = 0; i < stringList.size(); i++) {
-            list.add(Paths.get(stringList.get(i)).getFileName());
+            list.add(Paths.get(stringList.get(i)));
         }
     }
 
