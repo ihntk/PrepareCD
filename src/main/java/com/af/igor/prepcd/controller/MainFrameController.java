@@ -150,6 +150,7 @@ public class MainFrameController {
     @FXML
     private void handleInstall() throws IOException {
         target.setText("Install");
+        resetControlsDefault();
         machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
         remoteMachineDirFS.getFiles(Paths.get(getMachine().getI_PLANS()));
 
@@ -163,6 +164,7 @@ public class MainFrameController {
     @FXML
     private void handleXls() throws IOException {
         target.setText("Xls");
+        resetControlsDefault();
         if (!getMachine().getMachineXls())
             hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getMachineDir().getMachineXls());
         else {
@@ -175,6 +177,7 @@ public class MainFrameController {
     @FXML
     private void handleMachine() throws IOException {
         target.setText("Machine");
+        resetControlsDefault();
         if (!Files.exists(Paths.get(getMachine().getMachineDir().getMachinePathString() + getMachine().getMachineDir().getMachineXls()))) {
             status.setText("You haven't xls file yet! You could correct this now");
             handleXls();
@@ -348,6 +351,13 @@ public class MainFrameController {
             case XLS:
                 break;
         }
+    }
+
+    private void resetControlsDefault(){
+        copyHere.setDisable(true);
+        ok.setDisable(true);
+        basePlanDirList.clear();
+        cdDirList.clear();
     }
 
     public enum Targets {
