@@ -159,6 +159,7 @@ public class MainFrameController {
         copyHere.setDisable(false);
         ok.setDisable(false);
         status.setText("Copy base installation drawing for " + getMachine().getMachineType() + ". Then press ok");
+        app.tc("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + getMachine().getI_PLANS() + "\"");
     }
 
     @FXML
@@ -172,6 +173,7 @@ public class MainFrameController {
             hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getLuxFileName());
         }
         status.setText("You are can processing xls file");
+        endCurrentTarget();
     }
 
     @FXML
@@ -214,6 +216,7 @@ public class MainFrameController {
             copyHere.setDisable(false);
             ok.setDisable(false);
             status.setText("Copy base drawings for " + getMachine().getMachineType() + ". Then press ok");
+            app.tc("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + PLANS + "\"");
         }
 
     }
@@ -335,6 +338,7 @@ public class MainFrameController {
                 hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + installationName);
                 remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath()));
                 status.setText(installationName + " is opened");
+                app.tc("--r=\"" + getMachine().getRemoteMachinePath() + "\"");
             }
             break;
 
@@ -342,13 +346,16 @@ public class MainFrameController {
                 getMachine().copyEtiq();
                 getMachine().open4CkdFiles();
                 status.setText("Ready");
+                app.tc("--r=\"" + getMachine().getRemoteMachinePath() + "\"");
             }
             break;
 
             case CD:
                 break;
 
-            case XLS:
+            case XLS:{
+                app.tc("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + getMachine().getRemoteMachinePath() + "\"");
+            }
                 break;
         }
     }
