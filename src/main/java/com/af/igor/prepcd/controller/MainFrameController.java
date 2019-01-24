@@ -76,6 +76,9 @@ public class MainFrameController {
     @FXML
     private Button ok;
 
+    @FXML
+    private Button f1Button;
+
     public void setApplication(PrepareCD application) {
         this.application = application;
         hostServices = application.getHostServices();
@@ -264,6 +267,12 @@ public class MainFrameController {
         endCurrentTarget();
     }
 
+    @FXML
+    private void handleF1Button() throws IOException {
+        if (f1Button.getText().equals("Open M"))
+            getMachine().openMCkdFiles();
+    }
+
     public void machineInit(String machineName) throws IOException, InterruptedException {
         app.initializeMachine(machineName);
         status.setText("Copying " + getMachine().getLuxFileName());
@@ -347,6 +356,8 @@ public class MainFrameController {
                 getMachine().open4CkdFiles();
                 status.setText("Ready");
                 app.tc("--r=\"" + getMachine().getRemoteMachinePath() + "\"");
+                f1Button.setText("Open M");
+                f1Button.setDisable(false);
             }
             break;
 
@@ -363,6 +374,8 @@ public class MainFrameController {
     private void resetControlsDefault(){
         copyHere.setDisable(true);
         ok.setDisable(true);
+        f1Button.setDisable(true);
+        f1Button.setText("-");
         basePlanDirList.clear();
         cdDirList.clear();
     }
