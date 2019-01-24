@@ -290,6 +290,14 @@ public class Machine {
         }
     }
 
+    public void openMCkdFiles() throws IOException {
+        ArrayList<String> ckdFiles = machineDir.getCkdFiles();
+        for (String file : ckdFiles) {
+            if (file.startsWith("M"))
+                app.desktop.open(new File(machineDir.machinePath + file));
+        }
+    }
+
     public void copyEtiq() throws IOException {
         String machineEtiq = "Etiqclas" + "-" + getMachineName().substring(2) + ".ckd";
         if (!new File(machineDir.machinePath + machineEtiq).exists())
