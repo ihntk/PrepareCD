@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -175,7 +176,7 @@ public class MainFrameController {
             hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getMachineDir().getMachineXls());
             hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getLuxFileName());
         }
-        status.setText("You are can processing xls file");
+        status.setText("You can processing xls file");
         endCurrentTarget();
     }
 
@@ -243,7 +244,21 @@ public class MainFrameController {
             targetPath = Paths.get(getMachine().getMachineDir().getMachinePathString() + filename);
             machineDirList.set(index, targetPath.getFileName());
         }
-        Files.copy(sourcePath, targetPath);
+
+        if (!Files.exists(targetPath))
+            Files.copy(sourcePath, targetPath);
+        else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Attention");
+            alert.setHeaderText("File " + targetPath.getFileName() + " exist");
+            alert.setContentText("Do you really want to replace " + targetPath.getFileName() + " file?");
+            Optional<ButtonType> optionalButtonType = alert.showAndWait();
+
+            if (optionalButtonType.get() == ButtonType.OK)
+                Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+            else
+                return;
+        }
     }
 
     @FXML
@@ -293,6 +308,7 @@ public class MainFrameController {
 //        });
 
         remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath()));
+
         remoteMachineDir.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -364,14 +380,14 @@ public class MainFrameController {
             case CD:
                 break;
 
-            case XLS:{
+            case XLS: {
                 app.tc("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + getMachine().getRemoteMachinePath() + "\"");
             }
-                break;
+            break;
         }
     }
 
-    private void resetControlsDefault(){
+    private void resetControlsDefault() {
         copyHere.setDisable(true);
         ok.setDisable(true);
         f1Button.setDisable(true);
