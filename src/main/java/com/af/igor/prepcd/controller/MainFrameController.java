@@ -215,6 +215,19 @@ public class MainFrameController {
 
             machineDirFS.getFiles(machinePlansList);
 
+            cdDir.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    try {
+                        Path selectedFile = cdDir.getSelectionModel().getSelectedItem();
+                        cdDirFS.getFiles(selectedFile);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
             targetFileName = null;
             currenttarget = Targets.MACHINE;
             copyHere.setDisable(false);
@@ -374,6 +387,11 @@ public class MainFrameController {
                 app.tc("--r=\"" + getMachine().getRemoteMachinePath() + "\"");
                 f1Button.setText("Open M");
                 f1Button.setDisable(false);
+
+                machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
+                remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath()));
+                basePlanDirList.clear();
+                cdDirList.clear();
             }
             break;
 
