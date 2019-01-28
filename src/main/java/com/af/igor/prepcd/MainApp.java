@@ -36,6 +36,7 @@ public class MainApp {
     static String CDTEMPLATE;
     public static String PLANS;
     static String TOTALCOMMANDER;
+    private static String PRINTDIR;
 
     private static MainApp instance;
     private static String version = "0.6.2";
@@ -68,6 +69,7 @@ public class MainApp {
         CDTEMPLATE = properties.getProperty("CDTEMPLATE");
         PLANS = properties.getProperty("PLANS");
         TOTALCOMMANDER = properties.getProperty("TOTALCOMMANDER");
+        PRINTDIR = properties.getProperty("PRINTDIR");
     }
 
     public static MainApp getInstance() {
@@ -194,6 +196,14 @@ public class MainApp {
         String command = TOTALCOMMANDER + " /O " + pathParameters;
         Process process = runtime.exec(command);
         logger.log("total commander got parameters:\n   " + command);
+    }
+
+    public void openPrintDir() throws IOException {
+        Path printDir = Paths.get(PRINTDIR, machine.getMachineName());
+        if (!Files.exists(printDir))
+            Files.createDirectory(printDir);
+
+        tc("--t --r=\"" + printDir + "\"");
     }
 
     public String getMachineCode() {
