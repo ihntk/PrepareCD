@@ -72,6 +72,9 @@ public class MainFrameController {
     private Button cdButton;
 
     @FXML
+    private Menu openMenu;
+
+    @FXML
     private Button copyHere;
 
     @FXML
@@ -244,6 +247,7 @@ public class MainFrameController {
     @FXML
     private void handleCD() throws IOException {
         target.setText("CD");
+        resetControlsDefault();
         app.tc("--l=\"" + app.getCdsString() + "\" --t --r=\"" + app.getCdCommenceString() + "\"");
     }
 
@@ -331,6 +335,12 @@ public class MainFrameController {
 //        });
 
         remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath()));
+
+        installButton.setDisable(false);
+        xlsButton.setDisable(false);
+        machineButton.setDisable(false);
+        cdButton.setDisable(false);
+        openMenu.setDisable(false);
 
         remoteMachineDir.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override

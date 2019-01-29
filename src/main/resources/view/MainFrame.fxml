@@ -19,10 +19,10 @@
             <TextField fx:id="machineCode" layoutX="46.0" layoutY="10.0" onAction="#handleSetMachineCode" prefWidth="70.0" />
             <Label fx:id="machineType" layoutX="10.0" layoutY="10.0" />
             <Region HBox.hgrow="ALWAYS" />
-            <Button fx:id="installButton" mnemonicParsing="false" onAction="#handleInstall" text="Install" />
-            <Button layoutX="548.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleXls" text="Xls" fx:id="xlsButton" />
-            <Button fx:id="machineButton" layoutX="548.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleMachine" text="Machine" />
-            <Button fx:id="cdButton" layoutX="548.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleCD" text="CD" />
+            <Button fx:id="installButton" disable="true" mnemonicParsing="false" onAction="#handleInstall" text="Install" />
+            <Button disable="true" layoutX="548.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleXls" text="Xls" fx:id="xlsButton" />
+            <Button fx:id="machineButton" disable="true" layoutX="548.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleMachine" text="Machine" />
+            <Button fx:id="cdButton" disable="true" layoutX="548.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleCD" text="CD" />
          </children>
          <BorderPane.margin>
             <Insets bottom="5.0" left="5.0" right="2.0" top="2.0" />

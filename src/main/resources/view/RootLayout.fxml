@@ -14,7 +14,7 @@
               <MenuItem mnemonicParsing="false" text="Close" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Open">
+          <Menu fx:id="openMenu" disable="true" mnemonicParsing="false" text="Open">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#handleOpenPrint" text="Print" />
             </items>
