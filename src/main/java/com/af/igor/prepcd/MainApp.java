@@ -37,6 +37,7 @@ public class MainApp {
     public static String PLANS;
     static String TOTALCOMMANDER;
     private static String PRINTDIR;
+    private static String CDCOMMENCE;
 
     private static MainApp instance;
     private static String version = "0.6.4";
@@ -67,6 +68,7 @@ public class MainApp {
         H_MACHINES = properties.getProperty("H_MACHINES");
         CDS = properties.getProperty("CDS");
         CDTEMPLATE = properties.getProperty("CDTEMPLATE");
+        CDCOMMENCE = properties.getProperty("CDCOMMENCE");
         PLANS = properties.getProperty("PLANS");
         TOTALCOMMANDER = properties.getProperty("TOTALCOMMANDER");
         PRINTDIR = properties.getProperty("PRINTDIR");
@@ -206,8 +208,18 @@ public class MainApp {
         tc("--t --r=\"" + printDir + "\"");
     }
 
-    public String getCDSString() {
-        return CDS + machine.getMachineName() + "/";
+    public String getCdsString() throws IOException {
+        String cd = CDS + machine.getMachineName() + "/";
+        if (!Files.exists(Paths.get(cd)))
+            Files.createDirectory(Paths.get(cd));
+        return cd;
+    }
+
+    public String getCdCommenceString() throws IOException {
+        String cdCom = CDCOMMENCE + machine.getMachineName() + "/";
+        if (!Files.exists(Paths.get(cdCom)))
+            Files.createDirectory(Paths.get(cdCom));
+        return cdCom;
     }
 
     public String getMachineCode() {
