@@ -30,7 +30,6 @@ public class Machine {
     private String luxPathString;
 
     MachineDir machineDir;
-    CdDir cdDir;
 
     public MachineDir getMachineDir() {
         return machineDir;
@@ -107,7 +106,6 @@ public class Machine {
 
         if (machineName != null) {
             machineDir = new MachineDir(this);
-            cdDir = new CdDir(this);
 
             confFile = Paths.get(machineDir.getMachinePathString(), machineName + ".conf");
             loadFromConfigFile();
