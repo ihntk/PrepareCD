@@ -242,8 +242,9 @@ public class MainFrameController {
     }
 
     @FXML
-    private void handleCD() {
+    private void handleCD() throws IOException {
         target.setText("CD");
+        app.tc("--l=\"" + app.getCDSString() + "\" --t --r=\"" + getMachine().getRemoteMachinePath() + "\"");
     }
 
     @FXML

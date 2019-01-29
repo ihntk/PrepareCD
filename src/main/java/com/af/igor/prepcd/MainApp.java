@@ -32,14 +32,14 @@ public class MainApp {
     static String XLS;
     static String MACHINES;
     static String H_MACHINES;
-    static String CDS;
+    private static String CDS;
     static String CDTEMPLATE;
     public static String PLANS;
     static String TOTALCOMMANDER;
     private static String PRINTDIR;
 
     private static MainApp instance;
-    private static String version = "0.6.2";
+    private static String version = "0.6.3";
     private static Machine machine;         //in future this field will replace static ArrayList<Machine>
     public static LuxParser luxParser;
     public static MachineExcelParser machineExcelParser;
@@ -206,6 +206,10 @@ public class MainApp {
         tc("--t --r=\"" + printDir + "\"");
     }
 
+    public String getCDSString() {
+        return CDS + machine.getMachineName() + "/";
+    }
+
     public String getMachineCode() {
         String machineType = null;
         String machineCode;
@@ -259,7 +263,7 @@ public class MainApp {
          */
         for (int i = 0; i < args.length; i++) {
             String flag = args[i];
-            if (flag.equals("-g")){
+            if (flag.equals("-g")) {
                 logger.log("GUI started");
                 PrepareCD.main(args);
             }
