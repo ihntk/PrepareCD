@@ -40,7 +40,7 @@ public class MainApp {
     private static String CDCOMMENCE;
 
     private static MainApp instance;
-    private static String version = "0.6.4";
+    private static String version = "0.6.5";
     private static Machine machine;         //in future this field will replace static ArrayList<Machine>
     public static LuxParser luxParser;
     public static MachineExcelParser machineExcelParser;

@@ -183,6 +183,7 @@ public class MainFrameController {
             hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getLuxFileName());
         }
         status.setText("You can processing xls file");
+        currenttarget = Targets.XLS;
         endCurrentTarget();
     }
 
@@ -249,6 +250,7 @@ public class MainFrameController {
         target.setText("CD");
         resetControlsDefault();
         app.tc("--l=\"" + app.getCdsString() + "\" --t --r=\"" + app.getCdCommenceString() + "\"");
+        currenttarget = Targets.CD;
     }
 
     @FXML
@@ -341,6 +343,7 @@ public class MainFrameController {
         machineButton.setDisable(false);
         cdButton.setDisable(false);
         openMenu.setDisable(false);
+        resetControlsDefault();
 
         remoteMachineDir.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
