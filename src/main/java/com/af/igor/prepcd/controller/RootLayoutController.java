@@ -4,6 +4,7 @@ import com.af.igor.prepcd.MainApp;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 
 import java.io.IOException;
@@ -13,6 +14,13 @@ public class RootLayoutController {
 
     @FXML
     private MenuItem About;
+
+    @FXML
+    private Menu openMenu;
+
+    public RootLayoutController() {
+        app.getGui().setRootLayoutController(this);
+    }
 
     public void handleAbout(){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -24,5 +32,9 @@ public class RootLayoutController {
 
     public void handleOpenPrint() throws IOException {
         app.openPrintDir();
+    }
+
+    public void enableMenu(){
+        openMenu.setDisable(false);
     }
 }

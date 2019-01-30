@@ -72,9 +72,6 @@ public class MainFrameController {
     private Button cdButton;
 
     @FXML
-    private Menu openMenu;
-
-    @FXML
     private Button copyHere;
 
     @FXML
@@ -342,7 +339,7 @@ public class MainFrameController {
         xlsButton.setDisable(false);
         machineButton.setDisable(false);
         cdButton.setDisable(false);
-        openMenu.setDisable(false);
+        application.getRootLayoutController().enableMenu();
         resetControlsDefault();
 
         remoteMachineDir.setOnMouseClicked(new EventHandler<MouseEvent>() {

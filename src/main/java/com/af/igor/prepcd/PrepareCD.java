@@ -1,6 +1,7 @@
 package com.af.igor.prepcd;
 
 import com.af.igor.prepcd.controller.MainFrameController;
+import com.af.igor.prepcd.controller.RootLayoutController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -17,6 +18,7 @@ public class PrepareCD extends Application {
     private VBox rootLayout;
     private static final String APP_NAME="PrepareCD";
     private MainFrameController controller;
+    private RootLayoutController rootLayoutController;
 
     public MainFrameController getController() {
         return controller;
@@ -72,5 +74,13 @@ public class PrepareCD extends Application {
 
     public void setTitle(String machineName) {
         primaryStage.setTitle(APP_NAME+" - "+machineName);
+    }
+
+    public RootLayoutController getRootLayoutController() {
+        return rootLayoutController;
+    }
+
+    public void setRootLayoutController(RootLayoutController rootLayoutController) {
+        this.rootLayoutController = rootLayoutController;
     }
 }
