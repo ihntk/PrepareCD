@@ -18,6 +18,9 @@ public class RootLayoutController {
     @FXML
     private Menu openMenu;
 
+    @FXML
+    private MenuItem renameAllCkdFiles;
+
     public RootLayoutController() {
         app.getGui().setRootLayoutController(this);
     }
@@ -36,5 +39,10 @@ public class RootLayoutController {
 
     public void enableMenu(){
         openMenu.setDisable(false);
+        renameAllCkdFiles.setDisable(false);
+    }
+
+    public void handleRenameAllCkdFiles() throws IOException {
+        app.getMachine().renameAllCkd();
     }
 }
