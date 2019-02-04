@@ -255,19 +255,31 @@ public class MainFrameController {
         Path sourcePath = remoteMachineDirFS.getCurrentPath().resolve(remoteMachineDir.getSelectionModel().getSelectedItem());
         String filename;
         Path targetPath;
+        int index = -1;
         if (targetFileName != null) {
             filename = targetFileName;
             targetPath = Paths.get(getMachine().getMachineDir().getMachinePathString() + filename);
         } else {
-            int index = machineDir.getSelectionModel().getSelectedIndex();
+            index = machineDir.getSelectionModel().getSelectedIndex();
+            if (index < 0) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Attention");
+                alert.setHeaderText("Target file isn't selected");
+                alert.setContentText("Select target file you want to copy (in the left table)");
+                alert.showAndWait();
+
+            }
             filename = getMachine().defineFileName(machineDir.getSelectionModel().getSelectedItem());
             targetPath = Paths.get(getMachine().getMachineDir().getMachinePathString() + filename);
-            machineDirList.set(index, targetPath.getFileName());
         }
 
-        if (!Files.exists(targetPath))
+        if (!Files.exists(targetPath)) {
             Files.copy(sourcePath, targetPath);
-        else {
+            if (index > -1)
+                machineDirList.set(index, targetPath.getFileName());
+            else
+                machineDirList.add(targetPath.getFileName());
+        } else {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Attention");
             alert.setHeaderText("File " + targetPath.getFileName() + " exist");
