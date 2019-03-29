@@ -33,7 +33,7 @@ public class MainApp {
     static String MACHINES;
     static String H_MACHINES;
     private static String CDS;
-    static String CDTEMPLATE;
+    public static String CDTEMPLATE;
     public static String PLANS;
     static String TOTALCOMMANDER;
     private static String PRINTDIR;
@@ -207,6 +207,7 @@ public class MainApp {
 
         tc("--t --r=\"" + printDir + "\"");
     }
+
 
     public String getCdsString() throws IOException {
         String cd = CDS + machine.getMachineName() + "/";
@@ -427,6 +428,5 @@ public class MainApp {
         }
         getInstance().logger.stopLogging();
     }
-
 
 }

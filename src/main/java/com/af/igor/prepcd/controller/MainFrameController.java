@@ -205,8 +205,8 @@ public class MainFrameController {
             machinePlansList.add("   E" + app.getMachineCode());
             machinePlansList.add("   FS" + app.getMachineCode());
 
-            for (String s : mPlans.split("\\+")) {
-                machinePlansList.add("   " + s.trim());
+            for (String mPlan : mPlans.split("\\+")) {
+                machinePlansList.add("   " + mPlan.trim());
             }
             for (int i = 0; i < machinePlansList.size(); i++) {
                 String name = getMachine().defineFileName(Paths.get(machinePlansList.get(i)));
@@ -234,6 +234,7 @@ public class MainFrameController {
 
             targetFileName = null;
             currenttarget = Targets.MACHINE;
+            application.getRootLayoutController().enableRenameAllCkdFiles();
             copyHere.setDisable(false);
             ok.setDisable(false);
             status.setText("Copy base drawings for " + getMachine().getMachineType() + ". Then press ok");
@@ -449,6 +450,7 @@ public class MainFrameController {
         f4Button.setText("-");
         basePlanDirList.clear();
         cdDirList.clear();
+        application.getRootLayoutController().disableRenameAllCkdFiles();
     }
 
     public enum Targets {
