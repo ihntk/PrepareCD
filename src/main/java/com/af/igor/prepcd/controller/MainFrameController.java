@@ -236,6 +236,15 @@ public class MainFrameController {
 
     @FXML
     private void handleCopyHere() throws IOException {
+        if (remoteMachineDir.getSelectionModel().getSelectedIndex() < 0){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Attention");
+            alert.setHeaderText("Source file isn't selected");
+            alert.setContentText("Select source file you want to copy (in the right table)");
+            alert.showAndWait();
+            return;
+        }
+
         Path sourcePath = remoteMachineDirFS.getCurrentPath().resolve(remoteMachineDir.getSelectionModel().getSelectedItem());
         String filename;
         Path targetPath;
@@ -251,7 +260,7 @@ public class MainFrameController {
                 alert.setHeaderText("Target file isn't selected");
                 alert.setContentText("Select target file you want to copy (in the left table)");
                 alert.showAndWait();
-
+                return;
             }
             filename = getMachine().defineFileName(machineDir.getSelectionModel().getSelectedItem());
             targetPath = Paths.get(getMachine().getMachineDir().getMachinePathString() + filename);
