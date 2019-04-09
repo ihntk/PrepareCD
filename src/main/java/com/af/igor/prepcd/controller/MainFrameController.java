@@ -157,6 +157,7 @@ public class MainFrameController {
     @FXML
     private void handleInstall() throws IOException {
         target.setText("Install");
+        app.logger.log("target is: installation");
         resetControlsDefault();
         machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
         remoteMachineDirFS.getFiles(Paths.get(getMachine().getI_PLANS()));
@@ -172,6 +173,7 @@ public class MainFrameController {
     @FXML
     private void handleXls() throws IOException {
         target.setText("Xls");
+        app.logger.log("target is: xls");
         resetControlsDefault();
         if (!getMachine().getMachineXls())
             hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getMachineDir().getMachineXls());
@@ -187,6 +189,7 @@ public class MainFrameController {
     @FXML
     private void handleMachine() throws IOException {
         target.setText("Machine");
+        app.logger.log("target is: machine");
         resetControlsDefault();
         if (!Files.exists(Paths.get(getMachine().getMachineDir().getMachinePathString() + getMachine().getMachineDir().getMachineXls()))) {
             status.setText("You haven't xls file yet! You could correct this now");
@@ -308,6 +311,7 @@ public class MainFrameController {
     }
 
     public void machineInit(String machineName) throws IOException, InterruptedException {
+        app.logger.log("-----\n");
         app.initializeMachine(machineName);
         status.setText("Copying " + getMachine().getLuxFileName());
 
