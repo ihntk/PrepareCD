@@ -18,10 +18,10 @@
           <Menu fx:id="openMenu" disable="true" mnemonicParsing="false" text="Open">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#handleOpenPrint" text="Print" />
-                  <MenuItem mnemonicParsing="false" text="Remote machine directory" />
-                  <MenuItem mnemonicParsing="false" text="Base drawings" />
-                  <MenuItem mnemonicParsing="false" text="Base CD" />
-                  <MenuItem mnemonicParsing="false" text="Remote CD" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleOpenRemoteMachineDir" text="Remote machine directory" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleOpenBaseDrawings" text="Base drawings" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleOpenBaseCD" text="Base CD" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleOpenRemoteCD" text="Remote CD" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
