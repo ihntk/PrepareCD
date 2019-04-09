@@ -224,6 +224,10 @@ public class Machine {
                 String renamedCkd = "FS" + machineCode + "-" + getMachineName().substring(2) + ".ckd";
                 rename(file, renamedCkd);
             }
+            if (file.startsWith("I")) {
+                String renamedCkd = "I" + machineCode + "-" + getMachineName().substring(2) + ".ckd";
+                rename(file, renamedCkd);
+            }
 
             if (file.startsWith("M10") &&
                     !file.startsWith("M100")) {
