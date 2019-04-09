@@ -167,7 +167,7 @@ public class MainFrameController {
         copyHere.setDisable(false);
         ok.setDisable(false);
         status.setText("Copy base installation drawing for " + getMachine().getMachineType() + ". Then press ok");
-        app.tc("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + getMachine().getI_PLANS() + "\"");
+        app.tc("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + getMachine().getRemoteMachinePath() + "\"");
     }
 
     @FXML
@@ -429,7 +429,6 @@ public class MainFrameController {
                 hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + installationName);
                 remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath()));
                 status.setText(installationName + " is opened");
-                app.tc("--r=\"" + getMachine().getRemoteMachinePath() + "\"");
             }
             break;
 
