@@ -75,5 +75,6 @@ public class RootLayoutController {
 
     public void handleRenameAllCkdFiles() throws IOException {
         app.getMachine().renameAllCkd();
+        app.getGui().getController().refreshMachinePlansList();
     }
 }

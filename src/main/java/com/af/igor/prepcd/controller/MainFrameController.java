@@ -197,27 +197,7 @@ public class MainFrameController {
             remoteMachineDirFS.getFiles(Paths.get(app.PLANS));
             cdDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath()));
 
-            app.initMachineExcelParser();
-            String mPlans = machineExcelParser.getMPlans();
-            ArrayList<String> machinePlansList = new ArrayList<>();
-
-            machinePlansList.add("   I" + app.getMachineCode());
-            machinePlansList.add("   E" + app.getMachineCode());
-            machinePlansList.add("   FS" + app.getMachineCode());
-
-            for (String mPlan : mPlans.split("\\+")) {
-                machinePlansList.add("   " + mPlan.trim());
-            }
-            for (int i = 0; i < machinePlansList.size(); i++) {
-                String name = getMachine().defineFileName(Paths.get(machinePlansList.get(i)));
-                if (name != null)
-                    for (Path file : basePlanDirList) {
-                        if (file.toString().startsWith(name.substring(0, name.indexOf("."))) && file.toString().endsWith(".ckd"))
-                            machinePlansList.set(i, file.toString());
-                    }
-            }
-
-            machineDirFS.getFiles(machinePlansList);
+            refreshMachinePlansList();
 
             cdDir.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
@@ -400,6 +380,33 @@ public class MainFrameController {
             fileName = list.get(listView.getSelectionModel().getSelectedIndex());
 
         return fileName;
+    }
+
+    protected void refreshMachinePlansList(){
+        if (currenttarget!=Targets.MACHINE)
+            return;
+        
+        app.initMachineExcelParser();
+        String mPlans = machineExcelParser.getMPlans();
+        ArrayList<String> machinePlansList = new ArrayList<>();
+
+        machinePlansList.add("   I" + app.getMachineCode());
+        machinePlansList.add("   E" + app.getMachineCode());
+        machinePlansList.add("   FS" + app.getMachineCode());
+
+        for (String mPlan : mPlans.split("\\+")) {
+            machinePlansList.add("   " + mPlan.trim());
+        }
+        for (int i = 0; i < machinePlansList.size(); i++) {
+            String name = getMachine().defineFileName(Paths.get(machinePlansList.get(i)));
+            if (name != null)
+                for (String file : getMachine().getMachineDir().getCkdFiles()) {
+                    if (file.startsWith(name.substring(0, name.indexOf("."))))
+                        machinePlansList.set(i, file);
+                }
+        }
+
+        machineDirFS.getFiles(machinePlansList);
     }
 
     private void endCurrentTarget() throws IOException {
