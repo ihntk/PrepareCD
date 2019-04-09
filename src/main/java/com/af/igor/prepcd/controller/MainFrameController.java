@@ -403,7 +403,7 @@ public class MainFrameController {
         if (result.get() == ButtonType.OK) {
             index = listView.getSelectionModel().getSelectedIndex();
             if (index < 0)
-                processChooseFile(list);
+                return processChooseFile(list);
         }
 
         fileName = list.get(index);
