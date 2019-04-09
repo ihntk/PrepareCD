@@ -236,7 +236,7 @@ public class MainFrameController {
 
     @FXML
     private void handleCopyHere() throws IOException {
-        if (remoteMachineDir.getSelectionModel().getSelectedIndex() < 0){
+        if (remoteMachineDir.getSelectionModel().getSelectedIndex() < 0) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Attention");
             alert.setHeaderText("Source file isn't selected");
@@ -321,6 +321,16 @@ public class MainFrameController {
 
     public void machineInit(String machineName) throws IOException, InterruptedException {
         app.logger.log("-----\n");
+        if (!Files.exists(Paths.get(app.H_MACHINES + machineName))) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Machine does'nt exists");
+            alert.setHeaderText("Machine " + machineName + " does'nt exists");
+            alert.setContentText("There is no directory for machine " + machineName + ".\n" +
+                    "Make sure you enter correct machine name");
+            alert.showAndWait();
+            app.logger.log(machineName + " doesn't exists");
+            return;
+        }
         app.initializeMachine(machineName);
         status.setText("Copying " + getMachine().getLuxFileName());
 
@@ -377,6 +387,7 @@ public class MainFrameController {
 
     public String processChooseFile(List<String> list) throws IOException {
         String fileName = null;
+        int index = -1;
 
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Choose file");
@@ -389,16 +400,20 @@ public class MainFrameController {
 
         Optional<ButtonType> result = alert.showAndWait();
 
-        if (result.get() == ButtonType.OK)
-            fileName = list.get(listView.getSelectionModel().getSelectedIndex());
+        if (result.get() == ButtonType.OK) {
+            index = listView.getSelectionModel().getSelectedIndex();
+            if (index < 0)
+                processChooseFile(list);
+        }
 
+        fileName = list.get(index);
         return fileName;
     }
 
-    protected void refreshMachinePlansList(){
-        if (currenttarget!=Targets.MACHINE)
+    protected void refreshMachinePlansList() {
+        if (currenttarget != Targets.MACHINE)
             return;
-        
+
         app.initMachineExcelParser();
         String mPlans = machineExcelParser.getMPlans();
         ArrayList<String> machinePlansList = new ArrayList<>();

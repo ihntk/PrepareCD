@@ -31,7 +31,7 @@ public class MainApp {
     static String ETIQCLAS;
     static String XLS;
     static String MACHINES;
-    static String H_MACHINES;
+    public static String H_MACHINES;
     private static String CDS;
     public static String CDTEMPLATE;
     public static String PLANS;
