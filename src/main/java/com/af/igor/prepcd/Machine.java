@@ -69,15 +69,13 @@ public class Machine {
 
     public boolean setRemoteMachinePath(String remoteMachinePath) {
         this.remoteMachinePath = remoteMachinePath;
-        if (propertyElements.containsKey("remoteMachinePath"))
-            propertyElements.put("remoteMachinePath", this.remoteMachinePath);
+        propertyElements.put("remoteMachinePath", this.remoteMachinePath);
         return saveConfigFile();
     }
 
     public boolean setMachineCode(String machineCode) {
-        this.machineCode = machineCode.equals("")?null:machineCode;     //if null, next call app.getMachineCode() calculates right code
-        if (!propertyElements.containsKey("machineCode"))
-            propertyElements.put("machineCode", this.machineCode);
+        this.machineCode = machineCode.equals("") ? null : machineCode;     //if null, next call app.getMachineCode() calculates right code
+        propertyElements.put("machineCode", this.machineCode);
         return saveConfigFile();
     }
 
