@@ -16,7 +16,10 @@
          <children>
             <Label fx:id="machine" text="Machine" />
             <TextField fx:id="machineName" onAction="#handleSetMachine" prefWidth="85.0" text="20" />
-            <TextField fx:id="machineCode" layoutX="46.0" layoutY="10.0" onAction="#handleSetMachineCode" prefWidth="70.0" />
+            <Label fx:id="machineCode" onMouseClicked="#handleSetMachineCode" style="-fx-font-weight: bold;">
+               <HBox.margin>
+                  <Insets left="5.0" right="5.0" />
+               </HBox.margin></Label>
             <Label fx:id="machineType" layoutX="10.0" layoutY="10.0" />
             <Region HBox.hgrow="ALWAYS" />
             <Button fx:id="installButton" disable="true" mnemonicParsing="false" onAction="#handleInstall" text="Install" />

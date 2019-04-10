@@ -8,8 +8,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -45,7 +49,7 @@ public class MainFrameController {
     private TextField machineName;
 
     @FXML
-    private TextField machineCode;
+    private Label machineCode;
 
     @FXML
     private ListView<Path> machineDir;
@@ -132,7 +136,7 @@ public class MainFrameController {
     private void handleSetMachine() {
         try {
             target.setText("Processing machine");
-            status.setText("Waiting");
+            status.setText("Wait");
             machineInit(machineName.getText().toUpperCase());
             status.setText("Machine is " + getMachine().getMachineName());
             target.setText("Ready");
@@ -148,10 +152,25 @@ public class MainFrameController {
 
     @FXML
     private void handleSetMachineCode() {
-        if (getMachine().setMachineCode(machineCode.getText()))
-            status.setText("Machine code " + machineCode.getText() + " is saved");
-        else status.setText("Impossible to save machine code " + machineCode.getText());
-        machineCode.setText(app.getMachineCode());
+        Stage machineCodeStage = new Stage();
+        TextField textField = new TextField();
+        textField.setText(machineCode.getText());
+        StackPane pane = new StackPane(textField);
+
+        textField.setOnAction(event -> {
+            if (getMachine().setMachineCode(textField.getText()))
+                status.setText("Machine code " + textField.getText() + " is saved");
+            else status.setText("Impossible to save machine code " + textField.getText());
+            machineCode.setText(app.getMachineCode());
+            machineCodeStage.close();
+        });
+
+        machineCodeStage.setTitle("Edit machine code");
+        machineCodeStage.initModality(Modality.WINDOW_MODAL);
+        machineCodeStage.initOwner(application.getPrimaryStage());
+        machineCodeStage.setScene(new Scene(pane));
+        machineCodeStage.showAndWait();
+
     }
 
     @FXML

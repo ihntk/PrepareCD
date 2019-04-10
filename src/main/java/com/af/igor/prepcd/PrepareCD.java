@@ -76,6 +76,10 @@ public class PrepareCD extends Application {
         primaryStage.setTitle(APP_NAME+" - "+machineName);
     }
 
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
     public RootLayoutController getRootLayoutController() {
         return rootLayoutController;
     }
