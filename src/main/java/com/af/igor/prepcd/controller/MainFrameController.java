@@ -175,6 +175,7 @@ public class MainFrameController {
 
     @FXML
     private void handleInstall() throws IOException {
+        currenttarget = Targets.INSTALL;
         target.setText("Install");
         app.logger.log("target is: installation");
         resetControlsDefault();
@@ -182,7 +183,6 @@ public class MainFrameController {
         remoteMachineDirFS.getFiles(Paths.get(getMachine().getI_PLANS()));
 
         targetFileName = installationName;
-        currenttarget = Targets.INSTALL;
         copyHere.setDisable(false);
         ok.setDisable(false);
         status.setText("Copy base installation drawing for " + getMachine().getMachineType() + ". Then press ok");
@@ -191,6 +191,7 @@ public class MainFrameController {
 
     @FXML
     private void handleXls() throws IOException {
+        currenttarget = Targets.XLS;
         target.setText("Xls");
         app.logger.log("target is: xls");
         resetControlsDefault();
@@ -201,15 +202,16 @@ public class MainFrameController {
             hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getLuxFileName());
         }
         status.setText("You can processing xls file");
-        currenttarget = Targets.XLS;
         endCurrentTarget();
     }
 
     @FXML
     private void handleMachine() throws IOException {
+        currenttarget = Targets.MACHINE;
         target.setText("Machine");
         app.logger.log("target is: machine");
         resetControlsDefault();
+
         if (!Files.exists(Paths.get(getMachine().getMachineDir().getMachinePathString() + getMachine().getMachineDir().getMachineXls()))) {
             status.setText("You haven't xls file yet! You could correct this now");
             handleXls();
@@ -235,7 +237,6 @@ public class MainFrameController {
             });
 
             targetFileName = null;
-            currenttarget = Targets.MACHINE;
             application.getRootLayoutController().enableRenameAllCkdFiles();
             copyHere.setDisable(false);
             ok.setDisable(false);
@@ -247,10 +248,10 @@ public class MainFrameController {
 
     @FXML
     private void handleCD() throws IOException {
+        currenttarget = Targets.CD;
         target.setText("CD");
         resetControlsDefault();
         app.tc("--l=\"" + app.getCdsString() + "\" --t --r=\"" + app.getCdCommenceString() + "\"");
-        currenttarget = Targets.CD;
     }
 
     @FXML
