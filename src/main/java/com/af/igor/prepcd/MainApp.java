@@ -38,6 +38,7 @@ public class MainApp {
     static String TOTALCOMMANDER;
     private static String PRINTDIR;
     private static String CDCOMMENCE;
+    public static String DRAWINGS_DIR;
 
     private static MainApp instance;
     private static String version = "0.6.7";
@@ -72,6 +73,7 @@ public class MainApp {
         PLANS = properties.getProperty("PLANS");
         TOTALCOMMANDER = properties.getProperty("TOTALCOMMANDER");
         PRINTDIR = properties.getProperty("PRINTDIR");
+        DRAWINGS_DIR = properties.getProperty("DRAWINGS_DIR");
     }
 
     public static MainApp getInstance() {

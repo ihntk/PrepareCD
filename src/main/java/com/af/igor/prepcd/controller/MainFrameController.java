@@ -186,7 +186,7 @@ public class MainFrameController {
         copyHere.setDisable(false);
         ok.setDisable(false);
         status.setText("Copy base installation drawing for " + getMachine().getMachineType() + ". Then press ok");
-        app.tc("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + getMachine().getRemoteMachinePath() + "\"");
+        app.tc("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + getMachine().getRemoteMachinePath() + DRAWINGS_DIR + "\"");
     }
 
     @FXML
@@ -219,7 +219,7 @@ public class MainFrameController {
         } else {
             basePlanDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
             remoteMachineDirFS.getFiles(Paths.get(app.PLANS));
-            cdDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath()));
+            cdDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath(), DRAWINGS_DIR));
 
             refreshMachinePlansList();
 
@@ -361,7 +361,7 @@ public class MainFrameController {
         machineCode.setText(app.getMachineCode());
         installationName = "I" + app.getMachineCode() + "-" + getMachine().getMachineName().substring(2) + ".ckd";
 
-        machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
+        machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString(), DRAWINGS_DIR));
 //        machineDir.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 //            @Override
 //            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -462,7 +462,7 @@ public class MainFrameController {
             case INSTALL: {
                 hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getLuxFileName());
                 hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + installationName);
-                remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath()));
+                remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath(), DRAWINGS_DIR));
                 status.setText(installationName + " is opened");
             }
             break;
@@ -471,12 +471,12 @@ public class MainFrameController {
                 getMachine().copyEtiq();
                 getMachine().open4CkdFiles();
                 status.setText("Ready");
-                app.tc("--r=\"" + getMachine().getRemoteMachinePath() + "\"");
+                app.tc("--r=\"" + getMachine().getRemoteMachinePath() + DRAWINGS_DIR + "\"");
                 f1Button.setText("Open M");
                 f1Button.setDisable(false);
 
                 machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
-                remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath()));
+                remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath(), DRAWINGS_DIR));
                 basePlanDirList.clear();
                 cdDirList.clear();
 
@@ -489,7 +489,7 @@ public class MainFrameController {
                 break;
 
             case XLS: {
-                app.tc("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + getMachine().getRemoteMachinePath() + "\"");
+                app.tc("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + getMachine().getRemoteMachinePath() + DRAWINGS_DIR + "\"");
             }
             break;
         }
