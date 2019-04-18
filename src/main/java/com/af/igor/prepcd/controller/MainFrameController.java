@@ -361,7 +361,7 @@ public class MainFrameController {
         machineCode.setText(app.getMachineCode());
         installationName = "I" + app.getMachineCode() + "-" + getMachine().getMachineName().substring(2) + ".ckd";
 
-        machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString(), DRAWINGS_DIR));
+        machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
 //        machineDir.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 //            @Override
 //            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -369,7 +369,7 @@ public class MainFrameController {
 //            }
 //        });
 
-        remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath()));
+        remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath(), DRAWINGS_DIR));
 
         installButton.setDisable(false);
         xlsButton.setDisable(false);
