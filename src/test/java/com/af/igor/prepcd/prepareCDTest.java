@@ -4,7 +4,6 @@ import com.af.igor.prepcd.controller.MainFrameController;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class prepareCDTest {
@@ -21,6 +20,6 @@ public class prepareCDTest {
         list.add("file3.xlsx");
 
         Thread.sleep(3000);
-        controller.processChooseFile(list);
+        controller.processChooseLuxFile(list);
     }
 }

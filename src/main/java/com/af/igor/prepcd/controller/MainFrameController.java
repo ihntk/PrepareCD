@@ -405,9 +405,11 @@ public class MainFrameController {
 //        });
     }
 
-    public String processChooseFile(List<String> list) throws IOException {
+    public String processChooseLuxFile(List<String> list) throws IOException {
         String fileName = null;
         int index = -1;
+        int selected = 0;
+        Optional<ButtonType> result;
 
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Choose file");
@@ -416,14 +418,27 @@ public class MainFrameController {
         ListView<String> listView = new ListView<>();
         listView.setItems(FXCollections.observableArrayList(list));
         listView.setPrefHeight(120);
+
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).endsWith(".xlsx")||list.get(i).endsWith(".xltx")){
+                listView.scrollTo(i);
+                listView.getSelectionModel().select(i);
+                selected++;
+            }
+        }
+
         alert.getDialogPane().setContent(listView);
 
-        Optional<ButtonType> result = alert.showAndWait();
+        if (selected ==1)
+            result = Optional.ofNullable(ButtonType.OK);
+        else
+            result = alert.showAndWait();
+
 
         if (result.get() == ButtonType.OK) {
             index = listView.getSelectionModel().getSelectedIndex();
             if (index < 0)
-                return processChooseFile(list);
+                return processChooseLuxFile(list);
         }
 
         fileName = list.get(index);
