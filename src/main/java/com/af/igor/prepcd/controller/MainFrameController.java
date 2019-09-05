@@ -87,10 +87,6 @@ public class MainFrameController {
     @FXML
     private Button f4Button;
 
-    public void setApplication(PrepareCD application) {
-        this.application = application;
-        hostServices = application.getHostServices();
-    }
 
     private ObservableList<Path> machineDirList;
     private ObservableList<Path> remoteMachineDirList;
@@ -106,6 +102,15 @@ public class MainFrameController {
     private String installationName;
     private String targetFileName;
     private Targets currenttarget;
+
+    public void setApplication(PrepareCD application) {
+        this.application = application;
+        hostServices = application.getHostServices();
+    }
+
+    public void updateInstallationName() {
+        installationName = "I" + app.getMachineCode() + "-" + getMachine().getMachineName().substring(2) + ".ckd";
+    }
 
     public MainFrameController() {
     }
@@ -162,6 +167,7 @@ public class MainFrameController {
                 status.setText("Machine code " + textField.getText() + " is saved");
             else status.setText("Impossible to save machine code " + textField.getText());
             machineCode.setText(app.getMachineCode());
+            updateInstallationName();
             machineCodeStage.close();
         });
 
@@ -182,6 +188,7 @@ public class MainFrameController {
         machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
         remoteMachineDirFS.getFiles(Paths.get(getMachine().getI_PLANS()));
 
+        updateInstallationName();
         targetFileName = installationName;
         copyHere.setDisable(false);
         ok.setDisable(false);
@@ -359,7 +366,6 @@ public class MainFrameController {
         getMachine().setMachineType(luxParser.getMachineType());
         machineType.setText(getMachine().getMachineType());
         machineCode.setText(app.getMachineCode());
-        installationName = "I" + app.getMachineCode() + "-" + getMachine().getMachineName().substring(2) + ".ckd";
 
         machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
 //        machineDir.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
