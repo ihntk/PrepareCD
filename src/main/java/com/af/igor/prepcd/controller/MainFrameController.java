@@ -192,6 +192,7 @@ public class MainFrameController {
         targetFileName = installationName;
         copyHere.setDisable(false);
         ok.setDisable(false);
+        application.getRootLayoutController().enableRenameAllCkdFiles();
         status.setText("Copy base installation drawing for " + getMachine().getMachineType() + ". Then press ok");
         app.tc("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + getMachine().getRemoteMachinePath() + DRAWINGS_DIR + "\"");
     }
