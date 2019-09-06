@@ -455,7 +455,10 @@ public class MainFrameController {
         return fileName;
     }
 
-    protected void refreshMachinePlansList() {
+    protected void refreshMachinePlansList() throws IOException {
+        if (currentTarget == Targets.INSTALL)
+            machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
+
         if (currentTarget != Targets.MACHINE)
             return;
 
