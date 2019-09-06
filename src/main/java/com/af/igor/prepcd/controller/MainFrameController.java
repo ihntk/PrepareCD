@@ -110,6 +110,8 @@ public class MainFrameController {
 
     public void updateInstallationName() {
         installationName = "I" + app.getMachineCode() + "-" + getMachine().getMachineName().substring(2) + ".ckd";
+        if (currenttarget == Targets.INSTALL && targetFileName != null)
+            targetFileName = installationName;
     }
 
     public MainFrameController() {
