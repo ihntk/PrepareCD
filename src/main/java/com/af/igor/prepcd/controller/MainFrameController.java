@@ -101,7 +101,7 @@ public class MainFrameController {
     private HostServices hostServices;
     private String installationName;
     private String targetFileName;
-    private Targets currenttarget;
+    private Targets currentTarget;
 
     public void setApplication(PrepareCD application) {
         this.application = application;
@@ -110,7 +110,7 @@ public class MainFrameController {
 
     public void updateInstallationName() {
         installationName = "I" + app.getMachineCode() + "-" + getMachine().getMachineName().substring(2) + ".ckd";
-        if (currenttarget == Targets.INSTALL && targetFileName != null)
+        if (currentTarget == Targets.INSTALL && targetFileName != null)
             targetFileName = installationName;
     }
 
@@ -183,7 +183,7 @@ public class MainFrameController {
 
     @FXML
     private void handleInstall() throws IOException {
-        currenttarget = Targets.INSTALL;
+        currentTarget = Targets.INSTALL;
         target.setText("Install");
         app.logger.log("target is: installation");
         resetControlsDefault();
@@ -201,7 +201,7 @@ public class MainFrameController {
 
     @FXML
     private void handleXls() throws IOException {
-        currenttarget = Targets.XLS;
+        currentTarget = Targets.XLS;
         target.setText("Xls");
         app.logger.log("target is: xls");
         resetControlsDefault();
@@ -217,7 +217,7 @@ public class MainFrameController {
 
     @FXML
     private void handleMachine() throws IOException {
-        currenttarget = Targets.MACHINE;
+        currentTarget = Targets.MACHINE;
         target.setText("Machine");
         app.logger.log("target is: machine");
         resetControlsDefault();
@@ -258,7 +258,7 @@ public class MainFrameController {
 
     @FXML
     private void handleCD() throws IOException {
-        currenttarget = Targets.CD;
+        currentTarget = Targets.CD;
         target.setText("CD");
         resetControlsDefault();
         app.tc("--l=\"" + app.getCdsString() + "\" --t --r=\"" + app.getCdCommenceString() + "\"");
@@ -362,6 +362,7 @@ public class MainFrameController {
             return;
         }
         app.initializeMachine(machineName);
+        currentTarget = null;
         status.setText("Copying " + getMachine().getLuxFileName());
 
         getMachine().copyLuxFile();
@@ -455,7 +456,7 @@ public class MainFrameController {
     }
 
     protected void refreshMachinePlansList() {
-        if (currenttarget != Targets.MACHINE)
+        if (currentTarget != Targets.MACHINE)
             return;
 
         app.initMachineExcelParser();
@@ -482,7 +483,7 @@ public class MainFrameController {
     }
 
     private void endCurrentTarget() throws IOException {
-        switch (currenttarget) {
+        switch (currentTarget) {
             case INSTALL: {
                 hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getLuxFileName());
                 hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + installationName);
