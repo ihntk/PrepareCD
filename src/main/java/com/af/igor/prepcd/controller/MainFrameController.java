@@ -59,12 +59,6 @@ public class MainFrameController {
     private ListView<Path> remoteMachineDir;
 
     @FXML
-    private ListView<Path> basePlanDir;
-
-    @FXML
-    private ListView<Path> cdDir;
-
-    @FXML
     private Button installButton;
 
     @FXML
@@ -132,11 +126,9 @@ public class MainFrameController {
         remoteMachineDirFS = FSHelper.getInstance(remoteMachineDirList);
 
         basePlanDirList = FXCollections.observableArrayList();
-        basePlanDir.setItems(basePlanDirList);
         basePlanDirFS = FSHelper.getInstance(basePlanDirList);
 
         cdDirList = FXCollections.observableArrayList();
-        cdDir.setItems(cdDirList);
         cdDirFS = FSHelper.getInstance(cdDirList);
     }
 
@@ -238,19 +230,6 @@ public class MainFrameController {
             cdDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath(), DRAWINGS_DIR));
 
             refreshMachinePlansList();
-
-            cdDir.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    try {
-                        Path selectedFile = cdDir.getSelectionModel().getSelectedItem();
-                        cdDirFS.getFiles(selectedFile);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            });
 
             targetFileName = null;
             application.getRootLayoutController().enableRenameAllCkdFiles();
