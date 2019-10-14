@@ -1,15 +1,14 @@
 package com.af.igor.prepcd.util;
 
+import com.af.igor.prepcd.MainApp;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.List;
 
 public class FSHelper {
+    private MainApp app = MainApp.getInstance();
     private ObservableList<Path> list;
     private Path currentPath;
 
@@ -26,22 +25,31 @@ public class FSHelper {
     }
 
     public void getFiles(Path path) throws IOException {
-        if (path==null)
+        if (path == null)
             return;
         Path previousPath = currentPath;
-        currentPath = path.isAbsolute() ? path : currentPath.resolve(path);
+
+        if (path.toString().startsWith("..  ["))
+            path = Paths.get("..");
+
+        currentPath = path.isAbsolute() ? path : currentPath.resolve(path).normalize();
+
         if (Files.isDirectory(currentPath)) {
             list.clear();
-            list.add(currentPath.relativize(currentPath.getParent()));
+            list.add(Paths.get(currentPath.relativize(currentPath.getParent()) + "  [" + currentPath.getFileName() + "]"));
             DirectoryStream<Path> stream = Files.newDirectoryStream(currentPath);
-            for (Path pathSt : stream) {
-                if (!Files.isHidden(pathSt))
-                    list.add(pathSt.getFileName());
+            try {
+                for (Path pathSt : stream) {
+                    if (!Files.isHidden(pathSt))
+                        list.add(pathSt.getFileName());
+                }
+            } catch (AccessDeniedException e) {
+                app.logger.log("AccessDeniedException - file is hidden");
             }
         } else currentPath = previousPath;
     }
 
-    public void getFiles(List<String> stringList){
+    public void getFiles(List<String> stringList) {
         list.clear();
         for (int i = 0; i < stringList.size(); i++) {
             list.add(Paths.get(stringList.get(i)));
