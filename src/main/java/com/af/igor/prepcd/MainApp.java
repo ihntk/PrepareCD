@@ -236,8 +236,11 @@ public class MainApp {
             try {
                 machineCode = MachinesCode.valueOf(machineType).toString();
             } catch (IllegalArgumentException e) {
-                ConsoleHelper.writeMessage("Input machine's code");
-                machineCode = ConsoleHelper.readString();
+                if (gui == null) {
+                    ConsoleHelper.writeMessage("Input machine's code");
+                    machineCode = ConsoleHelper.readString();
+                } else
+                    machineCode = gui.getController().handleSetMachineCode();
             }
         } else machineCode = machine.getMachineCode();
 

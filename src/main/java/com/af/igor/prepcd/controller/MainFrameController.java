@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -158,15 +159,19 @@ public class MainFrameController {
     }
 
     @FXML
-    private void handleSetMachineCode() {
+    public String handleSetMachineCode() {
         Stage machineCodeStage = new Stage();
+        status.setText("Enter machine code!");
+        status.setTextFill(Color.RED);
         TextField textField = new TextField();
         textField.setText(machineCode.getText());
         StackPane pane = new StackPane(textField);
 
         textField.setOnAction(event -> {
-            if (getMachine().setMachineCode(textField.getText()))
+            if (getMachine().setMachineCode(textField.getText())) {
                 status.setText("Machine code " + textField.getText() + " is saved");
+                status.setTextFill(Color.BLACK);
+            }
             else status.setText("Impossible to save machine code " + textField.getText());
             machineCode.setText(app.getMachineCode());
             updateInstallationName();
@@ -179,6 +184,7 @@ public class MainFrameController {
         machineCodeStage.setScene(new Scene(pane));
         machineCodeStage.showAndWait();
 
+        return textField.getText();
     }
 
     @FXML
@@ -533,6 +539,7 @@ public class MainFrameController {
         basePlanDirList.clear();
         cdDirList.clear();
         application.getRootLayoutController().disableRenameAllCkdFiles();
+        status.setTextFill(Color.BLACK);
     }
 
     public enum Targets {
