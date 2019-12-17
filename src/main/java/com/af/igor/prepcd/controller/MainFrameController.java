@@ -355,8 +355,6 @@ public class MainFrameController {
         getMachine().setMachineType(luxParser.getMachineType());
         machineType.setText(getMachine().getMachineType());
         machineCode.setText(app.getMachineCode());
-        if (Integer.parseInt(machineCode.getText()) > 10000)
-            machineCode.setTextFill(Color.RED);
 
         machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
 //        machineDir.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
@@ -374,6 +372,8 @@ public class MainFrameController {
         cdButton.setDisable(false);
         application.getRootLayoutController().enableMenu();
         resetControlsDefault();
+        if (Integer.parseInt(machineCode.getText()) > 10000)
+            machineCode.setTextFill(Color.RED);
 
         remoteMachineDir.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
