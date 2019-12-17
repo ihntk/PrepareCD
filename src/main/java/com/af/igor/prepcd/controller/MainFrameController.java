@@ -355,6 +355,8 @@ public class MainFrameController {
         getMachine().setMachineType(luxParser.getMachineType());
         machineType.setText(getMachine().getMachineType());
         machineCode.setText(app.getMachineCode());
+        if (Integer.parseInt(machineCode.getText()) > 10000)
+            machineCode.setTextFill(Color.RED);
 
         machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
 //        machineDir.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
@@ -519,6 +521,7 @@ public class MainFrameController {
         cdDirList.clear();
         application.getRootLayoutController().disableRenameAllCkdFiles();
         status.setTextFill(Color.BLACK);
+        machineCode.setTextFill(Color.BLACK);
     }
 
     public enum Targets {
