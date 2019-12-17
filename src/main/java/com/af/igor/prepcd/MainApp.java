@@ -41,7 +41,7 @@ public class MainApp {
     public static String DRAWINGS_DIR;
 
     private static MainApp instance;
-    private static String version = "0.7.4";
+    private static String version = "0.7.5";
     private static Machine machine;         //in future this field will replace static ArrayList<Machine>
     public static LuxParser luxParser;
     public static MachineExcelParser machineExcelParser;
