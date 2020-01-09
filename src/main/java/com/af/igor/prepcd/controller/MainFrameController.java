@@ -324,8 +324,10 @@ public class MainFrameController {
 
     @FXML
     private void handleF1Button() throws IOException {
-        if (f1Button.getText().equals("Open M"))
+        if (f1Button.getText().equals("Open M")) {
             getMachine().openMCkdFiles();
+            machineDirFS.getFiles(machineDirFS.getCurrentPath());
+        }
     }
 
     @FXML
