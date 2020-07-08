@@ -268,6 +268,15 @@ public class MainApp {
         String machineName = null;
 
         /*
+        test record
+         */
+        for (int i = 0; i < args.length; i++) {
+            String flag = args[i];
+            if (flag.equals("-t"))
+                logger.log("========THIS RECORD IS FOR TEST ONLY========");
+        }
+
+        /*
         program version
          */
         for (int i = 0; i < args.length; i++) {
@@ -289,15 +298,6 @@ public class MainApp {
                 PrepareCD.main(args);
                 return;
             }
-        }
-
-        /*
-        test record
-         */
-        for (int i = 0; i < args.length; i++) {
-            String flag = args[i];
-            if (flag.equals("-t"))
-                logger.log("========THIS RECORD IS FOR TEST ONLY========");
         }
 
         /*
