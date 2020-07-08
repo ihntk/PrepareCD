@@ -86,9 +86,11 @@ public class Machine {
         sm = machineName.substring(0, 2);
         machineSeries = machineName.substring(2, 3).equals("Y") ? machineName.substring(2, 3) : machineName.substring(2, 4);
 
+        /*         //this code make 20XX subdirectory for different machine series
         Path machineSeriesPath = Paths.get(app.MACHINES + sm + machineSeries);
         if (!Files.exists(machineSeriesPath))
             Files.createDirectory(machineSeriesPath);
+        */
 
         luxPathString = remoteMachinePath + "010 Order/";
         luxFileName = app.searchFileName(luxPathString, machineName);

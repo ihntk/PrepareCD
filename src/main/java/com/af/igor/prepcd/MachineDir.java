@@ -1,10 +1,6 @@
 package com.af.igor.prepcd;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 /**
@@ -28,7 +24,9 @@ public class MachineDir {
 
     public MachineDir(Machine machine) {
         this.machine = machine;
-        machinePath = app.MACHINES + machine.getSm() + machine.getMachineSeries() + "/" + machine.getMachineName() + "/";
+        machinePath = app.MACHINES +
+//                machine.getSm() + machine.getMachineSeries() + "/" +
+                machine.getMachineName() + "/";
         machinePathDir = new File(machinePath);
         machineXls = machine.getMachineName() + ".xlsx";
         machinePathDir.mkdir();
