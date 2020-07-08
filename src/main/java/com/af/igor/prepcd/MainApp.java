@@ -115,7 +115,7 @@ public class MainApp {
          */
 
         Path path = Paths.get("").toAbsolutePath();
-        if (!path.toString().startsWith(MACHINES)) {
+        if (!path.toString().startsWith(MACHINES) && gui==null) {
             ConsoleHelper.writeMessage("\nYou are not in \"plans\" directory");
             logger.log("You are not in \"plans\" directory");
             getInstance().help();
@@ -254,7 +254,10 @@ public class MainApp {
         -n machine name
         -c cd
         -i installation
+        -m
         -v version
+        -g
+        -t
 
         parsing args
         first of all we need to find -n flag and if it exist create machine instance with machine name as machine directory
