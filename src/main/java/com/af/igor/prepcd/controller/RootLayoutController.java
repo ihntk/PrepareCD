@@ -1,7 +1,6 @@
 package com.af.igor.prepcd.controller;
 
 import com.af.igor.prepcd.MainApp;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Menu;
@@ -28,7 +27,7 @@ public class RootLayoutController {
     }
 
     @FXML
-    private void handleAbout(){
+    private void handleAbout() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("About PrepareCD");
         alert.setHeaderText("PrepareCD");
@@ -61,15 +60,15 @@ public class RootLayoutController {
         app.tc("--t --r=\"" + app.getCdCommenceString() + "\"");
     }
 
-    public void enableMenu(){
+    public void enableMenu() {
         openMenu.setDisable(false);
     }
 
-    public void enableRenameAllCkdFiles(){
+    public void enableRenameAllCkdFiles() {
         renameAllCkdFiles.setDisable(false);
     }
 
-    public void disableRenameAllCkdFiles(){
+    public void disableRenameAllCkdFiles() {
         renameAllCkdFiles.setDisable(true);
     }
 

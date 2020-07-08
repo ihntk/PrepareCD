@@ -16,7 +16,7 @@ public class PrepareCD extends Application {
     private MainApp app;
     private Stage primaryStage;
     private VBox rootLayout;
-    private static final String APP_NAME="PrepareCD";
+    private static final String APP_NAME = "PrepareCD";
     private MainFrameController controller;
     private RootLayoutController rootLayoutController;
 
@@ -33,7 +33,7 @@ public class PrepareCD extends Application {
         this.primaryStage = primaryStage;
         primaryStage.setTitle(APP_NAME);
 
-        app=MainApp.getInstance();
+        app = MainApp.getInstance();
         app.setGui(this);
 
         initRootLayout();
@@ -73,7 +73,7 @@ public class PrepareCD extends Application {
     }
 
     public void setTitle(String machineName) {
-        primaryStage.setTitle(APP_NAME+" - "+machineName);
+        primaryStage.setTitle(APP_NAME + " - " + machineName);
     }
 
     public Stage getPrimaryStage() {

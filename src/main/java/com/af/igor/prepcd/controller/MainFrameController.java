@@ -163,8 +163,7 @@ public class MainFrameController {
             if (getMachine().setMachineCode(textField.getText())) {
                 status.setText("Machine code " + textField.getText() + " is saved");
                 status.setTextFill(Color.BLACK);
-            }
-            else status.setText("Impossible to save machine code " + textField.getText());
+            } else status.setText("Impossible to save machine code " + textField.getText());
             machineCode.setText(app.getMachineCode());
             updateInstallationName();
             machineCodeStage.close();
@@ -419,7 +418,7 @@ public class MainFrameController {
         listView.setPrefHeight(120);
 
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).endsWith(".xlsx")||list.get(i).endsWith(".xltx")){
+            if (list.get(i).endsWith(".xlsx") || list.get(i).endsWith(".xltx")) {
                 listView.scrollTo(i);
                 listView.getSelectionModel().select(i);
                 selected++;
@@ -428,7 +427,7 @@ public class MainFrameController {
 
         alert.getDialogPane().setContent(listView);
 
-        if (selected ==1)
+        if (selected == 1)
             result = Optional.ofNullable(ButtonType.OK);
         else
             result = alert.showAndWait();

@@ -1,35 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.VBox?>
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.af.igor.prepcd.controller.RootLayoutController">
-   <children>
-      <MenuBar>
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem fx:id="renameAllCkdFiles" disable="true" mnemonicParsing="false" onAction="#handleRenameAllCkdFiles" text="Rename all ckd files" />
-                  <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu fx:id="openMenu" disable="true" mnemonicParsing="false" text="Open">
-            <items>
-              <MenuItem mnemonicParsing="false" onAction="#handleOpenPrint" text="Print" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleOpenRemoteMachineDir" text="Remote machine directory" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleOpenBaseDrawings" text="Base drawings" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleOpenBaseCD" text="Base CD" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleOpenRemoteCD" text="Remote CD" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" onAction="#handleAbout" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-   </children>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0"
+      prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.af.igor.prepcd.controller.RootLayoutController">
+    <children>
+        <MenuBar>
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem fx:id="renameAllCkdFiles" disable="true" mnemonicParsing="false"
+                                  onAction="#handleRenameAllCkdFiles" text="Rename all ckd files"/>
+                        <MenuItem mnemonicParsing="false" text="Close"/>
+                    </items>
+                </Menu>
+                <Menu fx:id="openMenu" disable="true" mnemonicParsing="false" text="Open">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#handleOpenPrint" text="Print"/>
+                        <MenuItem mnemonicParsing="false" onAction="#handleOpenRemoteMachineDir"
+                                  text="Remote machine directory"/>
+                        <MenuItem mnemonicParsing="false" onAction="#handleOpenBaseDrawings" text="Base drawings"/>
+                        <MenuItem mnemonicParsing="false" onAction="#handleOpenBaseCD" text="Base CD"/>
+                        <MenuItem mnemonicParsing="false" onAction="#handleOpenRemoteCD" text="Remote CD"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#handleAbout" text="About"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </children>
 </VBox>
