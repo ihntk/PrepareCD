@@ -115,7 +115,7 @@ public class MainApp {
          */
 
         Path path = Paths.get("").toAbsolutePath();
-        if (!path.toString().startsWith(MACHINES) && gui==null) {
+        if (!path.toString().startsWith(MACHINES) && gui == null) {
             ConsoleHelper.writeMessage("\nYou are not in \"plans\" directory");
             logger.log("You are not in \"plans\" directory");
             getInstance().help();
@@ -287,6 +287,7 @@ public class MainApp {
             if (flag.equals("-g")) {
                 logger.log("GUI started");
                 PrepareCD.main(args);
+                return;
             }
         }
 
