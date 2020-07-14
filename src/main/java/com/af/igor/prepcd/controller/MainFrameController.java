@@ -403,7 +403,7 @@ public class MainFrameController {
 //        });
     }
 
-    public String processChooseLuxFile(List<String> list) throws IOException {
+    public String processChooseLuxFile(String path, List<String> list) throws IOException {
         String fileName = null;
         int index = -1;
         int selected = 0;
@@ -429,14 +429,16 @@ public class MainFrameController {
 
         if (selected == 1)
             result = Optional.ofNullable(ButtonType.OK);
-        else
+        else{
+            app.tc("--t --l=\"" + path + "\"");
             result = alert.showAndWait();
+        }
 
 
         if (result.get() == ButtonType.OK) {
             index = listView.getSelectionModel().getSelectedIndex();
             if (index < 0)
-                return processChooseLuxFile(list);
+                return processChooseLuxFile(path, list);
         }
 
         fileName = list.get(index);

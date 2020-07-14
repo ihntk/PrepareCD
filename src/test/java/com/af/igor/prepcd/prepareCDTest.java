@@ -20,6 +20,6 @@ public class prepareCDTest {
         list.add("file3.xlsx");
 
         Thread.sleep(3000);
-        controller.processChooseLuxFile(list);
+        controller.processChooseLuxFile(null, list);
     }
 }

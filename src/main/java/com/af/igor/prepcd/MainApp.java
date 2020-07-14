@@ -176,7 +176,7 @@ public class MainApp {
                         }
                     }
                 } else {
-                    fileName = gui.getController().processChooseLuxFile(fileNames);
+                    fileName = gui.getController().processChooseLuxFile(path,fileNames);
                 }
             } else fileName = fileNames.get(0);
         } catch (Exception e) {
