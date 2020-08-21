@@ -203,7 +203,7 @@ public class MainApp {
     }
 
     private void openWithDoubleCmd(String pathParameters) throws IOException {
-        pathParameters = pathParameters.replaceAll("/", "\\\\").replaceAll("--", "-");
+        pathParameters = pathParameters.replaceAll("/", "\\\\").replaceAll("--", "-").replaceAll("="," ");
         Runtime runtime = Runtime.getRuntime();
         String command = DOUBLECOMMANDER + " -C " + pathParameters;
         Process process = runtime.exec(command);
