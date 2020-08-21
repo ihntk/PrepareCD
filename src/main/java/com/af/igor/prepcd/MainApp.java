@@ -12,10 +12,7 @@ else it can rename base .ckd to machine files, alike I...ckd -> I5500-GA1881.ckd
  */
 
 import com.af.igor.prepcd.log.SimpleLogger;
-import com.af.igor.prepcd.util.ConsoleHelper;
-import com.af.igor.prepcd.util.LuxParser;
-import com.af.igor.prepcd.util.MachineExcelParser;
-import com.af.igor.prepcd.util.MachinesCode;
+import com.af.igor.prepcd.util.*;
 
 import java.awt.*;
 import java.io.*;
@@ -51,6 +48,7 @@ public class MainApp {
     private Properties properties = new Properties();
     private static final String PROP_FILE = System.getProperty("user.home") + "/.PrepareCD/PrepareCD.conf";
     private static PrepareCD gui = null;
+    private static FileManagers fileManager;
 
     private MainApp() {
         try {
@@ -76,6 +74,8 @@ public class MainApp {
         DOUBLECOMMANDER = properties.getProperty("DOUBLECOMMANDER");
         PRINTDIR = properties.getProperty("PRINTDIR");
         DRAWINGS_DIR = properties.getProperty("DRAWINGS_DIR");
+
+        fileManager = FileManagers.DOUBLECMD;
     }
 
     public static MainApp getInstance() {
@@ -190,11 +190,28 @@ public class MainApp {
     }
 
     public void openWithFileMan(String pathParameters) throws IOException {
-        openWithTotalCmd(pathParameters);
+        switch (fileManager){
+            case EXPLORER:
+                return;
+            case TOTALCMD:
+                openWithTotalCmd(pathParameters);
+                return;
+            case DOUBLECMD:
+                openWithDoubleCmd(pathParameters);
+                return;
+        }
+    }
+
+    private void openWithDoubleCmd(String pathParameters) throws IOException {
+        pathParameters = pathParameters.replaceAll("/", "\\\\").replaceAll("--", "-");
+        Runtime runtime = Runtime.getRuntime();
+        String command = DOUBLECOMMANDER + " -C " + pathParameters;
+        Process process = runtime.exec(command);
+        logger.log("double commander got parameters:\n   " + command);
     }
 
     /**
-     * tc("--l=path/to/dir/")
+     * openWithTotalCmd("--l=path/to/dir/")
      * parameter change /l=path\to\dir\
      *
      * @param pathParameters
