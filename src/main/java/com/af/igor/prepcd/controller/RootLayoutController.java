@@ -42,22 +42,22 @@ public class RootLayoutController {
 
     @FXML
     private void handleOpenRemoteMachineDir() throws IOException {
-        app.tc("--t --r=\"" + getMachine().getRemoteMachinePath() + "\"");
+        app.openWithFileMan("--t --r=\"" + getMachine().getRemoteMachinePath() + "\"");
     }
 
     @FXML
     private void handleOpenBaseDrawings() throws IOException {
-        app.tc("--t --r=\"" + PLANS + "\"");
+        app.openWithFileMan("--t --r=\"" + PLANS + "\"");
     }
 
     @FXML
     private void handleOpenBaseCD() throws IOException {
-        app.tc("--t --r=\"" + CDTEMPLATE + "\"");
+        app.openWithFileMan("--t --r=\"" + CDTEMPLATE + "\"");
     }
 
     @FXML
     private void handleOpenRemoteCD() throws IOException {
-        app.tc("--t --r=\"" + app.getCdCommenceString() + "\"");
+        app.openWithFileMan("--t --r=\"" + app.getCdCommenceString() + "\"");
     }
 
     public void enableMenu() {

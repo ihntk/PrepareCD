@@ -22,7 +22,7 @@ public class MainAppTest {
     }
 
     private static void testPath() throws IOException {
-        mainApp.tc(mainApp.MACHINES);
+        mainApp.openWithFileMan(mainApp.MACHINES);
         desktop.open(new File(mainApp.XLS));
     }
 }

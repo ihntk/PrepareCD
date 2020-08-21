@@ -35,7 +35,8 @@ public class MainApp {
     private static String CDS;
     public static String CDTEMPLATE;
     public static String PLANS;
-    static String TOTALCOMMANDER;
+    private static String TOTALCOMMANDER;
+    private static String DOUBLECOMMANDER;
     private static String PRINTDIR;
     private static String CDCOMMENCE;
     public static String DRAWINGS_DIR;
@@ -72,6 +73,7 @@ public class MainApp {
         CDCOMMENCE = properties.getProperty("CDCOMMENCE");
         PLANS = properties.getProperty("PLANS");
         TOTALCOMMANDER = properties.getProperty("TOTALCOMMANDER");
+        DOUBLECOMMANDER = properties.getProperty("DOUBLECOMMANDER");
         PRINTDIR = properties.getProperty("PRINTDIR");
         DRAWINGS_DIR = properties.getProperty("DRAWINGS_DIR");
     }
@@ -187,6 +189,10 @@ public class MainApp {
         return fileName;
     }
 
+    public void openWithFileMan(String pathParameters) throws IOException {
+        openWithTotalCmd(pathParameters);
+    }
+
     /**
      * tc("--l=path/to/dir/")
      * parameter change /l=path\to\dir\
@@ -194,7 +200,7 @@ public class MainApp {
      * @param pathParameters
      * @throws IOException
      */
-    public void tc(String pathParameters) throws IOException {
+    private void openWithTotalCmd(String pathParameters) throws IOException {
         pathParameters = pathParameters.replaceAll("/", "\\\\").replaceAll("--", "/");
         Runtime runtime = Runtime.getRuntime();
         String command = TOTALCOMMANDER + " /O " + pathParameters;
@@ -207,7 +213,7 @@ public class MainApp {
         if (!Files.exists(printDir))
             Files.createDirectory(printDir);
 
-        tc("--t --r=\"" + printDir + "\"");
+        openWithFileMan("--t --r=\"" + printDir + "\"");
     }
 
 
@@ -350,7 +356,7 @@ public class MainApp {
         if (use == 0) {
             logger.log("target isn't specified");
             ConsoleHelper.writeMessage("\nYou must specify target. Application wont to know what to do");
-            tc("--l=\"" + machine.machineDir.machinePath + "\"");
+            openWithFileMan("--l=\"" + machine.machineDir.machinePath + "\"");
             help();
         }
         if (use == 1)
@@ -360,7 +366,7 @@ public class MainApp {
             logger.log("target is: installation");
             machine.openLuxFile();
             initLuxParser();
-            tc("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + machine.I_PLANS + "\"");
+            openWithFileMan("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + machine.I_PLANS + "\"");
             logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + machine.I_PLANS);
             machine.setMachineType(luxParser.getMachineType());
             ConsoleHelper.writeMessage("Copy base installation drawing for " + machine.getMachineType() + "\nand then press enter");
@@ -369,7 +375,7 @@ public class MainApp {
             Files.move(Paths.get(machine.machineDir.machinePath + machine.machineDir.getCkdFiles().get(0)), Paths.get(machine.machineDir.machinePath + installationName));  //rename installation
             desktop.open(new File(machine.machineDir.machinePath + installationName));
             logger.log("Installation " + installationName + " opened");
-            tc("--r=\"" + machine.getRemoteMachinePath() + "\"");
+            openWithFileMan("--r=\"" + machine.getRemoteMachinePath() + "\"");
             logger.log("Opened in tc :\n   " + machine.getRemoteMachinePath());
         }
 
@@ -377,7 +383,7 @@ public class MainApp {
             logger.log("target is: machine");
             if (!Files.exists(Paths.get(machine.machineDir.machinePath + machine.machineDir.machineXls)))
                 xlsTarget();
-            tc("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + PLANS + "\"");
+            openWithFileMan("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + PLANS + "\"");
             logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + PLANS);
             initMachineExcelParser();
             initLuxParser();
@@ -392,7 +398,7 @@ public class MainApp {
             machine.copyEtiq();
             machine.open4CkdFiles();
             logger.log("ckd files opened");
-            tc("--r=\"" + machine.getRemoteMachinePath() + "\"");
+            openWithFileMan("--r=\"" + machine.getRemoteMachinePath() + "\"");
             logger.log("Opened in tc :\n   " + machine.getRemoteMachinePath());
         }
 
@@ -400,7 +406,7 @@ public class MainApp {
 
     private void xlsTarget() throws IOException {
         logger.log("target is: xls");
-        tc("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + machine.getRemoteMachinePath() + "\"");
+        openWithFileMan("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + machine.getRemoteMachinePath() + "\"");
         if (!machine.getMachineXls()) {
             desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
             logger.log("xls is opened");

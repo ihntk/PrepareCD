@@ -193,7 +193,7 @@ public class MainFrameController {
         ok.setDisable(false);
         application.getRootLayoutController().enableRenameAllCkdFiles();
         status.setText("Copy base installation drawing for " + getMachine().getMachineType() + ". Then press ok");
-        app.tc("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + getMachine().getRemoteMachinePath() + DRAWINGS_DIR + "\"");
+        app.openWithFileMan("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + getMachine().getRemoteMachinePath() + DRAWINGS_DIR + "\"");
     }
 
     @FXML
@@ -235,7 +235,7 @@ public class MainFrameController {
             copyHere.setDisable(false);
             ok.setDisable(false);
             status.setText("Copy base drawings for " + getMachine().getMachineType() + ". Then press ok");
-            app.tc("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + PLANS + "\"");
+            app.openWithFileMan("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + PLANS + "\"");
         }
 
     }
@@ -245,7 +245,7 @@ public class MainFrameController {
         currentTarget = Targets.CD;
         target.setText("CD");
         resetControlsDefault();
-        app.tc("--l=\"" + app.getCdsString() + "\" --t --r=\"" + app.getCdCommenceString() + "\"");
+        app.openWithFileMan("--l=\"" + app.getCdsString() + "\" --t --r=\"" + app.getCdCommenceString() + "\"");
     }
 
     @FXML
@@ -430,7 +430,7 @@ public class MainFrameController {
         if (selected == 1)
             result = Optional.ofNullable(ButtonType.OK);
         else{
-            app.tc("--t --l=\"" + path + "\"");
+            app.openWithFileMan("--t --l=\"" + path + "\"");
             result = alert.showAndWait();
         }
 
@@ -489,7 +489,7 @@ public class MainFrameController {
                 getMachine().copyEtiq();
                 getMachine().open4CkdFiles();
                 status.setText("Ready");
-                app.tc("--r=\"" + getMachine().getRemoteMachinePath() + DRAWINGS_DIR + "\"");
+                app.openWithFileMan("--r=\"" + getMachine().getRemoteMachinePath() + DRAWINGS_DIR + "\"");
                 f1Button.setText("Open M");
                 f1Button.setDisable(false);
 
@@ -507,7 +507,7 @@ public class MainFrameController {
                 break;
 
             case XLS: {
-                app.tc("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + getMachine().getRemoteMachinePath() + DRAWINGS_DIR + "\"");
+                app.openWithFileMan("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + getMachine().getRemoteMachinePath() + DRAWINGS_DIR + "\"");
             }
             break;
         }
