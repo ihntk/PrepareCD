@@ -62,7 +62,7 @@ public class MachineDir {
     public ArrayList<String> getCkdFiles() {
         ArrayList<String> ckd = new ArrayList<>();
         for (String file : getFiles()) {
-            if (file.endsWith(".ckd"))
+            if (file.toLowerCase().endsWith(".ckd"))
                 ckd.add(file);
         }
         return ckd;

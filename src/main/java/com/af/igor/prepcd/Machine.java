@@ -217,8 +217,13 @@ public class Machine {
         ArrayList<String> ckdFiles = machineDir.getCkdFiles();
         for (String file : ckdFiles) {
             if ((file.startsWith("E")) && (!file.startsWith("Etiqclas"))) {
-                String renamedCkd = "E" + machineCode + "-" + getMachineName().substring(2) + ".ckd";
-                rename(file, renamedCkd);
+                try {
+                    if(Integer.parseInt(file.substring(1,file.indexOf("-")))>=700){
+                        String renamedCkd = "E" + machineCode + "-" + getMachineName().substring(2) + ".ckd";
+                        rename(file, renamedCkd);
+                    }
+                }catch (Exception e){}
+
             }
             if (file.startsWith("FS")) {
                 String renamedCkd = "FS" + machineCode + "-" + getMachineName().substring(2) + ".ckd";
