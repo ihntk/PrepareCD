@@ -25,7 +25,7 @@ public class Machine {
     protected final String I_PLANS = app.PLANS + "002 - Plan d'installation/";
     private Path confFile;
     private Properties confFileProperty = new Properties();
-    private String machineCode;     //is used for save to parameter only!!!
+    private String machineCode;
     private HashMap<String, String> propertyElements = new HashMap<>();
     private String luxPathString;
 
@@ -44,7 +44,7 @@ public class Machine {
         return machineCode;
     }
 
-    public boolean getSurbaise(){
+    public boolean getSurbaise() {
         return surbaise;
     }
 
@@ -84,7 +84,7 @@ public class Machine {
         return saveConfigFile();
     }
 
-    public boolean setSurbaise(boolean isActive){
+    public boolean setSurbaise(boolean isActive) {
         propertyElements.put("surbaise", String.valueOf(isActive));
         return saveConfigFile();
     }
@@ -121,6 +121,8 @@ public class Machine {
             loadFromConfigFile();
         }
 
+        if (machineCode == null)
+            machineCode = app.getMachineCode();
     }
 
     private void loadFromConfigFile() {
@@ -133,17 +135,17 @@ public class Machine {
             confFileProperty.load(stream);
             if (confFileProperty.containsKey("remoteMachinePath")) {
                 remoteMachinePath = confFileProperty.getProperty("remoteMachinePath");
-                confFileProperty.setProperty("remoteMachinePath", remoteMachinePath);
+                confFileProperty.setProperty("remoteMachinePath", remoteMachinePath);   // ???????!!!
                 propertyElements.put("remoteMachinePath", remoteMachinePath);
             }
             if (confFileProperty.containsKey("machineCode")) {
                 machineCode = confFileProperty.getProperty("machineCode");
-                confFileProperty.setProperty("machineCode", machineCode);
+                confFileProperty.setProperty("machineCode", machineCode);   // ???????!!!
                 propertyElements.put("machineCode", machineCode);
             }
             if (confFileProperty.containsKey("surbaise")) {
                 surbaise = Boolean.parseBoolean(confFileProperty.getProperty("surbaise"));
-                confFileProperty.setProperty("surbaise", String.valueOf(surbaise));
+                confFileProperty.setProperty("surbaise", String.valueOf(surbaise));   // ???????!!!
                 propertyElements.put("surbaise", String.valueOf(surbaise));
             }
 
@@ -233,11 +235,12 @@ public class Machine {
         for (String file : ckdFiles) {
             if ((file.startsWith("E")) && (!file.startsWith("Etiqclas"))) {
                 try {
-                    if(Integer.parseInt(file.substring(1,file.indexOf("-")))>=700){
+                    if (Integer.parseInt(file.substring(1, file.indexOf("-"))) >= 700) {
                         String renamedCkd = "E" + machineCode + "-" + getMachineName().substring(2) + ".ckd";
                         rename(file, renamedCkd);
                     }
-                }catch (Exception e){}
+                } catch (Exception e) {
+                }
 
             }
             if (file.startsWith("FS")) {
