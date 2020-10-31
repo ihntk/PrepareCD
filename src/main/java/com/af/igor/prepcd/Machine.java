@@ -25,6 +25,7 @@ public class Machine {
     protected final String I_PLANS = app.PLANS + "002 - Plan d'installation/";
     private Path confFile;
     private Properties confFileProperty = new Properties();
+    private String machineCodePure;
     private String machineCode;
     private HashMap<String, String> propertyElements = new HashMap<>();
     private String luxPathString;
@@ -78,14 +79,22 @@ public class Machine {
         return saveConfigFile();
     }
 
-    public boolean setMachineCode(String machineCode) {
-        this.machineCode = machineCode.equals("") ? null : machineCode;     //if null, next call app.getMachineCode() calculates right code
-        propertyElements.put("machineCode", this.machineCode);
+    public boolean setMachineCode(String machineCodePure) {
+        if (machineCodePure.equals("")) {
+            machineCode = null;
+            this.machineCodePure = app.getMachineCode();
+        } else
+            this.machineCodePure = machineCodePure;                            // if null, app.getMachineCode() calculates right code
+
+        propertyElements.put("machineCodePure", machineCodePure);               // and save null config file
+        calculateMachineCode();
         return saveConfigFile();
     }
 
-    public boolean setSurbaise(boolean isActive) {
-        propertyElements.put("surbaise", String.valueOf(isActive));
+    public boolean setSurbaise(boolean activate) {
+        this.surbaise = activate;
+        propertyElements.put("surbaise", String.valueOf(activate));
+        calculateMachineCode();
         return saveConfigFile();
     }
 
@@ -121,8 +130,20 @@ public class Machine {
             loadFromConfigFile();
         }
 
-        if (machineCode == null)
-            machineCode = app.getMachineCode();
+    }
+
+    public void initMachineCode(){
+        if (machineCodePure == null)
+            machineCodePure = app.getMachineCode();
+
+        calculateMachineCode();
+    }
+
+    private void calculateMachineCode() {
+        if (surbaise)
+            machineCode = String.valueOf(Integer.parseInt(machineCodePure) + 1);
+        else
+            machineCode = machineCodePure;
     }
 
     private void loadFromConfigFile() {
@@ -138,10 +159,10 @@ public class Machine {
                 confFileProperty.setProperty("remoteMachinePath", remoteMachinePath);   // ???????!!!
                 propertyElements.put("remoteMachinePath", remoteMachinePath);
             }
-            if (confFileProperty.containsKey("machineCode")) {
-                machineCode = confFileProperty.getProperty("machineCode");
-                confFileProperty.setProperty("machineCode", machineCode);   // ???????!!!
-                propertyElements.put("machineCode", machineCode);
+            if (confFileProperty.containsKey("machineCodePure")) {
+                machineCode = confFileProperty.getProperty("machineCodePure");
+                confFileProperty.setProperty("machineCodePure", machineCodePure);   // ???????!!!
+                propertyElements.put("machineCodePure", machineCodePure);
             }
             if (confFileProperty.containsKey("surbaise")) {
                 surbaise = Boolean.parseBoolean(confFileProperty.getProperty("surbaise"));

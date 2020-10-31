@@ -185,8 +185,7 @@ public class MainFrameController {
     private void handleSetSurbaise(){
         boolean isSelected=surbaiseRadioButton.isSelected();
         getMachine().setSurbaise(isSelected);
-//        status.setText(status.getText() + " Surbaise");
-        System.out.println("surbaise is " + (isSelected ? "selected": "unselected"));
+        machineCode.setText(app.getMachineCode());
     }
 
     @FXML
@@ -367,6 +366,7 @@ public class MainFrameController {
         getMachine().setMachineType(luxParser.getMachineType());
         machineType.setText(getMachine().getMachineType());
         surbaiseRadioButton.setSelected(getMachine().getSurbaise());
+        getMachine().initMachineCode();
         machineCode.setText(app.getMachineCode());
 
         machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
