@@ -140,7 +140,8 @@ public class MainApp {
     }
 
     public static String getVersion() {
-        return "\nPrepareCD version " + version;
+        return "\nPrepareCD version " + version +
+                "\njava version " + System.getProperty("java.version");
     }
 
     /*
