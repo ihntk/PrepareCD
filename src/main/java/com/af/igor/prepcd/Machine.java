@@ -30,6 +30,7 @@ public class Machine {
     private String luxPathString;
 
     MachineDir machineDir;
+    private boolean surbaise;
 
     public MachineDir getMachineDir() {
         return machineDir;
@@ -41,6 +42,10 @@ public class Machine {
 
     public String getMachineCode() {
         return machineCode;
+    }
+
+    public boolean getSurbaise(){
+        return surbaise;
     }
 
     public String getLuxFileName() {
@@ -76,6 +81,11 @@ public class Machine {
     public boolean setMachineCode(String machineCode) {
         this.machineCode = machineCode.equals("") ? null : machineCode;     //if null, next call app.getMachineCode() calculates right code
         propertyElements.put("machineCode", this.machineCode);
+        return saveConfigFile();
+    }
+
+    public boolean setSurbaise(boolean isActive){
+        propertyElements.put("surbaise", String.valueOf(isActive));
         return saveConfigFile();
     }
 
@@ -130,6 +140,11 @@ public class Machine {
                 machineCode = confFileProperty.getProperty("machineCode");
                 confFileProperty.setProperty("machineCode", machineCode);
                 propertyElements.put("machineCode", machineCode);
+            }
+            if (confFileProperty.containsKey("surbaise")) {
+                surbaise = Boolean.parseBoolean(confFileProperty.getProperty("surbaise"));
+                confFileProperty.setProperty("surbaise", String.valueOf(surbaise));
+                propertyElements.put("surbaise", String.valueOf(surbaise));
             }
 
         } catch (FileNotFoundException e) {
