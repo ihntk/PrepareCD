@@ -8,6 +8,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -155,35 +157,52 @@ public class MainFrameController {
 
     @FXML
     public String handleSetMachineCode() {
+        String machineCodeString = machineCode.getText();
         Stage machineCodeStage = new Stage();
         status.setText("Enter machine code!");
         status.setTextFill(Color.RED);
+
+        Label label = new Label();
+        label.setText("Enter the code \n" +
+                "without surbaise");
+        StackPane.setAlignment(label, Pos.TOP_CENTER);
+        StackPane.setMargin(label, new Insets(5, 0, 0, 0));
+
         TextField textField = new TextField();
         textField.setText(machineCode.getText());
-        StackPane pane = new StackPane(textField);
+        StackPane.setAlignment(textField, Pos.BOTTOM_CENTER);
+
+        StackPane pane = new StackPane(label, textField);
 
         textField.setOnAction(event -> {
-            if (getMachine().setMachineCode(textField.getText())) {
-                status.setText("Machine code " + textField.getText() + " is saved");
+            String code = textField.getText();
+            if (!code.equals(machineCodeString)) {
+                if (getMachine().setMachineCode(code)) {
+                    status.setText("Machine code " + textField.getText() + " is saved");
+                    status.setTextFill(Color.BLACK);
+                } else status.setText("Impossible to save machine code " + textField.getText());
+
+                machineCode.setText(app.getMachineCode());
+                updateInstallationName();
+            } else {
+                status.setText("Machine code is remained the same");
                 status.setTextFill(Color.BLACK);
-            } else status.setText("Impossible to save machine code " + textField.getText());
-            machineCode.setText(app.getMachineCode());
-            updateInstallationName();
+            }
             machineCodeStage.close();
         });
 
         machineCodeStage.setTitle("Edit machine code");
         machineCodeStage.initModality(Modality.WINDOW_MODAL);
         machineCodeStage.initOwner(application.getPrimaryStage());
-        machineCodeStage.setScene(new Scene(pane));
+        machineCodeStage.setScene(new Scene(pane, 160, 70));
         machineCodeStage.showAndWait();
 
         return textField.getText();
     }
 
     @FXML
-    private void handleSetSurbaise(){
-        boolean isSelected=surbaiseRadioButton.isSelected();
+    private void handleSetSurbaise() {
+        boolean isSelected = surbaiseRadioButton.isSelected();
         getMachine().setSurbaise(isSelected);
         machineCode.setText(app.getMachineCode());
     }
@@ -317,7 +336,7 @@ public class MainFrameController {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Attention");
                 alert.setHeaderText("There is uncopied files");
-                alert.setContentText("You didn't copy " + getMachine().defineFileName(item) + " file\n"
+                alert.setContentText("You haven't copied " + getMachine().defineFileName(item) + " file\n"
                         + "Are you sure you want to continue ");
                 Optional<ButtonType> result = alert.showAndWait();
 
@@ -350,7 +369,7 @@ public class MainFrameController {
         if (!Files.exists(Paths.get(app.H_MACHINES + machineName))) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Machine does'nt exists");
-            alert.setHeaderText("Machine " + machineName + " does'nt exists");
+            alert.setHeaderText("Machine " + machineName + " doesn't exists");
             alert.setContentText("There is no directory for machine " + machineName + ".\n" +
                     "Make sure you enter correct machine name");
             alert.showAndWait();
@@ -441,7 +460,7 @@ public class MainFrameController {
 
         if (selected == 1)
             result = Optional.ofNullable(ButtonType.OK);
-        else{
+        else {
             app.openWithFileMan("--t --l=\"" + path + "\"");
             result = alert.showAndWait();
         }
