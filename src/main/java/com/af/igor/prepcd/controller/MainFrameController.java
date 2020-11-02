@@ -205,6 +205,7 @@ public class MainFrameController {
         boolean isSelected = surbaiseRadioButton.isSelected();
         getMachine().setSurbaise(isSelected);
         machineCode.setText(app.getMachineCode());
+        updateInstallationName();
     }
 
     @FXML

@@ -156,17 +156,17 @@ public class Machine {
             confFileProperty.load(stream);
             if (confFileProperty.containsKey("remoteMachinePath")) {
                 remoteMachinePath = confFileProperty.getProperty("remoteMachinePath");
-                confFileProperty.setProperty("remoteMachinePath", remoteMachinePath);   // ???????!!!
+//                confFileProperty.setProperty("remoteMachinePath", remoteMachinePath);   // ???????!!!
                 propertyElements.put("remoteMachinePath", remoteMachinePath);
             }
             if (confFileProperty.containsKey("machineCodePure")) {
                 machineCode = confFileProperty.getProperty("machineCodePure");
-                confFileProperty.setProperty("machineCodePure", machineCodePure);   // ???????!!!
+//                confFileProperty.setProperty("machineCodePure", machineCodePure);   // ???????!!!
                 propertyElements.put("machineCodePure", machineCodePure);
             }
             if (confFileProperty.containsKey("surbaise")) {
                 surbaise = Boolean.parseBoolean(confFileProperty.getProperty("surbaise"));
-                confFileProperty.setProperty("surbaise", String.valueOf(surbaise));   // ???????!!!
+//                confFileProperty.setProperty("surbaise", String.valueOf(surbaise));   // ???????!!!
                 propertyElements.put("surbaise", String.valueOf(surbaise));
             }
 
