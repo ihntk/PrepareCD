@@ -21,6 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.prefs.Preferences;
 
 public class MainApp {
     public static String LOGFILE;
@@ -49,6 +50,7 @@ public class MainApp {
     private static final String PROP_FILE = System.getProperty("user.home") + "/.PrepareCD/PrepareCD.conf";
     private static PrepareCD gui = null;
     private static FileManagers fileManager;
+    private static Preferences preferences;
 
     private MainApp() {
         try {
@@ -59,6 +61,9 @@ public class MainApp {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        preferences = Preferences.userNodeForPackage(MainApp.class);
+        fileManager = FileManagers.valueOf(preferences.get("fileManager", FileManagers.TOTALCMD.name()));
 
         LOGFILE = properties.getProperty("LOGFILE");
         LOGERROR = properties.getProperty("LOGERROR");
@@ -74,8 +79,6 @@ public class MainApp {
         DOUBLECOMMANDER = properties.getProperty("DOUBLECOMMANDER");
         PRINTDIR = properties.getProperty("PRINTDIR");
         DRAWINGS_DIR = properties.getProperty("DRAWINGS_DIR");
-
-        fileManager = FileManagers.DOUBLECMD;
     }
 
     public static MainApp getInstance() {
@@ -179,7 +182,7 @@ public class MainApp {
                         }
                     }
                 } else {
-                    fileName = gui.getController().processChooseLuxFile(path,fileNames);
+                    fileName = gui.getController().processChooseLuxFile(path, fileNames);
                 }
             } else fileName = fileNames.get(0);
         } catch (Exception e) {
@@ -191,7 +194,7 @@ public class MainApp {
     }
 
     public void openWithFileMan(String pathParameters) throws IOException {
-        switch (fileManager){
+        switch (fileManager) {
             case EXPLORER:
                 return;
             case TOTALCMD:
@@ -204,7 +207,7 @@ public class MainApp {
     }
 
     private void openWithDoubleCmd(String pathParameters) throws IOException {
-        pathParameters = pathParameters.replaceAll("/", "\\\\").replaceAll("--", "-").replaceAll("="," ");
+        pathParameters = pathParameters.replaceAll("/", "\\\\").replaceAll("--", "-").replaceAll("=", " ");
         Runtime runtime = Runtime.getRuntime();
         String command = DOUBLECOMMANDER + " -C " + pathParameters;
         Process process = runtime.exec(command);
