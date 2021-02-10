@@ -22,7 +22,6 @@ public class Machine {
     private final String sm;        //first two symbols in machine name (usually 20)
     private final String machineSeries;
     private String remoteMachinePath;
-    protected final String I_PLANS = app.PLANS + "002 - Plan d'installation/";
     private Path confFile;
     private Properties confFileProperty = new Properties();
     private String machineCodePure;
@@ -67,10 +66,6 @@ public class Machine {
 
     public String getSm() {
         return sm;
-    }
-
-    public String getI_PLANS() {
-        return I_PLANS;
     }
 
     public boolean setRemoteMachinePath(String remoteMachinePath) {

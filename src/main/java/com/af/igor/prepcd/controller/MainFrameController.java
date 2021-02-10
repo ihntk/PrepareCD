@@ -2,6 +2,7 @@ package com.af.igor.prepcd.controller;
 
 import com.af.igor.prepcd.MainApp;
 import com.af.igor.prepcd.PrepareCD;
+import com.af.igor.prepcd.util.BaseDrawingPaths;
 import com.af.igor.prepcd.util.FSHelper;
 import javafx.application.HostServices;
 import javafx.collections.FXCollections;
@@ -215,7 +216,7 @@ public class MainFrameController {
         app.logger.log("target is: installation");
         resetControlsDefault();
         machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
-        remoteMachineDirFS.getFiles(Paths.get(getMachine().getI_PLANS()));
+        remoteMachineDirFS.getFiles(Paths.get(app.PLANS, BaseDrawingPaths.I.toString()));
 
         updateInstallationName();
         targetFileName = installationName;
@@ -259,6 +260,15 @@ public class MainFrameController {
             cdDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath(), DRAWINGS_DIR));
 
             refreshMachinePlansList();
+
+            machineDir.setOnMouseClicked(mouseEvent -> {
+                try {
+                    String planName = machineDir.getSelectionModel().getSelectedItem().toString().trim();
+                    remoteMachineDirFS.getFiles(Paths.get(app.PLANS, BaseDrawingPaths.valueOf(planName).toString()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
 
             targetFileName = null;
             application.getRootLayoutController().enableRenameAllCkdFiles();
@@ -488,9 +498,9 @@ public class MainFrameController {
         String mPlans = machineExcelParser.getMPlans();
         ArrayList<String> machinePlansList = new ArrayList<>();
 
-        machinePlansList.add("   I" + app.getMachineCode());
-        machinePlansList.add("   E" + app.getMachineCode());
-        machinePlansList.add("   FS" + app.getMachineCode());
+        machinePlansList.add("   I");
+        machinePlansList.add("   E");
+        machinePlansList.add("   FS");
 
         for (String mPlan : mPlans.split("\\+")) {
             machinePlansList.add("   " + mPlan.trim());
@@ -557,6 +567,7 @@ public class MainFrameController {
         application.getRootLayoutController().disableRenameAllCkdFiles();
         status.setTextFill(Color.BLACK);
         machineCode.setTextFill(Color.BLACK);
+        machineDir.setOnMouseClicked(null);
     }
 
     public enum Targets {

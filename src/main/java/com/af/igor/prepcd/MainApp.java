@@ -387,8 +387,8 @@ public class MainApp {
             logger.log("target is: installation");
             machine.openLuxFile();
             initLuxParser();
-            openWithFileMan("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + machine.I_PLANS + "\"");
-            logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + machine.I_PLANS);
+            openWithFileMan("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + BaseDrawingPaths.I.toString() + "\"");
+            logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + BaseDrawingPaths.I.toString());
             machine.setMachineType(luxParser.getMachineType());
             ConsoleHelper.writeMessage("Copy base installation drawing for " + machine.getMachineType() + "\nand then press enter");
             ConsoleHelper.readString();
