@@ -261,21 +261,29 @@ public class MainFrameController {
 
             refreshMachinePlansList();
 
-            machineDir.setOnMouseClicked(mouseEvent -> {
-                try {
-                    String planName = machineDir.getSelectionModel().getSelectedItem().toString().trim();
-                    remoteMachineDirFS.getFiles(Paths.get(app.PLANS, BaseDrawingPaths.valueOf(planName).toString()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-
             targetFileName = null;
             application.getRootLayoutController().enableRenameAllCkdFiles();
             copyHere.setDisable(false);
             ok.setDisable(false);
             status.setText("Copy base drawings for " + getMachine().getMachineType() + ". Then press ok");
             app.openWithFileMan("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + PLANS + "\"");
+
+            String currentStatus = status.getText();
+            machineDir.setOnMouseClicked(mouseEvent -> {
+                try {
+                    String planName = machineDir.getSelectionModel().getSelectedItem().toString().trim();
+                    if (planName.length() > 4) {
+                        planName = planName.split("-")[0];
+                        int machCodeIndex = planName.indexOf(app.getMachineCode());
+                        if (machCodeIndex > 0)
+                            planName = planName.substring(0, machCodeIndex);
+                        status.setText(currentStatus + "   " + planName);
+                    }
+                    remoteMachineDirFS.getFiles(Paths.get(app.PLANS, BaseDrawingPaths.valueOf(planName).toString()));
+                } catch (IOException e) {
+                    app.logger.log("Wrong plan name");
+                }
+            });
         }
 
     }
@@ -498,9 +506,9 @@ public class MainFrameController {
         String mPlans = machineExcelParser.getMPlans();
         ArrayList<String> machinePlansList = new ArrayList<>();
 
-        machinePlansList.add("   I");
-        machinePlansList.add("   E");
-        machinePlansList.add("   FS");
+        machinePlansList.add("   I" + app.getMachineCode());
+        machinePlansList.add("   E" + app.getMachineCode());
+        machinePlansList.add("   FS" + app.getMachineCode());
 
         for (String mPlan : mPlans.split("\\+")) {
             machinePlansList.add("   " + mPlan.trim());
