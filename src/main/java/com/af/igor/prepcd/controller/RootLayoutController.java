@@ -40,6 +40,10 @@ public class RootLayoutController {
         app.openPrintDir();
     }
 
+    public void handleLocalRemoteMachineDir() throws IOException {
+        app.openWithFileMan("--t --l=\"" + getMachine().getMachineDir().getMachinePathString() + "\"");
+    }
+
     @FXML
     private void handleOpenRemoteMachineDir() throws IOException {
         app.openWithFileMan("--t --r=\"" + getMachine().getRemoteMachinePath() + "\"");
