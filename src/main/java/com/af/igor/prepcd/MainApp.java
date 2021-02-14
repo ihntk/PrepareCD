@@ -138,6 +138,8 @@ public class MainApp {
                 "-x                   Create xls\n" +
                 "-c                   Prepare cd\n" +
                 "-m                   Prepare machine files\n" +
+                "-g                   launch GUI" +
+                "-v                   get version" +
                 "-t                   Insert test string to log file");
         Thread.sleep(7000);
     }
