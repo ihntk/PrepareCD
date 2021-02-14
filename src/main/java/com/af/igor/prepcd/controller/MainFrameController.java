@@ -265,6 +265,8 @@ public class MainFrameController {
             application.getRootLayoutController().enableRenameAllCkdFiles();
             copyHere.setDisable(false);
             ok.setDisable(false);
+            f4Button.setText("Apragaz");
+            f4Button.setDisable(false);
             status.setText("Copy base drawings for " + getMachine().getMachineType() + ". Then press ok");
             app.openWithFileMan("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + PLANS + "\"");
 
@@ -381,6 +383,8 @@ public class MainFrameController {
     private void handleF4Button() throws IOException {
         if (f4Button.getText().equals("Open Print"))
             app.openPrintDir();
+        if (f4Button.getText().equals("Apragaz"))
+            processApragaz();
     }
 
     public void machineInit(String machineName) throws IOException, InterruptedException {
@@ -495,34 +499,48 @@ public class MainFrameController {
         return fileName;
     }
 
+    private void processApragaz() throws IOException {
+        currentTarget = Targets.APRAGAZ;
+        refreshMachinePlansList();
+    }
+
     protected void refreshMachinePlansList() throws IOException {
         if (currentTarget == Targets.INSTALL)
             machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
 
-        if (currentTarget != Targets.MACHINE)
-            return;
+        if (currentTarget == Targets.MACHINE || currentTarget == Targets.APRAGAZ){
+            ArrayList<String> machinePlansList = new ArrayList<>();
+            createMachinePlansList(machinePlansList);
 
-        app.initMachineExcelParser();
-        String mPlans = machineExcelParser.getMPlans();
-        ArrayList<String> machinePlansList = new ArrayList<>();
+            for (int i = 0; i < machinePlansList.size(); i++) {             //rename if file exist
+                String name = getMachine().defineFileName(Paths.get(machinePlansList.get(i)));
+                if (name != null)
+                    for (String file : getMachine().getMachineDir().getCkdFiles()) {
+                        if (file.startsWith(name.substring(0, name.indexOf("."))))
+                            machinePlansList.set(i, file);
+                    }
+            }
 
+            machineDirFS.getFiles(machinePlansList);
+        }
+    }
+
+    private void createMachinePlansList(ArrayList<String> machinePlansList){
         machinePlansList.add("   I" + app.getMachineCode());
         machinePlansList.add("   E" + app.getMachineCode());
         machinePlansList.add("   FS" + app.getMachineCode());
 
+        if (currentTarget == Targets.APRAGAZ){
+            currentTarget = Targets.MACHINE;
+            return;
+        }
+
+        app.initMachineExcelParser();
+        String mPlans = machineExcelParser.getMPlans();
+
         for (String mPlan : mPlans.split("\\+")) {
             machinePlansList.add("   " + mPlan.trim());
         }
-        for (int i = 0; i < machinePlansList.size(); i++) {
-            String name = getMachine().defineFileName(Paths.get(machinePlansList.get(i)));
-            if (name != null)
-                for (String file : getMachine().getMachineDir().getCkdFiles()) {
-                    if (file.startsWith(name.substring(0, name.indexOf("."))))
-                        machinePlansList.set(i, file);
-                }
-        }
-
-        machineDirFS.getFiles(machinePlansList);
     }
 
     private void endCurrentTarget() throws IOException {
@@ -582,6 +600,7 @@ public class MainFrameController {
         INSTALL,
         XLS,
         MACHINE,
+        APRAGAZ,
         CD;
     }
 
