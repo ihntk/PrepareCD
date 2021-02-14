@@ -202,11 +202,11 @@ public class MainFrameController {
     }
 
     @FXML
-    private void handleSetSurbaise() {
+    private void handleSetSurbaise() throws IOException {
         boolean isSelected = surbaiseRadioButton.isSelected();
         getMachine().setSurbaise(isSelected);
         machineCode.setText(app.getMachineCode());
-        updateInstallationName();
+        refreshMachinePlansList();
     }
 
     @FXML
@@ -313,10 +313,10 @@ public class MainFrameController {
         String filename;
         Path targetPath;
         int index = -1;
-        if (targetFileName != null) {
+        if (targetFileName != null) {       // Target.INSTALL
             filename = targetFileName;
             targetPath = Paths.get(getMachine().getMachineDir().getMachinePathString() + filename);
-        } else {
+        } else {                            // Target.MACHINE
             index = machineDir.getSelectionModel().getSelectedIndex();
             if (index < 0) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -506,7 +506,7 @@ public class MainFrameController {
 
     protected void refreshMachinePlansList() throws IOException {
         if (currentTarget == Targets.INSTALL)
-            machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
+            updateInstallationName();
 
         if (currentTarget == Targets.MACHINE || currentTarget == Targets.APRAGAZ){
             ArrayList<String> machinePlansList = new ArrayList<>();
