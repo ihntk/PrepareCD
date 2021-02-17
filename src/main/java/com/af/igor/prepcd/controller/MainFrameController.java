@@ -279,8 +279,8 @@ public class MainFrameController {
                         int machCodeIndex = planName.indexOf(app.getMachineCode());
                         if (machCodeIndex > 0)
                             planName = planName.substring(0, machCodeIndex);
-                        status.setText(currentStatus + "   " + planName);
                     }
+                    status.setText(currentStatus + "   " + planName);
                     remoteMachineDirFS.getFiles(Paths.get(app.PLANS, BaseDrawingPaths.valueOf(planName).toString()));
                 } catch (IOException e) {
                     app.logger.log("Wrong plan name");
