@@ -295,6 +295,7 @@ public class MainFrameController {
         currentTarget = Targets.CD;
         target.setText("CD");
         resetControlsDefault();
+        hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getMachineDir().getMachineXls());
         app.openWithFileMan("--l=\"" + app.getCdsString() + "\" --t --r=\"" + app.getCdCommenceString() + "\"");
     }
 
