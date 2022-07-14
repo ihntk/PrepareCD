@@ -107,7 +107,7 @@ public class Machine {
         */
 
         luxPathString = remoteMachinePath + "010 Order/";
-        luxFileName = app.searchFileName(luxPathString, machineName);
+        luxFileName = app.searchFileNameStartWith(luxPathString, machineName);
         if (luxFileName == null) {
             app.logger.log("Program can't find luxemburg file\nluxPathString is:\n   " + luxPathString);
             app.logger.log("machineName is:\n   " + machineName);

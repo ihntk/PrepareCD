@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.prefs.Preferences;
 
@@ -152,20 +153,28 @@ public class MainApp {
     /*
     global method
      */
-    public String searchFileName(String path, String pattern) {
+    public String searchFileNameStartWith(String path, String startWithPattern) {
         ArrayList<String> fileNames = new ArrayList<>(3);
         String fileName = null;
         int count = 0;
         try {
             String[] files = new File(path).list();
             for (String file : files) {
-                if (file.startsWith(pattern)) {
+                if (file.startsWith(startWithPattern)) {
                     fileNames.add(file);
                 }
             }
             count = fileNames.size();
+            if (count==0){
+                if (gui!=null){
+                    fileName = gui.getController().processChooseLuxFile(path, Arrays.asList(files));
+                }
+            }
             if (count > 1) {
-                if (gui == null) {
+                if (gui != null) {
+                    fileName = gui.getController().processChooseLuxFile(path, fileNames);
+
+                } else {
                     desktop.open(new File(path));
                     ConsoleHelper.writeMessage("Attention! There are " + count + " files for this machine");
 
@@ -183,12 +192,10 @@ public class MainApp {
                             ConsoleHelper.writeMessage("You input incorrect number, please try again");
                         }
                     }
-                } else {
-                    fileName = gui.getController().processChooseLuxFile(path, fileNames);
                 }
             } else fileName = fileNames.get(0);
         } catch (Exception e) {
-            logger.log("Error in mainApp.searchFileName\n   path is: " + path + "\n     pattern is: " + pattern + "\n");
+            logger.log("Error in mainApp.searchFileName\n   path is: " + path + "\n     pattern is: " + startWithPattern + "\n");
             logger.log(e.toString());
             e.printStackTrace();
         }
