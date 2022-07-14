@@ -41,7 +41,7 @@ public class MainApp {
     public static String DRAWINGS_DIR;
 
     private static MainApp instance;
-    private static String version = "0.7.14";
+    private static String version = "0.7.15";
     private static Machine machine;         //in future this field will replace static ArrayList<Machine>
     public static LuxParser luxParser;
     public static MachineExcelParser machineExcelParser;
@@ -165,8 +165,8 @@ public class MainApp {
                 }
             }
             count = fileNames.size();
-            if (count==0){
-                if (gui!=null){
+            if (count == 0) {
+                if (gui != null) {
                     fileName = gui.getController().processChooseLuxFile(path, Arrays.asList(files));
                 }
             }
@@ -195,7 +195,7 @@ public class MainApp {
                 }
             } else fileName = fileNames.get(0);
         } catch (Exception e) {
-            logger.log("Error in mainApp.searchFileName\n   path is: " + path + "\n     pattern is: " + startWithPattern + "\n");
+            logger.log("Error in mainApp.searchFileNameStartWith\n   path is: " + path + "\n     pattern is: " + startWithPattern + "\n");
             logger.log(e.toString());
             e.printStackTrace();
         }
