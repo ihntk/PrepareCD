@@ -265,7 +265,7 @@ public class MainApp {
         String machineCode;
         if (machine.getMachineCode() == null) {
             if (machine.getMachineType().contains("-"))
-                machineType = machine.getMachineType().substring(0, machine.getMachineType().indexOf("-"));
+                machineType = machine.getMachineType().replaceAll("-", "_");
             else machineType = machine.getMachineType();
 
             try {
