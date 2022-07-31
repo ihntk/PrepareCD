@@ -3,7 +3,11 @@
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/com/github/virtuald/curvesapi/1.04/curvesapi-1.04.jar!/" />
     </CLASSES>
-    <JAVADOC />
-    <SOURCES />
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/virtuald/curvesapi/1.04/curvesapi-1.04-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/virtuald/curvesapi/1.04/curvesapi-1.04-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>
