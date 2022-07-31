@@ -10,15 +10,6 @@
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/xmlbeans/xmlbeans/2.6.0/xmlbeans-2.6.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-controls/11/javafx-controls-11.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-base/11/javafx-base-11.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="/usr/lib/jvm/java-11-openjdk/lib/jrt-fs.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="/usr/lib/jvm/java-11-openjfx/lib/javafx-swt.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="/usr/lib/jvm/java-11-openjfx/lib/javafx.web.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="/usr/lib/jvm/java-11-openjfx/lib/javafx.base.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="/usr/lib/jvm/java-11-openjfx/lib/javafx.fxml.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="/usr/lib/jvm/java-11-openjfx/lib/javafx.media.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="/usr/lib/jvm/java-11-openjfx/lib/javafx.swing.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="/usr/lib/jvm/java-11-openjfx/lib/javafx.controls.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="/usr/lib/jvm/java-11-openjfx/lib/javafx.graphics.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/11/javafx-graphics-11-linux.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-base/11/javafx-base-11-linux.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/virtuald/curvesapi/1.04/curvesapi-1.04.jar" path-in-jar="/" />

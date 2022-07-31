@@ -169,8 +169,7 @@ public class MainApp {
                 if (gui != null) {
                     fileName = gui.getController().processChooseLuxFile(path, Arrays.asList(files));
                 }
-            }
-            if (count > 1) {
+            } else if (count > 1) {
                 if (gui != null) {
                     fileName = gui.getController().processChooseLuxFile(path, fileNames);
 
