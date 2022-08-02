@@ -5,7 +5,6 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -24,10 +23,6 @@
                     </HBox.margin>
                 </Label>
                 <Label fx:id="machineType" layoutX="10.0" layoutY="10.0" />
-                <RadioButton fx:id="surbaiseRadioButton" mnemonicParsing="false" onAction="#handleSetSurbaise" text="Surbaise">
-               <padding>
-                  <Insets left="5.0" right="5.0" />
-               </padding></RadioButton>
             <ComboBox fx:id="additionalComboBox" onAction="#handleSetAdditionalOptions" prefWidth="150.0"/>
                 <Region HBox.hgrow="ALWAYS" />
                 <Button fx:id="installButton" disable="true" mnemonicParsing="false" onAction="#handleInstall" text="Install" />

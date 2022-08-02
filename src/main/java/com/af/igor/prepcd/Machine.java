@@ -31,7 +31,6 @@ public class Machine {
     private String luxPathString;
 
     MachineDir machineDir;
-    private boolean surbaise;
     private AdditionalOptions additionalOption;
 
     public MachineDir getMachineDir() {
@@ -44,10 +43,6 @@ public class Machine {
 
     public String getMachineCode() {
         return machineCode;
-    }
-
-    public boolean getSurbaise() {
-        return surbaise;
     }
 
     public AdditionalOptions getAdditionalOption() {
@@ -92,16 +87,9 @@ public class Machine {
         return saveConfigFile();
     }
 
-    public boolean setSurbaise(boolean activate) {
-        this.surbaise = activate;
-        propertyElements.put("surbaise", String.valueOf(activate));
-        calculateMachineCode();
-        return saveConfigFile();
-    }
-
     public void setAdditionalOption(AdditionalOptions option) {
         additionalOption = option;
-        propertyElements.put("additionalOptions", option.getText());
+        propertyElements.put("additionalOption", option.getText());
         calculateMachineCode();
         saveConfigFile();
     }
@@ -169,12 +157,14 @@ public class Machine {
                 propertyElements.put("machineCodePure", machineCodePure);
             }
             if (confFileProperty.containsKey("surbaise")) {
-                surbaise = Boolean.parseBoolean(confFileProperty.getProperty("surbaise"));
-                propertyElements.put("surbaise", String.valueOf(surbaise));
+                if (Boolean.parseBoolean(confFileProperty.getProperty("surbaise"))) {
+                    additionalOption = AdditionalOptions.SURBAISE;
+                    propertyElements.put("additionalOption", additionalOption.getText());
+                }
             }
-            if (confFileProperty.containsKey("additionalOptions")) {
-                additionalOption = AdditionalOptions.valueOf(confFileProperty.getProperty("additionalOptions"));
-                propertyElements.put("additionalOptions", additionalOption.toString());
+            if (confFileProperty.containsKey("additionalOption")) {
+                additionalOption = AdditionalOptions.valueOf(confFileProperty.getProperty("additionalOption"));
+                propertyElements.put("additionalOption", additionalOption.getText());
             }
 
         } catch (FileNotFoundException e) {

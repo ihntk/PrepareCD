@@ -63,9 +63,6 @@ public class MainFrameController {
     private ListView<Path> remoteMachineDir;
 
     @FXML
-    private RadioButton surbaiseRadioButton;
-
-    @FXML
     private Button installButton;
 
     @FXML
@@ -206,14 +203,6 @@ public class MainFrameController {
         machineCodeStage.showAndWait();
 
         return textField.getText();
-    }
-
-    @FXML
-    private void handleSetSurbaise() throws IOException {
-        boolean isSelected = surbaiseRadioButton.isSelected();
-        getMachine().setSurbaise(isSelected);
-        machineCode.setText(app.getMachineCode());
-        refreshMachinePlansList();
     }
 
     @FXML
@@ -426,7 +415,6 @@ public class MainFrameController {
         app.initLuxParser();
         getMachine().setMachineType(luxParser.getMachineType());
         machineType.setText(getMachine().getMachineType());
-        surbaiseRadioButton.setSelected(getMachine().getSurbaise());
         additionalComboBox.setValue(getMachine().getAdditionalOption());
         getMachine().initMachineCode();
         machineCode.setText(app.getMachineCode());
