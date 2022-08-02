@@ -218,6 +218,10 @@ public class MainFrameController {
 
     @FXML
     private void handleSetAdditionalOptions() throws IOException {
+        if (!currentMachine.getText().equals(machineName.getText())) {
+            return;
+        }
+
         getMachine().setAdditionalOptions(additionalComboBox.getValue());
         machineCode.setText(app.getMachineCode());
         refreshMachinePlansList();
