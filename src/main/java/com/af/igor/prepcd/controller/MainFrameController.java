@@ -222,7 +222,7 @@ public class MainFrameController {
             return;
         }
 
-        getMachine().setAdditionalOptions(additionalComboBox.getValue());
+        getMachine().setAdditionalOption(additionalComboBox.getValue());
         machineCode.setText(app.getMachineCode());
         refreshMachinePlansList();
     }
@@ -427,7 +427,7 @@ public class MainFrameController {
         getMachine().setMachineType(luxParser.getMachineType());
         machineType.setText(getMachine().getMachineType());
         surbaiseRadioButton.setSelected(getMachine().getSurbaise());
-        additionalComboBox.setValue(getMachine().getAdditionalOptions());
+        additionalComboBox.setValue(getMachine().getAdditionalOption());
         getMachine().initMachineCode();
         machineCode.setText(app.getMachineCode());
 

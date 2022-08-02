@@ -14,8 +14,16 @@ public enum AdditionalOptions {
         this.increment = increment;
     }
 
+    @Override
+    public String toString() {
+        return option;
+    }
+
     public int getIncrement() {
         return increment;
     }
 
+    public String getText() {
+        return name();
+    }
 }

@@ -32,7 +32,7 @@ public class Machine {
 
     MachineDir machineDir;
     private boolean surbaise;
-    private AdditionalOptions additionalOptions;
+    private AdditionalOptions additionalOption;
 
     public MachineDir getMachineDir() {
         return machineDir;
@@ -50,8 +50,8 @@ public class Machine {
         return surbaise;
     }
 
-    public AdditionalOptions getAdditionalOptions() {
-        return additionalOptions;
+    public AdditionalOptions getAdditionalOption() {
+        return additionalOption;
     }
 
     public String getLuxFileName() {
@@ -99,16 +99,16 @@ public class Machine {
         return saveConfigFile();
     }
 
-    public void setAdditionalOptions(AdditionalOptions options) {
-        additionalOptions = options;
-        propertyElements.put("additionalOptions", options.toString());
+    public void setAdditionalOption(AdditionalOptions option) {
+        additionalOption = option;
+        propertyElements.put("additionalOptions", option.getText());
         calculateMachineCode();
         saveConfigFile();
     }
 
     public Machine(String machineName) throws IOException {
         this.machineName = machineName;
-        additionalOptions = AdditionalOptions.BASE_FRAME;
+        additionalOption = AdditionalOptions.BASE_FRAME;
         remoteMachinePath = app.H_MACHINES + machineName + "/";
 
         sm = machineName.substring(0, 2);
@@ -149,7 +149,7 @@ public class Machine {
     }
 
     private void calculateMachineCode() {
-        machineCode = String.valueOf(Integer.parseInt(machineCodePure) + additionalOptions.getIncrement());
+        machineCode = String.valueOf(Integer.parseInt(machineCodePure) + additionalOption.getIncrement());
     }
 
     private void loadFromConfigFile() {
@@ -173,8 +173,8 @@ public class Machine {
                 propertyElements.put("surbaise", String.valueOf(surbaise));
             }
             if (confFileProperty.containsKey("additionalOptions")) {
-                additionalOptions = AdditionalOptions.valueOf(confFileProperty.getProperty("additionalOptions"));
-                propertyElements.put("additionalOptions", additionalOptions.toString());
+                additionalOption = AdditionalOptions.valueOf(confFileProperty.getProperty("additionalOptions"));
+                propertyElements.put("additionalOptions", additionalOption.toString());
             }
 
         } catch (FileNotFoundException e) {
