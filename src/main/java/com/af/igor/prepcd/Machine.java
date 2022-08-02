@@ -1,5 +1,6 @@
 package com.af.igor.prepcd;
 
+import com.af.igor.prepcd.util.AdditionalOptions;
 import com.af.igor.prepcd.util.ConsoleHelper;
 
 import java.io.*;
@@ -31,6 +32,7 @@ public class Machine {
 
     MachineDir machineDir;
     private boolean surbaise;
+    private AdditionalOptions additionalOptions;
 
     public MachineDir getMachineDir() {
         return machineDir;
@@ -46,6 +48,10 @@ public class Machine {
 
     public boolean getSurbaise() {
         return surbaise;
+    }
+
+    public AdditionalOptions getAdditionalOptions() {
+        return additionalOptions;
     }
 
     public String getLuxFileName() {
@@ -93,8 +99,16 @@ public class Machine {
         return saveConfigFile();
     }
 
+    public void setAdditionalOptions(AdditionalOptions options) {
+        additionalOptions = options;
+        propertyElements.put("additionalOptions", options.toString());
+        calculateMachineCode();
+        saveConfigFile();
+    }
+
     public Machine(String machineName) throws IOException {
         this.machineName = machineName;
+        additionalOptions = AdditionalOptions.BASE_FRAME;
         remoteMachinePath = app.H_MACHINES + machineName + "/";
 
         sm = machineName.substring(0, 2);
@@ -135,10 +149,7 @@ public class Machine {
     }
 
     private void calculateMachineCode() {
-        if (surbaise)
-            machineCode = String.valueOf(Integer.parseInt(machineCodePure) + 1);
-        else
-            machineCode = machineCodePure;
+        machineCode = String.valueOf(Integer.parseInt(machineCodePure) + additionalOptions.getIncrement());
     }
 
     private void loadFromConfigFile() {
@@ -151,18 +162,19 @@ public class Machine {
             confFileProperty.load(stream);
             if (confFileProperty.containsKey("remoteMachinePath")) {
                 remoteMachinePath = confFileProperty.getProperty("remoteMachinePath");
-//                confFileProperty.setProperty("remoteMachinePath", remoteMachinePath);   // ???????!!!
                 propertyElements.put("remoteMachinePath", remoteMachinePath);
             }
             if (confFileProperty.containsKey("machineCodePure")) {
                 machineCode = confFileProperty.getProperty("machineCodePure");
-//                confFileProperty.setProperty("machineCodePure", machineCodePure);   // ???????!!!
                 propertyElements.put("machineCodePure", machineCodePure);
             }
             if (confFileProperty.containsKey("surbaise")) {
                 surbaise = Boolean.parseBoolean(confFileProperty.getProperty("surbaise"));
-//                confFileProperty.setProperty("surbaise", String.valueOf(surbaise));   // ???????!!!
                 propertyElements.put("surbaise", String.valueOf(surbaise));
+            }
+            if (confFileProperty.containsKey("additionalOptions")) {
+                additionalOptions = AdditionalOptions.valueOf(confFileProperty.getProperty("additionalOptions"));
+                propertyElements.put("additionalOptions", additionalOptions.toString());
             }
 
         } catch (FileNotFoundException e) {
@@ -428,4 +440,6 @@ public class Machine {
 
         return fileName;
     }
+
+
 }

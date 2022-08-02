@@ -2,7 +2,7 @@ package com.af.igor.prepcd.controller;
 
 import com.af.igor.prepcd.MainApp;
 import com.af.igor.prepcd.PrepareCD;
-import com.af.igor.prepcd.util.AddutuinalOptions;
+import com.af.igor.prepcd.util.AdditionalOptions;
 import com.af.igor.prepcd.util.BaseDrawingPaths;
 import com.af.igor.prepcd.util.FSHelper;
 import javafx.application.HostServices;
@@ -90,7 +90,7 @@ public class MainFrameController {
     private Button f4Button;
 
     @FXML
-    public ComboBox<AddutuinalOptions> additionalComboBox;
+    public ComboBox<AdditionalOptions> additionalComboBox;
 
 
     private ObservableList<Path> machineDirList;
@@ -141,8 +141,8 @@ public class MainFrameController {
         cdDirList = FXCollections.observableArrayList();
         cdDirFS = FSHelper.getInstance(cdDirList);
 
-        additionalComboBox.setItems(FXCollections.observableArrayList(AddutuinalOptions.values()));
-        additionalComboBox.setValue(AddutuinalOptions.BASE_FRAME);
+        additionalComboBox.setItems(FXCollections.observableArrayList(AdditionalOptions.values()));
+        additionalComboBox.setValue(AdditionalOptions.BASE_FRAME);
     }
 
     @FXML
@@ -172,7 +172,7 @@ public class MainFrameController {
 
         Label label = new Label();
         label.setText("Enter the code \n" +
-                "without surbaise");
+                "without surbaise or industrialization");
         StackPane.setAlignment(label, Pos.TOP_CENTER);
         StackPane.setMargin(label, new Insets(5, 0, 0, 0));
 
@@ -212,6 +212,13 @@ public class MainFrameController {
     private void handleSetSurbaise() throws IOException {
         boolean isSelected = surbaiseRadioButton.isSelected();
         getMachine().setSurbaise(isSelected);
+        machineCode.setText(app.getMachineCode());
+        refreshMachinePlansList();
+    }
+
+    @FXML
+    private void handleSetAdditionalOptions() throws IOException {
+        getMachine().setAdditionalOptions(additionalComboBox.getValue());
         machineCode.setText(app.getMachineCode());
         refreshMachinePlansList();
     }
@@ -416,6 +423,7 @@ public class MainFrameController {
         getMachine().setMachineType(luxParser.getMachineType());
         machineType.setText(getMachine().getMachineType());
         surbaiseRadioButton.setSelected(getMachine().getSurbaise());
+        additionalComboBox.setValue(getMachine().getAdditionalOptions());
         getMachine().initMachineCode();
         machineCode.setText(app.getMachineCode());
 
