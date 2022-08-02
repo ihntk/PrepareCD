@@ -2,6 +2,7 @@ package com.af.igor.prepcd.controller;
 
 import com.af.igor.prepcd.MainApp;
 import com.af.igor.prepcd.PrepareCD;
+import com.af.igor.prepcd.util.AddutuinalOptions;
 import com.af.igor.prepcd.util.BaseDrawingPaths;
 import com.af.igor.prepcd.util.FSHelper;
 import javafx.application.HostServices;
@@ -88,6 +89,9 @@ public class MainFrameController {
     @FXML
     private Button f4Button;
 
+    @FXML
+    public ComboBox<AddutuinalOptions> additionalComboBox;
+
 
     private ObservableList<Path> machineDirList;
     private ObservableList<Path> remoteMachineDirList;
@@ -136,6 +140,9 @@ public class MainFrameController {
 
         cdDirList = FXCollections.observableArrayList();
         cdDirFS = FSHelper.getInstance(cdDirList);
+
+        additionalComboBox.setItems(FXCollections.observableArrayList(AddutuinalOptions.values()));
+        additionalComboBox.setValue(AddutuinalOptions.BASE_FRAME);
     }
 
     @FXML
