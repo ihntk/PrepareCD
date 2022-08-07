@@ -102,12 +102,6 @@ public class Machine {
         sm = machineName.substring(0, 2);
         machineSeries = machineName.substring(2, 3).equals("Y") ? machineName.substring(2, 3) : machineName.substring(2, 4);
 
-        /*         //this code make 20XX subdirectory for different machine series
-        Path machineSeriesPath = Paths.get(app.MACHINES + sm + machineSeries);
-        if (!Files.exists(machineSeriesPath))
-            Files.createDirectory(machineSeriesPath);
-        */
-
         luxPathString = remoteMachinePath + "010 Order/";
         luxFileName = app.searchFileNameStartWith(luxPathString, machineName);
         if (luxFileName == null) {
@@ -228,14 +222,6 @@ public class Machine {
         for (String lang : langs) {
             ConsoleHelper.writeMessage(lang);
         }
-//        new File(cdDir.cdPathDir).mkdir();
-//        Files.copy(Paths.get(app.CDTEMPLATE),Paths.get(cdDir.cdPathDir));           //вибрати потрібні мови і файли
-//        if (isEnglish)copyPlans();
-//        else ...;
-//        copyMinMop();
-//        addCertif();
-//        app.desktop.open(lang/index.html);
-//        app.desktop.open(index.html);
     }
 
     public void openLuxFile() throws IOException {

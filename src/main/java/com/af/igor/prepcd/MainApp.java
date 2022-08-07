@@ -42,7 +42,7 @@ public class MainApp {
 
     private static MainApp instance;
     private static String version = "0.8.0";
-    private static Machine machine;         //in future this field will replace static ArrayList<Machine>
+    private static Machine machine;
     public static LuxParser luxParser;
     public static MachineExcelParser machineExcelParser;
     static Desktop desktop = Desktop.getDesktop();
@@ -283,27 +283,27 @@ public class MainApp {
     }
 
     public void run(String[] args) throws IOException, InterruptedException {
-        /*
-        available flags
-        -x xls
-        -n machine name
-        -c cd
-        -i installation
-        -m
-        -v version
-        -g
-        -t
-
-        parsing args
-        first of all we need to find -n flag and if it exist create machine instance with machine name as machine directory
-        else we use current directory as machine dir
+        /**
+         * available flags
+         * -x xls
+         * -n machine name
+         * -c cd
+         * -i installation
+         * -m
+         * -v version
+         * -g
+         * -t
+         *
+         * parsing args
+         * first of all we need to find -n flag and if it exist create machine instance with machine name as machine directory
+         * else we use current directory as machine dir
          */
 
         byte use = 0;
         String machineName = null;
 
-        /*
-        test record
+        /**
+         * test record
          */
         for (int i = 0; i < args.length; i++) {
             String flag = args[i];
@@ -373,14 +373,14 @@ public class MainApp {
         }
 
 
-        /*
-        use - marker control program:
-        0 - do nothing
-        1 - xls
-        2 - cd
-        3 - xls+cd
-        4 - installation
-        8 - machine
+        /**
+         * use - marker control program:
+         * 0 - do nothing
+         * 1 - xls
+         * 2 - cd
+         * 3 - xls+cd
+         * 4 - installation
+         * 8 - machine
          */
         if (use == 0) {
             logger.log("target isn't specified");

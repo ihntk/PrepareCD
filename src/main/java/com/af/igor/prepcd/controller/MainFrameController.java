@@ -139,7 +139,6 @@ public class MainFrameController {
         cdDirFS = FSHelper.getInstance(cdDirList);
 
         additionalComboBox.setItems(FXCollections.observableArrayList(AdditionalOptions.values()));
-        additionalComboBox.setValue(AdditionalOptions.BASE_FRAME);
     }
 
     @FXML
@@ -420,12 +419,6 @@ public class MainFrameController {
         machineCode.setText(app.getMachineCode());
 
         machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
-//        machineDir.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-//            @Override
-//            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-//                status.setText(String.valueOf(newValue));
-//            }
-//        });
 
         remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath(), DRAWINGS_DIR));
 
@@ -449,18 +442,6 @@ public class MainFrameController {
             }
         });
 
-//        remoteMachineDir.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Path>() {
-//            @Override
-//            public void changed(ObservableValue<? extends Path> observable, Path oldValue, Path newValue) {
-////                if (!newValue.getParent().getFileName().toString().startsWith(getMachine().getMachineName())) {
-//                    try {
-//                        remoteMachineDirFS.getFiles(newValue);
-//                    } catch (IOException e) {
-//
-//                    }
-////                }
-//            }
-//        });
     }
 
     public String processChooseLuxFile(String path, List<String> list) throws IOException {
