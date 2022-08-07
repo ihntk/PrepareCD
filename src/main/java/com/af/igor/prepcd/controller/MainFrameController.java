@@ -435,8 +435,6 @@ public class MainFrameController {
         cdButton.setDisable(false);
         application.getRootLayoutController().enableMenu();
         resetControlsDefault();
-        if (Integer.parseInt(machineCode.getText()) > 10000)
-            machineCode.setTextFill(Color.RED);
 
         remoteMachineDir.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
