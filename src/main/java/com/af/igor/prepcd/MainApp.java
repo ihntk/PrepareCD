@@ -19,6 +19,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Properties;
@@ -280,6 +281,18 @@ public class MainApp {
         } else machineCode = machine.getMachineCode();
 
         return machineCode;
+    }
+
+    public void rename(String sourceName, String targetName) throws IOException {
+        Files.move(Paths.get(sourceName), Paths.get(targetName));
+    }
+
+    public void copy(String sourceFile, String targetFile) throws IOException {
+        Files.copy(Paths.get(sourceFile), Paths.get(targetFile));
+    }
+
+    public void copy(String sourceFile, String targetFile, StandardCopyOption copyOption) throws IOException {
+        Files.copy(Paths.get(sourceFile), Paths.get(targetFile), copyOption);
     }
 
     public void run(String[] args) throws IOException, InterruptedException {

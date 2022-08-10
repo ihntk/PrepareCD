@@ -217,13 +217,6 @@ public class Machine {
         return isXlsCreated;
     }
 
-    public void prepareCd() throws IOException {
-        String[] langs = app.machineExcelParser.getLanguage();
-        for (String lang : langs) {
-            ConsoleHelper.writeMessage(lang);
-        }
-    }
-
     public void openLuxFile() throws IOException {
         copyLuxFile();
         app.desktop.open(new File(machineDir.machinePath + luxFileName));
@@ -241,7 +234,7 @@ public class Machine {
                 try {
                     if (Integer.parseInt(file.substring(1, file.indexOf("-"))) >= 700) {
                         String renamedCkd = "E" + machineCode + "-" + getMachineName().substring(2) + ".ckd";
-                        rename(file, renamedCkd);
+                        renameInLocalDir(file, renamedCkd);
                     }
                 } catch (Exception e) {
                 }
@@ -249,57 +242,57 @@ public class Machine {
             }
             if (file.startsWith("FS")) {
                 String renamedCkd = "FS" + machineCode + "-" + getMachineName().substring(2) + ".ckd";
-                rename(file, renamedCkd);
+                renameInLocalDir(file, renamedCkd);
             }
             if (file.startsWith("I")) {
                 String renamedCkd = "I" + machineCode + "-" + getMachineName().substring(2) + ".ckd";
-                rename(file, renamedCkd);
+                renameInLocalDir(file, renamedCkd);
             }
 
             if (file.startsWith("M10") &&
                     !file.startsWith("M100")) {
                 String renamedCkd = "M10" + "-" + getMachineName().substring(2) + ".ckd";
-                rename(file, renamedCkd);
+                renameInLocalDir(file, renamedCkd);
             }
             if (file.startsWith("M20")) {
                 String renamedCkd = "M20" + "-" + getMachineName().substring(2) + ".ckd";
-                rename(file, renamedCkd);
+                renameInLocalDir(file, renamedCkd);
             }
             if (file.startsWith("M30")) {
                 String renamedCkd = "M30" + "-" + getMachineName().substring(2) + ".ckd";
-                rename(file, renamedCkd);
+                renameInLocalDir(file, renamedCkd);
             }
             if (file.startsWith("M40")) {
                 String renamedCkd = "M40" + "-" + getMachineName().substring(2) + ".ckd";
-                rename(file, renamedCkd);
+                renameInLocalDir(file, renamedCkd);
             }
             if (file.startsWith("M50")) {
                 String renamedCkd = "M50" + "-" + getMachineName().substring(2) + ".ckd";
-                rename(file, renamedCkd);
+                renameInLocalDir(file, renamedCkd);
             }
             if (file.startsWith("M60")) {
                 String renamedCkd = "M60" + "-" + getMachineName().substring(2) + ".ckd";
-                rename(file, renamedCkd);
+                renameInLocalDir(file, renamedCkd);
             }
             if (file.startsWith("M70")) {
                 String renamedCkd = "M70" + "-" + getMachineName().substring(2) + ".ckd";
-                rename(file, renamedCkd);
+                renameInLocalDir(file, renamedCkd);
             }
             if (file.startsWith("M80")) {
                 String renamedCkd = "M80" + "-" + getMachineName().substring(2) + ".ckd";
-                rename(file, renamedCkd);
+                renameInLocalDir(file, renamedCkd);
             }
             if (file.startsWith("M90")) {
                 String renamedCkd = "M90" + "-" + getMachineName().substring(2) + ".ckd";
-                rename(file, renamedCkd);
+                renameInLocalDir(file, renamedCkd);
             }
             if (file.startsWith("M100")) {
                 String renamedCkd = "M100" + "-" + getMachineName().substring(2) + ".ckd";
-                rename(file, renamedCkd);
+                renameInLocalDir(file, renamedCkd);
             }
             if (file.startsWith("M110")) {
                 String renamedCkd = "M110" + "-" + getMachineName().substring(2) + ".ckd";
-                rename(file, renamedCkd);
+                renameInLocalDir(file, renamedCkd);
             }
 
         }
@@ -330,11 +323,11 @@ public class Machine {
     public void copyEtiq() throws IOException {
         String machineEtiq = "Etiqclas" + "-" + getMachineName().substring(2) + ".ckd";
         if (!new File(machineDir.machinePath + machineEtiq).exists())
-            copy(app.ETIQCLAS, machineDir.machinePath + machineEtiq);
+            app.copy(app.ETIQCLAS, machineDir.machinePath + machineEtiq);
     }
 
     protected void copyXls() throws IOException {
-        copy(app.XLS, machineDir.machinePath + machineDir.machineXls);
+        app.copy(app.XLS, machineDir.machinePath + machineDir.machineXls);
         app.logger.log("Copied xls");
 
         copyLuxFile();
@@ -343,7 +336,7 @@ public class Machine {
     public void copyLuxFile() throws IOException {
         if (luxFileName != null) {
             try {
-                copy(luxPathString + luxFileName, machineDir.machinePath + luxFileName, REPLACE_EXISTING);
+                app.copy(luxPathString + luxFileName, machineDir.machinePath + luxFileName, REPLACE_EXISTING);
                 app.logger.log("Copied luxFileName:\n   " + luxFileName);
             } catch (FileSystemException e) {
                 ConsoleHelper.writeMessage("I can't replace " + luxFileName + " file because it is being used by another process");
@@ -352,16 +345,8 @@ public class Machine {
         }
     }
 
-    public void rename(String sourceName, String targetName) throws IOException {
-        Files.move(Paths.get(machineDir.machinePath + sourceName), Paths.get(machineDir.machinePath + targetName));
-    }
-
-    public void copy(String sourceFile, String targetFile) throws IOException {
-        Files.copy(Paths.get(sourceFile), Paths.get(targetFile));
-    }
-
-    public void copy(String sourceFile, String targetFile, StandardCopyOption copyOption) throws IOException {
-        Files.copy(Paths.get(sourceFile), Paths.get(targetFile), copyOption);
+    public void renameInLocalDir(String sourceName, String targetName) throws IOException {
+        app.rename(machineDir.machinePath + sourceName, machineDir.machinePath + targetName);
     }
 
     public String defineFileName(Path selectedItem) {
