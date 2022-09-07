@@ -42,7 +42,7 @@ public class MainApp {
     public static String DRAWINGS_DIR;
 
     private static MainApp instance;
-    private static String version = "0.8.0";
+    private static String version = "0.8.0+";
     private static Machine machine;
     public static LuxParser luxParser;
     public static MachineExcelParser machineExcelParser;
@@ -254,6 +254,10 @@ public class MainApp {
         return cd;
     }
 
+    public String getCDTEMPLATE() {
+        return CDTEMPLATE;
+    }
+
     public String getCdCommenceString() throws IOException {
         String cdCom = CDCOMMENCE + machine.getMachineName() + "/";
         if (!Files.exists(Paths.get(cdCom)))
@@ -287,8 +291,12 @@ public class MainApp {
         Files.move(Paths.get(sourceName), Paths.get(targetName));
     }
 
+    public void copyPath(Path source, Path target) throws IOException {
+        Files.copy(source, target);
+    }
+
     public void copy(String sourceFile, String targetFile) throws IOException {
-        Files.copy(Paths.get(sourceFile), Paths.get(targetFile));
+        copyPath(Paths.get(sourceFile), Paths.get(targetFile));
     }
 
     public void copy(String sourceFile, String targetFile, StandardCopyOption copyOption) throws IOException {

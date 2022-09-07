@@ -33,6 +33,6 @@ public abstract class ExcelParser {
         }
     }
 
-    public abstract String[] getLanguage();
+    public abstract String[] getLanguages();
 
 }

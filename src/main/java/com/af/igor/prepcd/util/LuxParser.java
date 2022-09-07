@@ -22,7 +22,7 @@ public class LuxParser extends ExcelParser {
     }
 
 
-    public String[] getLanguage() {
+    public String[] getLanguages() {
         List<String> languages = new LinkedList<>();
         XSSFSheet sheet = workbook.getSheet("Encodage Admin");
         ConsoleHelper.writeMessage("last row " + sheet.getLastRowNum());

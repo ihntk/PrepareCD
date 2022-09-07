@@ -56,7 +56,7 @@ public class RootLayoutController {
 
     @FXML
     private void handleOpenBaseCD() throws IOException {
-        app.openWithFileMan("--t --r=\"" + CDTEMPLATE + "\"");
+        app.openWithFileMan("--t --r=\"" + app.getCDTEMPLATE() + "\"");
     }
 
     @FXML

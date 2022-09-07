@@ -25,10 +25,20 @@ public class MachineExcelParser extends ExcelParser {
         return instance;
     }
 
-    public String[] getLanguage() {
-        String languages = String.format("%8s", sheet.getRow(0).getCell(0));
-        languages = languages.substring(languages.indexOf("CD") + 3, languages.indexOf("suv")).trim();
-        return languages.split("/");
+    /**
+     * When there are not any language, method will return "nothing"
+     *
+     * @retur languages[]
+     */
+    public String[] getLanguages() {
+        String allLanguages = String.format("%8s", sheet.getRow(8).getCell(1));
+        String cdLanguages = "nothing";
+        for (String langs : allLanguages.split("\\+")) {
+            if (langs.matches("(.*)CD(.*)")) {
+                cdLanguages = langs.trim().substring(3).replaceAll("\\s", "");
+            }
+        }
+        return cdLanguages.split("/");
     }
 
     public String getMPlans() {

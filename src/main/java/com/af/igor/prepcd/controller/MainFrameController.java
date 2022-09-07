@@ -4,6 +4,7 @@ import com.af.igor.prepcd.MainApp;
 import com.af.igor.prepcd.PrepareCD;
 import com.af.igor.prepcd.util.AdditionalOptions;
 import com.af.igor.prepcd.util.BaseDrawingPaths;
+import com.af.igor.prepcd.util.CdLangFiles;
 import com.af.igor.prepcd.util.FSHelper;
 import javafx.application.HostServices;
 import javafx.collections.FXCollections;
@@ -15,6 +16,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
@@ -25,9 +28,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.af.igor.prepcd.MainApp.*;
 
@@ -303,6 +304,77 @@ public class MainFrameController {
         resetControlsDefault();
         hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getMachineDir().getMachineXls());
         app.openWithFileMan("--l=\"" + app.getCdsString() + "\" --t --r=\"" + app.getCdCommenceString() + "\"");
+
+        app.initMachineExcelParser();
+        List<String> languagesOrder = new LinkedList<>();
+        Collections.addAll(languagesOrder, machineExcelParser.getLanguages());
+
+        if (languagesOrder.get(0).equals("nothing")) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Attention");
+            alert.setHeaderText("Are you sure?");
+            alert.setContentText("Looks like no CD is required for this order\n" +
+                    "Do you really want to make this CD?");
+
+            ((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText("Yes");
+            ((Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL)).setText("No");
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.get() == ButtonType.CANCEL) {
+                return;
+            }
+        }
+
+        ObservableList<Pane> languageList = showCdLanguageSelectorAlert(languagesOrder);
+
+        List<Path> fileList = new LinkedList<>();
+        Collections.addAll(fileList, CdLangFiles.getRegularFiles());
+        for (Pane pane : languageList) {
+            CheckBox checkBox = (CheckBox) pane.getChildren().get(0);
+            if (checkBox.isSelected()) {
+                fileList.add(Paths.get(CdLangFiles.values()[languageList.indexOf(pane)].getFileName()));
+            }
+        }
+
+        copyBaseCD(fileList);
+        /*
+        скопіювати вибрані мови
+         */
+    }
+
+    private void copyBaseCD(List<Path> fileList) throws IOException {
+        System.out.println("The method copyBaseCD() do nothing");
+//        Path sourceDirPath = Paths.get(app.getCDTEMPLATE());
+//        Path targetDirPath = Paths.get(app.getCdsString());
+//        for (Path path: fileList){
+//            if (Files.isDirectory(sourceDirPath.resolve(path))){
+//                Files.walk(sourceDirPath.resolve(path)).forEach(source ->{
+//                    Path destination = targetDirPath.resolve(source.getFileName());
+//                    try {
+//                        app.copyPath(source,destination);
+//                    } catch (IOException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                });
+//            }else app.copyPath(sourceDirPath.resolve(path),targetDirPath.resolve(path));
+//        }
+    }
+
+    private ObservableList<Pane> showCdLanguageSelectorAlert(List<String> languagesOrder) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Select languages");
+        ObservableList<Pane> languageList = FXCollections.observableArrayList();
+
+        for (CdLangFiles lang : CdLangFiles.values()) {
+            CheckBox checkBox = new CheckBox();
+            languageList.add(new FlowPane(5, 5, checkBox, new Label(lang.getDescription())));
+            if (languagesOrder.contains(lang.getDescription())) {
+                checkBox.setSelected(true);
+            }
+        }
+        alert.getDialogPane().setContent(new ListView<Pane>(languageList));
+        alert.showAndWait();
+        return languageList;
     }
 
     @FXML
@@ -348,6 +420,9 @@ public class MainFrameController {
             alert.setTitle("Attention");
             alert.setHeaderText("File " + targetPath.getFileName() + " exist");
             alert.setContentText("Do you really want to replace " + targetPath.getFileName() + " file?");
+
+            ((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText("Yes");
+            ((Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL)).setText("No");
             Optional<ButtonType> optionalButtonType = alert.showAndWait();
 
             if (optionalButtonType.get() == ButtonType.OK)
@@ -366,6 +441,9 @@ public class MainFrameController {
                 alert.setHeaderText("There is uncopied files");
                 alert.setContentText("You haven't copied " + getMachine().defineFileName(item) + " file\n"
                         + "Are you sure you want to continue ");
+
+                ((Button) alert.getDialogPane().lookupButton(ButtonType.YES)).setText("Yes");
+                ((Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL)).setText("No");
                 Optional<ButtonType> result = alert.showAndWait();
 
                 if (result.get() == ButtonType.OK)
@@ -495,7 +573,7 @@ public class MainFrameController {
         if (currentTarget == Targets.INSTALL)
             updateInstallationName();
 
-        if (currentTarget == Targets.MACHINE || currentTarget == Targets.APRAGAZ){
+        if (currentTarget == Targets.MACHINE || currentTarget == Targets.APRAGAZ) {
             ArrayList<String> machinePlansList = new ArrayList<>();
             createMachinePlansList(machinePlansList);
 
@@ -512,12 +590,12 @@ public class MainFrameController {
         }
     }
 
-    private void createMachinePlansList(ArrayList<String> machinePlansList){
+    private void createMachinePlansList(ArrayList<String> machinePlansList) {
         machinePlansList.add("   I" + app.getMachineCode());
         machinePlansList.add("   E" + app.getMachineCode());
         machinePlansList.add("   FS" + app.getMachineCode());
 
-        if (currentTarget == Targets.APRAGAZ){
+        if (currentTarget == Targets.APRAGAZ) {
             currentTarget = Targets.MACHINE;
             return;
         }
