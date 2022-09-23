@@ -58,6 +58,9 @@ public class MainFrameController {
     private Label machineCode;
 
     @FXML
+    private Label sgBar;
+
+    @FXML
     private ListView<Path> machineDir;
 
     @FXML
@@ -492,6 +495,11 @@ public class MainFrameController {
         app.initLuxParser();
         getMachine().setMachineType(luxParser.getMachineType());
         machineType.setText(getMachine().getMachineType());
+        String macchinePresure = luxParser.getSgBar();
+        sgBar.setText("SG" + macchinePresure);
+        if (Integer.parseInt(macchinePresure) < 40) {
+            sgBar.setTextFill(Color.BLUE);
+        }
         additionalComboBox.setValue(getMachine().getAdditionalOption());
         getMachine().initMachineCode();
         machineCode.setText(app.getMachineCode());

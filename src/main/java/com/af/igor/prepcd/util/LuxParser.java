@@ -1,5 +1,6 @@
 package com.af.igor.prepcd.util;
 
+import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
@@ -44,6 +45,18 @@ public class LuxParser extends ExcelParser {
         XSSFSheet sheet = workbook.getSheet("Encodage Admin");
         String machineType = String.format("%s", sheet.getRow(1).getCell(2)).replaceAll(" ", "").trim();
         return machineType;
+    }
+
+    public String getSgBar() {
+        XSSFSheet sheet = workbook.getSheet("For Manual");
+        String sgFormula = String.format("%s", sheet.getRow(2).getCell(3));
+        String sgAddress = sgFormula.substring(sgFormula.indexOf("'!") + 2, sgFormula.indexOf("<>"));
+
+        sheet = workbook.getSheet("Encodage Scope");
+        CellReference cellReference = new CellReference(sgAddress);
+        String cellText = sheet.getRow(cellReference.getRow()).getCell(cellReference.getCol()).getStringCellValue();
+
+        return cellText.substring(0, cellText.indexOf(" "));
     }
 
     public String getMachineData() {
