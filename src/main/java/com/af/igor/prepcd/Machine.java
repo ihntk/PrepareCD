@@ -4,7 +4,10 @@ import com.af.igor.prepcd.util.AdditionalOptions;
 import com.af.igor.prepcd.util.ConsoleHelper;
 
 import java.io.*;
-import java.nio.file.*;
+import java.nio.file.FileSystemException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -123,7 +126,7 @@ public class Machine {
 
     }
 
-    public void initMachineCode(){
+    public void initMachineCode() {
         if (machineCodePure == null)
             machineCodePure = app.getMachineCode();
 
@@ -204,8 +207,7 @@ public class Machine {
 
 
     /*
-    getMachineXls() check machineXls exist, if no copy and launch it in excel
-    also copy Luxemburg xls and launch it too
+    getMachineXls() check machineXls exist, if false, copy base machineXls
      */
     public boolean getMachineXls() throws IOException {
         boolean isXlsCreated = false;

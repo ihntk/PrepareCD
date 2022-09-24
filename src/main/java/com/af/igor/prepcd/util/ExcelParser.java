@@ -1,6 +1,9 @@
 package com.af.igor.prepcd.util;
 
 import com.af.igor.prepcd.MainApp;
+import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
@@ -12,6 +15,7 @@ public abstract class ExcelParser {
     MainApp app = MainApp.getInstance();
     protected String excelFile;
     protected XSSFWorkbook workbook;
+    protected XSSFSheet sheet;
 
     public void setExcelFile(String excelFile) {
         this.excelFile = excelFile;
@@ -31,6 +35,10 @@ public abstract class ExcelParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    protected XSSFCell getCell(CellReference cellReference) {
+        return sheet.getRow(cellReference.getRow()).getCell(cellReference.getCol());
     }
 
     public abstract String[] getLanguages();

@@ -9,10 +9,10 @@ import java.io.IOException;
  */
 public class MainAppTest {
     private static MainApp mainApp;
-    private static Desktop desktop=Desktop.getDesktop();
+    private static Desktop desktop = Desktop.getDesktop();
 
     public static void main(String[] args) throws IOException {
-        mainApp =MainApp.getInstance();
+        mainApp = MainApp.getInstance();
         mainApp.logger.log("MainAppTest started");
         mainApp.logger.log("testPart");
         testPath();

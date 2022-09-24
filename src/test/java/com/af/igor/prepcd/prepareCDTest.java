@@ -9,6 +9,7 @@ import java.util.List;
 public class prepareCDTest {
     private static MainApp mainApp;
     private static PrepareCD prepareCD;
+
     public static void main(String[] args) throws IOException, InterruptedException {
         PrepareCD.main(args);
         mainApp = MainApp.getInstance();

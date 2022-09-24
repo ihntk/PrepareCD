@@ -4,7 +4,6 @@ import com.af.igor.prepcd.MainApp;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 /**
  * Created by ede on 30.08.2016.
@@ -14,8 +13,6 @@ public class MachineExcelParser extends ExcelParser {
 
     private MachineExcelParser() {
     }
-
-    XSSFSheet sheet;
 
     @Override
     public void setExcelFile(String excelFile) {
@@ -58,9 +55,5 @@ public class MachineExcelParser extends ExcelParser {
         getCell(new CellReference("D1")).setCellValue(MainApp.getGui().getController().getSgBarString());
 
         writeXLS();
-    }
-
-    private XSSFCell getCell(CellReference cellReference) {
-        return sheet.getRow(cellReference.getRow()).getCell(cellReference.getCol());
     }
 }

@@ -21,9 +21,10 @@ public enum BaseDrawingPaths {
 
     private String path;
 
-    private BaseDrawingPaths(String path){
-        this.path=path;
+    private BaseDrawingPaths(String path) {
+        this.path = path;
     }
+
     @Override
     public String toString() {
         return path;

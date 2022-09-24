@@ -2,7 +2,6 @@ package com.af.igor.prepcd.util;
 
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -25,7 +24,7 @@ public class LuxParser extends ExcelParser {
 
     public String[] getLanguages() {
         List<String> languages = new LinkedList<>();
-        XSSFSheet sheet = workbook.getSheet("Encodage Admin");
+        sheet = workbook.getSheet("Encodage Admin");
         ConsoleHelper.writeMessage("last row " + sheet.getLastRowNum());
         for (int i = 0; i < sheet.getLastRowNum(); i++) {
             XSSFCell cell = sheet.getRow(i).getCell(2);
@@ -42,19 +41,17 @@ public class LuxParser extends ExcelParser {
     }
 
     public String getMachineType() {
-        XSSFSheet sheet = workbook.getSheet("Encodage Admin");
+        sheet = workbook.getSheet("Encodage Admin");
         String machineType = String.format("%s", sheet.getRow(1).getCell(2)).replaceAll(" ", "").trim();
         return machineType;
     }
 
     public String getSgBar() {
-        XSSFSheet sheet = workbook.getSheet("For Manual");
+        sheet = workbook.getSheet("For Manual");
         String sgFormula = String.format("%s", sheet.getRow(2).getCell(3));
         String sgAddress = sgFormula.substring(sgFormula.indexOf("'!") + 2, sgFormula.indexOf("<>"));
-
         sheet = workbook.getSheet("Encodage Scope");
-        CellReference cellReference = new CellReference(sgAddress);
-        String cellText = sheet.getRow(cellReference.getRow()).getCell(cellReference.getCol()).getStringCellValue();
+        String cellText = getCell(new CellReference(sgAddress)).getStringCellValue();
 
         return cellText.substring(0, cellText.indexOf(" "));
     }
