@@ -120,6 +120,10 @@ public class MainFrameController {
             targetFileName = installationName;
     }
 
+    public String getSgBarString() {
+        return sgBar.getText();
+    }
+
     public MainFrameController() {
     }
 
@@ -246,6 +250,8 @@ public class MainFrameController {
         if (!getMachine().getMachineXls())
             hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getMachineDir().getMachineXls());
         else {
+            app.initMachineExcelParser();
+            machineExcelParser.fillInMachineXls();
             hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getMachineDir().getMachineXls());
             hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getLuxFileName());
         }

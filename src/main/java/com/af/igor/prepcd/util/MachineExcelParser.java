@@ -1,5 +1,9 @@
 package com.af.igor.prepcd.util;
 
+import com.af.igor.prepcd.MainApp;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 /**
@@ -46,4 +50,17 @@ public class MachineExcelParser extends ExcelParser {
         return mPlans;
     }
 
+    public void fillInMachineXls() {
+        XSSFCell machineNameCell = getCell(new CellReference("H3"));
+        machineNameCell.setCellType(CellType.STRING);
+        machineNameCell.setCellValue(MainApp.getMachine().getMachineName());
+        getCell(new CellReference("H9")).setCellValue(MainApp.getMachine().getAdditionalOption().getIncrement());
+        getCell(new CellReference("D1")).setCellValue(MainApp.getGui().getController().getSgBarString());
+
+        writeXLS();
+    }
+
+    private XSSFCell getCell(CellReference cellReference) {
+        return sheet.getRow(cellReference.getRow()).getCell(cellReference.getCol());
+    }
 }
