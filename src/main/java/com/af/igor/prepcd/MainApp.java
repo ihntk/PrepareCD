@@ -42,7 +42,7 @@ public class MainApp {
     public static String DRAWINGS_DIR;
 
     private static MainApp instance;
-    private static String version = "0.8.1";
+    private static String version = "0.8.1+";
     private static Machine machine;
     public static LuxParser luxParser;
     public static MachineExcelParser machineExcelParser;

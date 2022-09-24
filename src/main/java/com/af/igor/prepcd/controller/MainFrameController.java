@@ -501,10 +501,14 @@ public class MainFrameController {
         app.initLuxParser();
         getMachine().setMachineType(luxParser.getMachineType());
         machineType.setText(getMachine().getMachineType());
-        String macchinePresure = luxParser.getSgBar();
-        sgBar.setText("SG" + macchinePresure);
-        if (Integer.parseInt(macchinePresure) < 40) {
-            sgBar.setTextFill(Color.BLUE);
+        if (machineType.getText().startsWith("OPC")) {
+            sgBar.setText("");
+        } else {
+            String machinePressure = luxParser.getSgBar();
+            sgBar.setText("SG" + machinePressure);
+            if (Integer.parseInt(machinePressure) < 40) {
+                sgBar.setTextFill(Color.BLUE);
+            }
         }
         additionalComboBox.setValue(getMachine().getAdditionalOption());
         getMachine().initMachineCode();

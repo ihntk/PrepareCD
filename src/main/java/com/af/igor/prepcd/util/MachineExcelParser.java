@@ -52,7 +52,10 @@ public class MachineExcelParser extends ExcelParser {
         machineNameCell.setCellType(CellType.STRING);
         machineNameCell.setCellValue(MainApp.getMachine().getMachineName());
         getCell(new CellReference("H9")).setCellValue(MainApp.getMachine().getAdditionalOption().getIncrement());
-        getCell(new CellReference("D1")).setCellValue(MainApp.getGui().getController().getSgBarString());
+        String sgBar = MainApp.getGui().getController().getSgBarString();
+        if (!sgBar.equals("")) {
+            getCell(new CellReference("D1")).setCellValue(sgBar);
+        }
 
         writeXLS();
     }
