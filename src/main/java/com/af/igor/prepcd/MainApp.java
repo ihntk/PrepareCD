@@ -21,7 +21,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Properties;
 import java.util.prefs.Preferences;
 
@@ -42,7 +41,7 @@ public class MainApp {
     public static String DRAWINGS_DIR;
 
     private static MainApp instance;
-    private static String version = "0.8.1+";
+    private static String version = "0.8.2";
     private static Machine machine;
     public static LuxParser luxParser;
     public static MachineExcelParser machineExcelParser;
@@ -152,54 +151,55 @@ public class MainApp {
     }
 
     /*
-    global method
+    must be renamed to searcLuxhFile
      */
     public String searchFileNameStartWith(String path, String startWithPattern) {
-        ArrayList<String> fileNames = new ArrayList<>(3);
-        String fileName = null;
+        ArrayList<String> xlsFileNames = new ArrayList<>(3);
+        String searchedFileName = null;
+        String luxFile = null;
         int count = 0;
         try {
             String[] files = new File(path).list();
             for (String file : files) {
-                if (file.startsWith(startWithPattern)) {
-                    fileNames.add(file);
+                if (file.endsWith(".xlsx") || file.endsWith(".xltx")) {
+                    xlsFileNames.add(file);
+                    if (file.startsWith(startWithPattern)) {
+                        count++;
+                        luxFile = file;
+                    }
                 }
             }
-            count = fileNames.size();
-            if (count == 0) {
+            if (count == 1) {
+                searchedFileName = luxFile;
+            } else {
                 if (gui != null) {
-                    fileName = gui.getController().processChooseLuxFile(path, Arrays.asList(files));
-                }
-            } else if (count > 1) {
-                if (gui != null) {
-                    fileName = gui.getController().processChooseLuxFile(path, fileNames);
-
+                    searchedFileName = gui.getController().processChooseLuxFile(path, xlsFileNames);
                 } else {
                     desktop.open(new File(path));
                     ConsoleHelper.writeMessage("Attention! There are " + count + " files for this machine");
 
                     for (int i = 0; i < count; i++) {
-                        ConsoleHelper.writeMessage("   " + (i + 1) + " - " + fileNames.get(i));
+                        ConsoleHelper.writeMessage("   " + (i + 1) + " - " + xlsFileNames.get(i));
                     }
 
                     while (true) {
                         ConsoleHelper.writeMessage("choose number of correct file ");
                         try {
                             int number = Integer.parseInt(ConsoleHelper.readString()) - 1;
-                            fileName = fileNames.get(number);
+                            searchedFileName = xlsFileNames.get(number);
                             break;
                         } catch (ArrayIndexOutOfBoundsException e) {
                             ConsoleHelper.writeMessage("You input incorrect number, please try again");
                         }
                     }
                 }
-            } else fileName = fileNames.get(0);
+            }
         } catch (Exception e) {
             logger.log("Error in mainApp.searchFileNameStartWith\n   path is: " + path + "\n     pattern is: " + startWithPattern + "\n");
             logger.log(e.toString());
             e.printStackTrace();
         }
-        return fileName;
+        return searchedFileName;
     }
 
     public void openWithFileMan(String pathParameters) throws IOException {

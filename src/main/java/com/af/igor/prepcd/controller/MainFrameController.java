@@ -508,6 +508,8 @@ public class MainFrameController {
             sgBar.setText("SG" + machinePressure);
             if (Integer.parseInt(machinePressure) < 40) {
                 sgBar.setTextFill(Color.BLUE);
+            } else {
+                sgBar.setTextFill(Color.BLACK);
             }
         }
         additionalComboBox.setValue(getMachine().getAdditionalOption());
@@ -543,7 +545,6 @@ public class MainFrameController {
     public String processChooseLuxFile(String path, List<String> list) throws IOException {
         String fileName = null;
         int index = -1;
-        int selected = 0;
         Optional<ButtonType> result;
 
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -553,24 +554,10 @@ public class MainFrameController {
         ListView<String> listView = new ListView<>();
         listView.setItems(FXCollections.observableArrayList(list));
         listView.setPrefHeight(120);
-
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).endsWith(".xlsx") || list.get(i).endsWith(".xltx")) {
-                listView.scrollTo(i);
-                listView.getSelectionModel().select(i);
-                selected++;
-            }
-        }
-
         alert.getDialogPane().setContent(listView);
 
-        if (selected == 1)
-            result = Optional.ofNullable(ButtonType.OK);
-        else {
-            app.openWithFileMan("--t --l=\"" + path + "\"");
-            result = alert.showAndWait();
-        }
-
+        app.openWithFileMan("--t --l=\"" + path + "\"");
+        result = alert.showAndWait();
 
         if (result.get() == ButtonType.OK) {
             index = listView.getSelectionModel().getSelectedIndex();
