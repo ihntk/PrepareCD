@@ -76,8 +76,14 @@ public class RootLayoutController {
         renameAllCkdFiles.setDisable(true);
     }
 
+    @FXML
     public void handleRenameAllCkdFiles() throws IOException {
         app.getMachine().renameAllCkd();
         app.getGui().getController().refreshMachinePlansList();
+    }
+
+    @FXML
+    public void handleOffline() {
+        app.toggleOffline();
     }
 }

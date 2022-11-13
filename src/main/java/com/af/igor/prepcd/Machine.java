@@ -336,14 +336,14 @@ public class Machine {
     }
 
     public void copyLuxFile() throws IOException {
-        if (luxFileName != null) {
-            try {
-                app.copy(luxPathString + luxFileName, machinePathString + luxFileName, REPLACE_EXISTING);
-                app.logger.log("Copied luxFileName:\n   " + luxFileName);
-            } catch (FileSystemException e) {
-                ConsoleHelper.writeMessage("I can't replace " + luxFileName + " file because it is being used by another process");
-                app.logger.log("Could'nt replace:\n   " + luxFileName);
-            }
+        if (luxFileName == null || app.isOfflineMode()) return;
+
+        try {
+            app.copy(luxPathString + luxFileName, machinePathString + luxFileName, REPLACE_EXISTING);
+            app.logger.log("Copied luxFileName:\n   " + luxFileName);
+        } catch (FileSystemException e) {
+            ConsoleHelper.writeMessage("I can't replace " + luxFileName + " file because it is being used by another process");
+            app.logger.log("Could'nt replace:\n   " + luxFileName);
         }
     }
 

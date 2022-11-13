@@ -59,6 +59,8 @@ public class MainFrameController {
 
     @FXML
     private Label sgBar;
+    @FXML
+    private Label offline;
 
     @FXML
     private ListView<Path> machineDir;
@@ -109,6 +111,7 @@ public class MainFrameController {
     private String targetFileName;
     private Targets currentTarget;
 
+
     public void setApplication(PrepareCD application) {
         this.application = application;
         hostServices = application.getHostServices();
@@ -147,6 +150,16 @@ public class MainFrameController {
         cdDirFS = FSHelper.getInstance(cdDirList);
 
         additionalComboBox.setItems(FXCollections.observableArrayList(AdditionalOptions.values()));
+
+        showOfflineMode();
+    }
+
+    public void showOfflineMode() {
+        if (app.isOfflineMode()) {
+            offline.setVisible(true);
+        } else {
+            offline.setVisible(false);
+        }
     }
 
     @FXML
@@ -157,7 +170,7 @@ public class MainFrameController {
             machineInit(machineName.getText().toUpperCase());
             status.setText("Machine is " + getMachine().getMachineName());
             target.setText("Ready");
-            application.setTitle(getMachine().getMachineName());
+            application.setTitle(getMachine().getMachineName() + (app.isOfflineMode() ? " - *OFFLINE*" : ""));
             currentMachine.setText(getMachine().getMachineName());
             machineName.setText(getMachine().getMachineName());
         } catch (IOException e) {
@@ -483,15 +496,17 @@ public class MainFrameController {
 
     public void machineInit(String machineName) throws IOException, InterruptedException {
         app.logger.log("-----\n");
-        if (!Files.exists(Paths.get(app.H_MACHINES + machineName))) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Machine does'nt exists");
-            alert.setHeaderText("Machine " + machineName + " doesn't exists");
-            alert.setContentText("There is no directory for machine " + machineName + ".\n" +
-                    "Make sure you enter correct machine name");
-            alert.showAndWait();
-            app.logger.log(machineName + " doesn't exists");
-            return;
+        if (!app.isOfflineMode()) {
+            if (!Files.exists(Paths.get(app.H_MACHINES + machineName))) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Machine does'nt exists");
+                alert.setHeaderText("Machine " + machineName + " doesn't exists");
+                alert.setContentText("There is no directory for machine " + machineName + ".\n" +
+                        "Make sure you enter correct machine name");
+                alert.showAndWait();
+                app.logger.log(machineName + " doesn't exists");
+                return;
+            }
         }
         app.initializeMachine(machineName);
         currentTarget = null;

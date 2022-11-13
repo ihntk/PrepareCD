@@ -52,6 +52,7 @@ public class MainApp {
     private static PrepareCD gui = null;
     private static FileManagers fileManager;
     private static Preferences preferences;
+    private boolean offlineMode;
 
     private MainApp() {
         try {
@@ -108,11 +109,29 @@ public class MainApp {
         return machine;
     }
 
+    public boolean isOfflineMode() {
+        return offlineMode;
+    }
+
+    public void toggleOffline() {
+        offlineMode = !offlineMode;
+        logger.log("Offline mode is " + (isOfflineMode() ? "enabled" : "disabled"));
+        gui.getController().showOfflineMode();
+    }
+
     public void initializeMachine(String machineName) throws IOException, InterruptedException {
         if (machineName == null) initializeCurrentDirPath(machineName);
 
         machine = new Machine(machineName);
-        machine.setLuxFileName(searchLuxFile());
+        String luxFileName = "";
+        if (!isOfflineMode()) {
+            luxFileName = searchLuxFile();
+        } else {
+            if (gui != null) {
+                luxFileName = gui.getController().processChooseLuxFile(machine.getMachinePathString(), getXlsFileList(new File(machine.getMachinePathString()).list()));
+            }
+        }
+        machine.setLuxFileName(luxFileName);
 
         logger.log("machine name is: " + machineName);
     }
@@ -155,14 +174,11 @@ public class MainApp {
         String luxFile = null;
         int count = 0;
         try {
-            String[] files = new File(path).list();
-            for (String file : files) {
-                if (file.endsWith(".xlsx") || file.endsWith(".xltx")) {
-                    xlsFileNames.add(file);
-                    if (file.startsWith(machine.getMachineName())) {
-                        count++;
-                        luxFile = file;
-                    }
+            xlsFileNames = getXlsFileList(new File(path).list());
+            for (String file : xlsFileNames) {
+                if (file.startsWith(machine.getMachineName())) {
+                    count++;
+                    luxFile = file;
                 }
             }
             if (count == 1) {
@@ -196,6 +212,16 @@ public class MainApp {
             e.printStackTrace();
         }
         return searchedFileName;
+    }
+
+    private ArrayList<String> getXlsFileList(String[] files) {
+        ArrayList<String> xlsFileList = new ArrayList<>(3);
+        for (String file : files) {
+            if (file.endsWith(".xlsx") || file.endsWith(".xltx")) {
+                xlsFileList.add(file);
+            }
+        }
+        return xlsFileList;
     }
 
     public void openWithFileMan(String pathParameters) throws IOException {
