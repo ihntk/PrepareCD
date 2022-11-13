@@ -19,29 +19,28 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
  * Created by ede on 11.08.2016.
  */
 public class Machine {
-    protected final String luxFileName;
+    private String luxFileName;
     MainApp app = MainApp.getInstance();
     private final String machineName;
     private String machineType;
     private final String sm;        //first two symbols in machine name (usually 20)
     private final String machineSeries;
-    private String remoteMachinePath;
+    private String machinePathString;
+    private String remoteMachinePathString;
+    private final File machinePathDir;
     private Path confFile;
     private Properties confFileProperty = new Properties();
     private String machineCodePure;
     private String machineCode;
     private HashMap<String, String> propertyElements = new HashMap<>();
     private String luxPathString;
+    private final String machineXlsName;
 
-    MachineDir machineDir;
-    private AdditionalOptions additionalOption;
+    private AdditionalOptions additionalOption = AdditionalOptions.BASE_FRAME;
 
-    public MachineDir getMachineDir() {
-        return machineDir;
-    }
 
-    public String getRemoteMachinePath() {
-        return remoteMachinePath;
+    public String getRemoteMachinePathString() {
+        return remoteMachinePathString;
     }
 
     public String getMachineCode() {
@@ -56,12 +55,28 @@ public class Machine {
         return luxFileName;
     }
 
+    public void setLuxFileName(String luxFileName) {
+        this.luxFileName = luxFileName;
+    }
+
+    public String getMachineXlsName() {
+        return machineXlsName;
+    }
+
+    public String getMachinePathString() {
+        return machinePathString;
+    }
+
     public String getMachineType() {
         return machineType;
     }
 
     public String getMachineName() {
         return machineName;
+    }
+
+    public String getLuxPathString() {
+        return luxPathString;
     }
 
     public String getMachineSeries() {
@@ -73,8 +88,8 @@ public class Machine {
     }
 
     public boolean setRemoteMachinePath(String remoteMachinePath) {
-        this.remoteMachinePath = remoteMachinePath;
-        propertyElements.put("remoteMachinePath", this.remoteMachinePath);
+        this.remoteMachinePathString = remoteMachinePath;
+        propertyElements.put("remoteMachinePath", this.remoteMachinePathString);
         return saveConfigFile();
     }
 
@@ -99,31 +114,16 @@ public class Machine {
 
     public Machine(String machineName) throws IOException {
         this.machineName = machineName;
-        additionalOption = AdditionalOptions.BASE_FRAME;
-        remoteMachinePath = app.H_MACHINES + machineName + "/";
-
+        remoteMachinePathString = app.H_MACHINES + machineName + "/";
         sm = machineName.substring(0, 2);
         machineSeries = machineName.substring(2, 3).equals("Y") ? machineName.substring(2, 3) : machineName.substring(2, 4);
-
-        luxPathString = remoteMachinePath + "010 Order/";
-        luxFileName = app.searchFileNameStartWith(luxPathString, machineName);
-        if (luxFileName == null) {
-            app.logger.log("Program can't find luxemburg file\nluxPathString is:\n   " + luxPathString);
-            app.logger.log("machineName is:\n   " + machineName);
-            app.desktop.open(new File(luxPathString));
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
-                ConsoleHelper.writeMessage("Are you sure the machine " + machineName + " is exist? (y/N)");
-                if (!reader.readLine().toLowerCase().equals("y")) machineName = null;
-            }
-        }
-
-        if (machineName != null) {
-            machineDir = new MachineDir(this);
-
-            confFile = Paths.get(machineDir.getMachinePathString(), machineName + ".conf");
-            loadFromConfigFile();
-        }
-
+        luxPathString = remoteMachinePathString + "010 Order/";
+        machineXlsName = machineName + ".xlsx";
+        machinePathString = app.MACHINES + machineName + "/";
+        confFile = Paths.get(machinePathString, machineName + ".conf");
+        machinePathDir = new File(machinePathString);
+        machinePathDir.mkdir();
+        loadFromConfigFile();
     }
 
     public void initMachineCode() {
@@ -146,8 +146,8 @@ public class Machine {
 
             confFileProperty.load(stream);
             if (confFileProperty.containsKey("remoteMachinePath")) {
-                remoteMachinePath = confFileProperty.getProperty("remoteMachinePath");
-                propertyElements.put("remoteMachinePath", remoteMachinePath);
+                remoteMachinePathString = confFileProperty.getProperty("remoteMachinePath");
+                propertyElements.put("remoteMachinePath", remoteMachinePathString);
             }
             if (confFileProperty.containsKey("machineCodePure")) {
                 machineCode = confFileProperty.getProperty("machineCodePure");
@@ -209,9 +209,9 @@ public class Machine {
     /*
     getMachineXls() check machineXls exist, if false, copy base machineXls
      */
-    public boolean getMachineXls() throws IOException {
+    public boolean copyMachineXlsIfNotExist() throws IOException {
         boolean isXlsCreated = false;
-        if (!new File(machineDir.machinePath + machineDir.machineXls).exists()) {
+        if (!new File(machinePathString + machineXlsName).exists()) {
             copyXls();
             isXlsCreated = true;
         }
@@ -221,16 +221,16 @@ public class Machine {
 
     public void openLuxFile() throws IOException {
         copyLuxFile();
-        app.desktop.open(new File(machineDir.machinePath + luxFileName));
+        app.desktop.open(new File(machinePathString + luxFileName));
     }
 
     public String getXls() {
-        return machineDir.machineXls;
+        return machineXlsName;
     }
 
     public void renameAllCkd() throws IOException {
         String machineCode = app.getMachineCode();
-        ArrayList<String> ckdFiles = machineDir.getCkdFiles();
+        ArrayList<String> ckdFiles = getCkdFiles();
         for (String file : ckdFiles) {
             if ((file.startsWith("E")) && (!file.startsWith("Etiqclas"))) {
                 try {
@@ -301,35 +301,35 @@ public class Machine {
     }
 
     public void open4CkdFiles() throws IOException {
-        ArrayList<String> ckdFiles = machineDir.getCkdFiles();
+        ArrayList<String> ckdFiles = getCkdFiles();
         for (String file : ckdFiles) {
             if (file.startsWith("FS"))
-                app.desktop.open(new File(machineDir.machinePath + file));
+                app.desktop.open(new File(machinePathString + file));
             if (file.startsWith("Etiqclas"))
-                app.desktop.open(new File(machineDir.machinePath + file));
+                app.desktop.open(new File(machinePathString + file));
             if ((file.startsWith("E")) && (!file.startsWith("Etiqclas")))
-                app.desktop.open(new File(machineDir.machinePath + file));
+                app.desktop.open(new File(machinePathString + file));
             if (file.startsWith("I"))
-                app.desktop.open(new File(machineDir.machinePath + file));
+                app.desktop.open(new File(machinePathString + file));
         }
     }
 
     public void openMCkdFiles() throws IOException {
-        ArrayList<String> ckdFiles = machineDir.getCkdFiles();
+        ArrayList<String> ckdFiles = getCkdFiles();
         for (String file : ckdFiles) {
             if (file.startsWith("M"))
-                app.desktop.open(new File(machineDir.machinePath + file));
+                app.desktop.open(new File(machinePathString + file));
         }
     }
 
     public void copyEtiq() throws IOException {
         String machineEtiq = "Etiqclas" + "-" + getMachineName().substring(2) + ".ckd";
-        if (!new File(machineDir.machinePath + machineEtiq).exists())
-            app.copy(app.ETIQCLAS, machineDir.machinePath + machineEtiq);
+        if (!new File(machinePathString + machineEtiq).exists())
+            app.copy(app.ETIQCLAS, machinePathString + machineEtiq);
     }
 
-    protected void copyXls() throws IOException {
-        app.copy(app.XLS, machineDir.machinePath + machineDir.machineXls);
+    private void copyXls() throws IOException {
+        app.copy(app.XLS, machinePathString + machineXlsName);
         app.logger.log("Copied xls");
 
         copyLuxFile();
@@ -338,7 +338,7 @@ public class Machine {
     public void copyLuxFile() throws IOException {
         if (luxFileName != null) {
             try {
-                app.copy(luxPathString + luxFileName, machineDir.machinePath + luxFileName, REPLACE_EXISTING);
+                app.copy(luxPathString + luxFileName, machinePathString + luxFileName, REPLACE_EXISTING);
                 app.logger.log("Copied luxFileName:\n   " + luxFileName);
             } catch (FileSystemException e) {
                 ConsoleHelper.writeMessage("I can't replace " + luxFileName + " file because it is being used by another process");
@@ -348,7 +348,7 @@ public class Machine {
     }
 
     public void renameInLocalDir(String sourceName, String targetName) throws IOException {
-        app.rename(machineDir.machinePath + sourceName, machineDir.machinePath + targetName);
+        app.rename(machinePathString + sourceName, machinePathString + targetName);
     }
 
     public String defineFileName(Path selectedItem) {
@@ -404,5 +404,18 @@ public class Machine {
         return fileName;
     }
 
+    public String[] getFiles() {
+        return machinePathDir.list();
+
+    }
+
+    public ArrayList<String> getCkdFiles() {
+        ArrayList<String> ckd = new ArrayList<>();
+        for (String file : getFiles()) {
+            if (file.toLowerCase().endsWith(".ckd"))
+                ckd.add(file);
+        }
+        return ckd;
+    }
 
 }

@@ -229,7 +229,7 @@ public class MainFrameController {
         target.setText("Install");
         app.logger.log("target is: installation");
         resetControlsDefault();
-        machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
+        machineDirFS.getFiles(Paths.get(getMachine().getMachinePathString()));
         remoteMachineDirFS.getFiles(Paths.get(app.PLANS, BaseDrawingPaths.I.toString()));
 
         updateInstallationName();
@@ -238,7 +238,7 @@ public class MainFrameController {
         ok.setDisable(false);
         application.getRootLayoutController().enableRenameAllCkdFiles();
         status.setText("Copy base installation drawing for " + getMachine().getMachineType() + ". Then press ok");
-        app.openWithFileMan("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + getMachine().getRemoteMachinePath() + DRAWINGS_DIR + "\"");
+        app.openWithFileMan("--l=\"" + getMachine().getMachinePathString() + "\" --t --r=\"" + getMachine().getRemoteMachinePathString() + DRAWINGS_DIR + "\"");
     }
 
     @FXML
@@ -247,13 +247,13 @@ public class MainFrameController {
         target.setText("Xls");
         app.logger.log("target is: xls");
         resetControlsDefault();
-        if (!getMachine().getMachineXls())
-            hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getMachineDir().getMachineXls());
+        if (!getMachine().copyMachineXlsIfNotExist())
+            hostServices.showDocument(getMachine().getMachinePathString() + getMachine().getMachineXlsName());
         else {
             app.initMachineExcelParser();
             machineExcelParser.fillInMachineXls();
-            hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getMachineDir().getMachineXls());
-            hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getLuxFileName());
+            hostServices.showDocument(getMachine().getMachinePathString() + getMachine().getMachineXlsName());
+            hostServices.showDocument(getMachine().getMachinePathString() + getMachine().getLuxFileName());
         }
         status.setText("You can processing xls file");
         endCurrentTarget();
@@ -266,14 +266,14 @@ public class MainFrameController {
         app.logger.log("target is: machine");
         resetControlsDefault();
 
-        if (!Files.exists(Paths.get(getMachine().getMachineDir().getMachinePathString() + getMachine().getMachineDir().getMachineXls()))) {
+        if (!Files.exists(Paths.get(getMachine().getMachinePathString() + getMachine().getMachineXlsName()))) {
             status.setText("You haven't xls file yet! You could correct this now");
             handleXls();
             status.setText("You can continue process machine just pressing Machine button");
         } else {
-            basePlanDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
+            basePlanDirFS.getFiles(Paths.get(getMachine().getMachinePathString()));
             remoteMachineDirFS.getFiles(Paths.get(app.PLANS));
-            cdDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath(), DRAWINGS_DIR));
+            cdDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePathString(), DRAWINGS_DIR));
 
             refreshMachinePlansList();
 
@@ -284,7 +284,7 @@ public class MainFrameController {
             f4Button.setText("Apragaz");
             f4Button.setDisable(false);
             status.setText("Copy base drawings for " + getMachine().getMachineType() + ". Then press ok");
-            app.openWithFileMan("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + PLANS + "\"");
+            app.openWithFileMan("--l=\"" + getMachine().getMachinePathString() + "\" --t --r=\"" + PLANS + "\"");
 
             String currentStatus = status.getText();
             machineDir.setOnMouseClicked(mouseEvent -> {
@@ -311,7 +311,7 @@ public class MainFrameController {
         currentTarget = Targets.CD;
         target.setText("CD");
         resetControlsDefault();
-        hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getMachineDir().getMachineXls());
+        hostServices.showDocument(getMachine().getMachinePathString() + getMachine().getMachineXlsName());
         app.openWithFileMan("--l=\"" + app.getCdsString() + "\" --t --r=\"" + app.getCdCommenceString() + "\"");
 
         app.initMachineExcelParser();
@@ -403,7 +403,7 @@ public class MainFrameController {
         int index = -1;
         if (targetFileName != null) {       // Target.INSTALL
             filename = targetFileName;
-            targetPath = Paths.get(getMachine().getMachineDir().getMachinePathString() + filename);
+            targetPath = Paths.get(getMachine().getMachinePathString() + filename);
         } else {                            // Target.MACHINE
             index = machineDir.getSelectionModel().getSelectedIndex();
             if (index < 0) {
@@ -415,7 +415,7 @@ public class MainFrameController {
                 return;
             }
             filename = getMachine().defineFileName(machineDir.getSelectionModel().getSelectedItem());
-            targetPath = Paths.get(getMachine().getMachineDir().getMachinePathString() + filename);
+            targetPath = Paths.get(getMachine().getMachinePathString() + filename);
         }
 
         if (!Files.exists(targetPath)) {
@@ -516,9 +516,9 @@ public class MainFrameController {
         getMachine().initMachineCode();
         machineCode.setText(app.getMachineCode());
 
-        machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
+        machineDirFS.getFiles(Paths.get(getMachine().getMachinePathString()));
 
-        remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath(), DRAWINGS_DIR));
+        remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePathString(), DRAWINGS_DIR));
 
         installButton.setDisable(false);
         xlsButton.setDisable(false);
@@ -585,7 +585,7 @@ public class MainFrameController {
             for (int i = 0; i < machinePlansList.size(); i++) {             //rename if file exist
                 String name = getMachine().defineFileName(Paths.get(machinePlansList.get(i)));
                 if (name != null)
-                    for (String file : getMachine().getMachineDir().getCkdFiles()) {
+                    for (String file : getMachine().getCkdFiles()) {
                         if (file.startsWith(name.substring(0, name.indexOf("."))))
                             machinePlansList.set(i, file);
                     }
@@ -616,9 +616,9 @@ public class MainFrameController {
     private void endCurrentTarget() throws IOException {
         switch (currentTarget) {
             case INSTALL: {
-                hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + getMachine().getLuxFileName());
-                hostServices.showDocument(getMachine().getMachineDir().getMachinePathString() + installationName);
-                remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath(), DRAWINGS_DIR));
+                hostServices.showDocument(getMachine().getMachinePathString() + getMachine().getLuxFileName());
+                hostServices.showDocument(getMachine().getMachinePathString() + installationName);
+                remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePathString(), DRAWINGS_DIR));
                 status.setText(installationName + " is opened");
             }
             break;
@@ -627,12 +627,12 @@ public class MainFrameController {
                 getMachine().copyEtiq();
                 getMachine().open4CkdFiles();
                 status.setText("Ready");
-                app.openWithFileMan("--r=\"" + getMachine().getRemoteMachinePath() + DRAWINGS_DIR + "\"");
+                app.openWithFileMan("--r=\"" + getMachine().getRemoteMachinePathString() + DRAWINGS_DIR + "\"");
                 f1Button.setText("Open M");
                 f1Button.setDisable(false);
 
-                machineDirFS.getFiles(Paths.get(getMachine().getMachineDir().getMachinePathString()));
-                remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePath(), DRAWINGS_DIR));
+                machineDirFS.getFiles(Paths.get(getMachine().getMachinePathString()));
+                remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePathString(), DRAWINGS_DIR));
                 basePlanDirList.clear();
                 cdDirList.clear();
 
@@ -645,7 +645,7 @@ public class MainFrameController {
                 break;
 
             case XLS: {
-                app.openWithFileMan("--l=\"" + getMachine().getMachineDir().getMachinePathString() + "\" --t --r=\"" + getMachine().getRemoteMachinePath() + DRAWINGS_DIR + "\"");
+                app.openWithFileMan("--l=\"" + getMachine().getMachinePathString() + "\" --t --r=\"" + getMachine().getRemoteMachinePathString() + DRAWINGS_DIR + "\"");
             }
             break;
         }

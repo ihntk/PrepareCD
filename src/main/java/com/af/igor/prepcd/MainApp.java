@@ -109,17 +109,15 @@ public class MainApp {
     }
 
     public void initializeMachine(String machineName) throws IOException, InterruptedException {
-        if (machineName == null) initializePath(machineName);
+        if (machineName == null) initializeCurrentDirPath(machineName);
 
         machine = new Machine(machineName);
+        machine.setLuxFileName(searchLuxFile());
+
         logger.log("machine name is: " + machineName);
     }
 
-    private void initializePath(String machineName) throws IOException, InterruptedException {
-        /*
-        Use current dir as path to machine
-         */
-
+    private void initializeCurrentDirPath(String machineName) throws IOException, InterruptedException {
         Path path = Paths.get("").toAbsolutePath();
         if (!path.toString().startsWith(MACHINES) && gui == null) {
             ConsoleHelper.writeMessage("\nYou are not in \"plans\" directory");
@@ -150,10 +148,8 @@ public class MainApp {
                 "\njava version " + System.getProperty("java.version");
     }
 
-    /*
-    must be renamed to searcLuxhFile
-     */
-    public String searchFileNameStartWith(String path, String startWithPattern) {
+    public String searchLuxFile() {
+        String path = machine.getLuxPathString();
         ArrayList<String> xlsFileNames = new ArrayList<>(3);
         String searchedFileName = null;
         String luxFile = null;
@@ -163,7 +159,7 @@ public class MainApp {
             for (String file : files) {
                 if (file.endsWith(".xlsx") || file.endsWith(".xltx")) {
                     xlsFileNames.add(file);
-                    if (file.startsWith(startWithPattern)) {
+                    if (file.startsWith(machine.getMachineName())) {
                         count++;
                         luxFile = file;
                     }
@@ -195,7 +191,7 @@ public class MainApp {
                 }
             }
         } catch (Exception e) {
-            logger.log("Error in mainApp.searchFileNameStartWith\n   path is: " + path + "\n     pattern is: " + startWithPattern + "\n");
+            logger.log("Error in mainApp.searchFileNameStartWith\n   path is: " + path + "\n");
             logger.log(e.toString());
             e.printStackTrace();
         }
@@ -406,7 +402,7 @@ public class MainApp {
         if (use == 0) {
             logger.log("target isn't specified");
             ConsoleHelper.writeMessage("\nYou must specify target. Application wont to know what to do");
-            openWithFileMan("--l=\"" + machine.machineDir.machinePath + "\"");
+            openWithFileMan("--l=\"" + machine.getMachinePathString() + "\"");
             help();
         }
         if (use == 1)
@@ -416,25 +412,25 @@ public class MainApp {
             logger.log("target is: installation");
             machine.openLuxFile();
             initLuxParser();
-            openWithFileMan("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + BaseDrawingPaths.I.toString() + "\"");
-            logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + BaseDrawingPaths.I.toString());
+            openWithFileMan("--l=\"" + machine.getMachinePathString() + "\" --t --r=\"" + BaseDrawingPaths.I.toString() + "\"");
+            logger.log("Opened in tc: \n   " + machine.getMachinePathString() + "\n   " + BaseDrawingPaths.I.toString());
             machine.setMachineType(luxParser.getMachineType());
             ConsoleHelper.writeMessage("Copy base installation drawing for " + machine.getMachineType() + "\nand then press enter");
             ConsoleHelper.readString();
             String installationName = "I" + getMachineCode() + "-" + machine.getMachineName().substring(2) + ".ckd";
-            Files.move(Paths.get(machine.machineDir.machinePath + machine.machineDir.getCkdFiles().get(0)), Paths.get(machine.machineDir.machinePath + installationName));  //rename installation
-            desktop.open(new File(machine.machineDir.machinePath + installationName));
+            Files.move(Paths.get(machine.getMachinePathString() + machine.getCkdFiles().get(0)), Paths.get(machine.getMachinePathString() + installationName));  //rename installation
+            desktop.open(new File(machine.getMachinePathString() + installationName));
             logger.log("Installation " + installationName + " opened");
-            openWithFileMan("--r=\"" + machine.getRemoteMachinePath() + "\"");
-            logger.log("Opened in tc :\n   " + machine.getRemoteMachinePath());
+            openWithFileMan("--r=\"" + machine.getRemoteMachinePathString() + "\"");
+            logger.log("Opened in tc :\n   " + machine.getRemoteMachinePathString());
         }
 
         if (use == 8) {
             logger.log("target is: machine");
-            if (!Files.exists(Paths.get(machine.machineDir.machinePath + machine.machineDir.machineXls)))
+            if (!Files.exists(Paths.get(machine.getMachinePathString() + machine.getMachineXlsName())))
                 xlsTarget();
-            openWithFileMan("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + PLANS + "\"");
-            logger.log("Opened in tc: \n   " + machine.machineDir.machinePath + "\n   " + PLANS);
+            openWithFileMan("--l=\"" + machine.getMachinePathString() + "\" --t --r=\"" + PLANS + "\"");
+            logger.log("Opened in tc: \n   " + machine.getMachinePathString() + "\n   " + PLANS);
             initMachineExcelParser();
             initLuxParser();
             String machineType = luxParser.getMachineType();
@@ -448,38 +444,38 @@ public class MainApp {
             machine.copyEtiq();
             machine.open4CkdFiles();
             logger.log("ckd files opened");
-            openWithFileMan("--r=\"" + machine.getRemoteMachinePath() + "\"");
-            logger.log("Opened in tc :\n   " + machine.getRemoteMachinePath());
+            openWithFileMan("--r=\"" + machine.getRemoteMachinePathString() + "\"");
+            logger.log("Opened in tc :\n   " + machine.getRemoteMachinePathString());
         }
 
     }
 
     private void xlsTarget() throws IOException {
         logger.log("target is: xls");
-        openWithFileMan("--l=\"" + machine.machineDir.machinePath + "\" --t --r=\"" + machine.getRemoteMachinePath() + "\"");
-        if (!machine.getMachineXls()) {
-            desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
+        openWithFileMan("--l=\"" + machine.getMachinePathString() + "\" --t --r=\"" + machine.getRemoteMachinePathString() + "\"");
+        if (!machine.copyMachineXlsIfNotExist()) {
+            desktop.open(new File(machine.getMachinePathString() + machine.getMachineXlsName()));
             logger.log("xls is opened");
         } else {
             initLuxParser();
-            machineExcelParser.setExcelFile(machine.machineDir.machinePath + machine.getXls());
+            machineExcelParser.setExcelFile(machine.getMachinePathString() + machine.getXls());
             machine.setMachineType(luxParser.getMachineType());
             luxParser.getMachineData();
 //                machineExcelParser.setMachineType(machine.getMachineType());
 
-            desktop.open(new File(machine.machineDir.machinePath + machine.machineDir.machineXls));
+            desktop.open(new File(machine.getMachinePathString() + machine.getMachineXlsName()));
             logger.log("xls is opened");
-            desktop.open(new File(machine.machineDir.machinePath + machine.getLuxFileName()));
+            desktop.open(new File(machine.getMachinePathString() + machine.getLuxFileName()));
             logger.log("lux is opened");
         }
     }
 
     public void initLuxParser() {
-        luxParser.setExcelFile(machine.machineDir.machinePath + machine.getLuxFileName());
+        luxParser.setExcelFile(machine.getMachinePathString() + machine.getLuxFileName());
     }
 
     public void initMachineExcelParser() {
-        machineExcelParser.setExcelFile(machine.machineDir.machinePath + machine.getXls());
+        machineExcelParser.setExcelFile(machine.getMachinePathString() + machine.getXls());
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {

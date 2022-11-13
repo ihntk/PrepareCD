@@ -41,12 +41,12 @@ public class RootLayoutController {
     }
 
     public void handleLocalRemoteMachineDir() throws IOException {
-        app.openWithFileMan("--t --l=\"" + getMachine().getMachineDir().getMachinePathString() + "\"");
+        app.openWithFileMan("--t --l=\"" + getMachine().getMachinePathString() + "\"");
     }
 
     @FXML
     private void handleOpenRemoteMachineDir() throws IOException {
-        app.openWithFileMan("--t --r=\"" + getMachine().getRemoteMachinePath() + "\"");
+        app.openWithFileMan("--t --r=\"" + getMachine().getRemoteMachinePathString() + "\"");
     }
 
     @FXML
