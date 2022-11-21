@@ -168,6 +168,7 @@ public class MainFrameController {
             target.setText("Processing machine");
             status.setText("Wait");
             machineInit(machineName.getText().toUpperCase());
+            if (getMachine() == null) return;
             status.setText("Machine is " + getMachine().getMachineName());
             target.setText("Ready");
             application.setTitle(getMachine().getMachineName() + (app.isOfflineMode() ? " - *OFFLINE*" : ""));
@@ -243,7 +244,9 @@ public class MainFrameController {
         app.logger.log("target is: installation");
         resetControlsDefault();
         machineDirFS.getFiles(Paths.get(getMachine().getMachinePathString()));
-        remoteMachineDirFS.getFiles(Paths.get(app.PLANS, BaseDrawingPaths.I.toString()));
+        if (!app.isOfflineMode()) {
+            remoteMachineDirFS.getFiles(Paths.get(app.PLANS, BaseDrawingPaths.I.toString()));
+        }
 
         updateInstallationName();
         targetFileName = installationName;
@@ -284,11 +287,6 @@ public class MainFrameController {
             handleXls();
             status.setText("You can continue process machine just pressing Machine button");
         } else {
-            basePlanDirFS.getFiles(Paths.get(getMachine().getMachinePathString()));
-            remoteMachineDirFS.getFiles(Paths.get(app.PLANS));
-            cdDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePathString(), DRAWINGS_DIR));
-
-            refreshMachinePlansList();
 
             targetFileName = null;
             application.getRootLayoutController().enableRenameAllCkdFiles();
@@ -300,21 +298,28 @@ public class MainFrameController {
             app.openWithFileMan("--l=\"" + getMachine().getMachinePathString() + "\" --t --r=\"" + PLANS + "\"");
 
             String currentStatus = status.getText();
-            machineDir.setOnMouseClicked(mouseEvent -> {
-                try {
-                    String planName = machineDir.getSelectionModel().getSelectedItem().toString().trim();
-                    if (planName.length() > 4) {
-                        planName = planName.split("-")[0];
-                        int machCodeIndex = planName.indexOf(app.getMachineCode());
-                        if (machCodeIndex > 0)
-                            planName = planName.substring(0, machCodeIndex);
+            basePlanDirFS.getFiles(Paths.get(getMachine().getMachinePathString()));
+            refreshMachinePlansList();
+
+            if (!app.isOfflineMode()) {
+                remoteMachineDirFS.getFiles(Paths.get(app.PLANS));
+
+                machineDir.setOnMouseClicked(mouseEvent -> {
+                    try {
+                        String planName = machineDir.getSelectionModel().getSelectedItem().toString().trim();
+                        if (planName.length() > 4) {
+                            planName = planName.split("-")[0];
+                            int machCodeIndex = planName.indexOf(app.getMachineCode());
+                            if (machCodeIndex > 0)
+                                planName = planName.substring(0, machCodeIndex);
+                        }
+                        status.setText(currentStatus + "   " + planName);
+                        remoteMachineDirFS.getFiles(Paths.get(app.PLANS, BaseDrawingPaths.valueOf(planName).toString()));
+                    } catch (IOException e) {
+                        app.logger.log("Wrong plan name");
                     }
-                    status.setText(currentStatus + "   " + planName);
-                    remoteMachineDirFS.getFiles(Paths.get(app.PLANS, BaseDrawingPaths.valueOf(planName).toString()));
-                } catch (IOException e) {
-                    app.logger.log("Wrong plan name");
-                }
-            });
+                });
+            }
         }
 
     }
@@ -509,6 +514,7 @@ public class MainFrameController {
             }
         }
         app.initializeMachine(machineName);
+        if (getMachine() == null) return;
         currentTarget = null;
         status.setText("Copying " + getMachine().getLuxFileName());
 
@@ -533,7 +539,9 @@ public class MainFrameController {
 
         machineDirFS.getFiles(Paths.get(getMachine().getMachinePathString()));
 
-        remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePathString(), DRAWINGS_DIR));
+        if (!app.isOfflineMode()) {
+            remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePathString(), DRAWINGS_DIR));
+        }
 
         installButton.setDisable(false);
         xlsButton.setDisable(false);
@@ -578,7 +586,7 @@ public class MainFrameController {
             index = listView.getSelectionModel().getSelectedIndex();
             if (index < 0)
                 return processChooseLuxFile(path, list);
-        }
+        } else fileName = "nothing";
 
         fileName = list.get(index);
         return fileName;
@@ -633,7 +641,9 @@ public class MainFrameController {
             case INSTALL: {
                 hostServices.showDocument(getMachine().getMachinePathString() + getMachine().getLuxFileName());
                 hostServices.showDocument(getMachine().getMachinePathString() + installationName);
-                remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePathString(), DRAWINGS_DIR));
+                if (!app.isOfflineMode()) {
+                    remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePathString(), DRAWINGS_DIR));
+                }
                 status.setText(installationName + " is opened");
             }
             break;
@@ -647,9 +657,9 @@ public class MainFrameController {
                 f1Button.setDisable(false);
 
                 machineDirFS.getFiles(Paths.get(getMachine().getMachinePathString()));
-                remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePathString(), DRAWINGS_DIR));
-                basePlanDirList.clear();
-                cdDirList.clear();
+                if (!app.isOfflineMode()) {
+                    remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePathString(), DRAWINGS_DIR));
+                }
 
                 f4Button.setText("Open Print");
                 f4Button.setDisable(false);
