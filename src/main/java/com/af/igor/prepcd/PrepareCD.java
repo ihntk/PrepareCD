@@ -4,7 +4,9 @@ import com.af.igor.prepcd.controller.MainFrameController;
 import com.af.igor.prepcd.controller.RootLayoutController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
 import javafx.scene.Scene;
+import javafx.scene.control.Dialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -70,6 +72,12 @@ public class PrepareCD extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void positionDialog(final Dialog<?> dialog) {
+        final Bounds position = rootLayout.localToScreen(rootLayout.getBoundsInLocal());
+        dialog.setX(position.getMinX() + position.getWidth() / 2 - 200);
+        dialog.setY(position.getMinY() + position.getHeight() / 2 - 150);
     }
 
     public void setTitle(String machineName) {

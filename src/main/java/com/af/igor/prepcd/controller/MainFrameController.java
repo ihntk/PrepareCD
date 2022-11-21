@@ -345,6 +345,7 @@ public class MainFrameController {
 
             ((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText("Yes");
             ((Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL)).setText("No");
+            application.positionDialog(alert);
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.get() == ButtonType.CANCEL) {
@@ -400,6 +401,7 @@ public class MainFrameController {
             }
         }
         alert.getDialogPane().setContent(new ListView<Pane>(languageList));
+        application.positionDialog(alert);
         alert.showAndWait();
         return languageList;
     }
@@ -411,6 +413,7 @@ public class MainFrameController {
             alert.setTitle("Attention");
             alert.setHeaderText("Source file isn't selected");
             alert.setContentText("Select source file you want to copy (in the right table)");
+            application.positionDialog(alert);
             alert.showAndWait();
             return;
         }
@@ -429,6 +432,7 @@ public class MainFrameController {
                 alert.setTitle("Attention");
                 alert.setHeaderText("Target file isn't selected");
                 alert.setContentText("Select target file you want to copy (in the left table)");
+                application.positionDialog(alert);
                 alert.showAndWait();
                 return;
             }
@@ -450,6 +454,7 @@ public class MainFrameController {
 
             ((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText("Yes");
             ((Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL)).setText("No");
+            application.positionDialog(alert);
             Optional<ButtonType> optionalButtonType = alert.showAndWait();
 
             if (optionalButtonType.get() == ButtonType.OK)
@@ -471,6 +476,7 @@ public class MainFrameController {
 
                 ((Button) alert.getDialogPane().lookupButton(ButtonType.YES)).setText("Yes");
                 ((Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL)).setText("No");
+                application.positionDialog(alert);
                 Optional<ButtonType> result = alert.showAndWait();
 
                 if (result.get() == ButtonType.OK)
@@ -508,6 +514,7 @@ public class MainFrameController {
                 alert.setHeaderText("Machine " + machineName + " doesn't exists");
                 alert.setContentText("There is no directory for machine " + machineName + ".\n" +
                         "Make sure you enter correct machine name");
+                application.positionDialog(alert);
                 alert.showAndWait();
                 app.logger.log(machineName + " doesn't exists");
                 return;
@@ -582,6 +589,7 @@ public class MainFrameController {
         alert.getDialogPane().setContent(listView);
 
         app.openWithFileMan("", "--t --l=\"" + path + "\"");
+        application.positionDialog(alert);
         result = alert.showAndWait();
 
         try {

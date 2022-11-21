@@ -32,6 +32,7 @@ public class RootLayoutController {
         alert.setTitle("About PrepareCD");
         alert.setHeaderText("PrepareCD");
         alert.setContentText(app.getVersion());
+        app.getGui().positionDialog(alert);
         alert.showAndWait();
     }
 
