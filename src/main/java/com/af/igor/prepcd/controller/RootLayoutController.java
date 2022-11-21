@@ -40,18 +40,18 @@ public class RootLayoutController {
         app.openPrintDir();
     }
 
-    public void handleLocalRemoteMachineDir() throws IOException {
+    public void handleOpenLocalMachineDir() throws IOException {
         app.openWithFileMan("--t --l=\"" + getMachine().getMachinePathString() + "\"");
     }
 
     @FXML
     private void handleOpenRemoteMachineDir() throws IOException {
-        app.openWithFileMan("--t --r=\"" + getMachine().getRemoteMachinePathString() + "\"");
+        app.openWithFileMan("", "--t --r=\"" + getMachine().getRemoteMachinePathString() + "\"");
     }
 
     @FXML
     private void handleOpenBaseDrawings() throws IOException {
-        app.openWithFileMan("--t --r=\"" + PLANS + "\"");
+        app.openWithFileMan("", "--t --r=\"" + PLANS + "\"");
     }
 
     @FXML
@@ -61,7 +61,7 @@ public class RootLayoutController {
 
     @FXML
     private void handleOpenRemoteCD() throws IOException {
-        app.openWithFileMan("--t --r=\"" + app.getCdCommenceString() + "\"");
+        app.openWithFileMan("", "--t --r=\"" + app.getCdCommenceString() + "\"");
     }
 
     public void enableMenu() {

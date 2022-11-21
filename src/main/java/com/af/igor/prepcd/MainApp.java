@@ -228,6 +228,12 @@ public class MainApp {
         return xlsFileList;
     }
 
+    /**
+     * This method open local path
+     *
+     * @param pathParameters - must be local path only
+     * @throws IOException
+     */
     public void openWithFileMan(String pathParameters) throws IOException {
         switch (fileManager) {
             case EXPLORER:
@@ -241,12 +247,45 @@ public class MainApp {
         }
     }
 
+    /**
+     * Use it for offline mode. Second parameter mac be remote path.
+     * When offline mode is enabled this method delegate to openWithFileMan(String pathParameters)
+     *
+     * @param firstPath  - always must be local path
+     * @param secondPath - always must be remote path
+     * @throws IOException
+     */
+    public void openWithFileMan(String firstPath, String secondPath) throws IOException {
+        if (isOfflineMode()) {
+            openWithFileMan(firstPath);
+        } else {
+            switch (fileManager) {
+                case EXPLORER:
+                    return;
+                case TOTALCMD:
+                    openWithTotalCmd(firstPath, secondPath);
+                    return;
+                case DOUBLECMD:
+                    openWithDoubleCmd(firstPath, secondPath);
+                    return;
+            }
+        }
+    }
+
     private void openWithDoubleCmd(String pathParameters) throws IOException {
+        if (pathParameters.equals("")) {
+            return;
+        }
         pathParameters = pathParameters.replaceAll("/", "\\\\").replaceAll("--", "-").replaceAll("=", " ");
         Runtime runtime = Runtime.getRuntime();
         String command = DOUBLECOMMANDER + " -C " + pathParameters;
         Process process = runtime.exec(command);
         logger.log("double commander got parameters:\n   " + command);
+    }
+
+    private void openWithDoubleCmd(String firstPath, String secondPath) throws IOException {
+        openWithDoubleCmd(firstPath);
+        openWithDoubleCmd(secondPath);
     }
 
     /**
@@ -257,6 +296,9 @@ public class MainApp {
      * @throws IOException
      */
     private void openWithTotalCmd(String pathParameters) throws IOException {
+        if (pathParameters.equals("")) {
+            return;
+        }
         pathParameters = pathParameters.replaceAll("/", "\\\\").replaceAll("--", "/");
         Runtime runtime = Runtime.getRuntime();
         String command = TOTALCOMMANDER + " /O " + pathParameters;
@@ -264,12 +306,17 @@ public class MainApp {
         logger.log("total commander got parameters:\n   " + command);
     }
 
+    private void openWithTotalCmd(String firstPath, String secondPath) throws IOException {
+        openWithTotalCmd(firstPath);
+        openWithTotalCmd(secondPath);
+    }
+
     public void openPrintDir() throws IOException {
         Path printDir = Paths.get(PRINTDIR, machine.getMachineName());
         if (!Files.exists(printDir))
             Files.createDirectory(printDir);
 
-        openWithFileMan("--t --r=\"" + printDir + "\"");
+        openWithFileMan("", "--t --r=\"" + printDir + "\"");
     }
 
 
@@ -442,7 +489,7 @@ public class MainApp {
             logger.log("target is: installation");
             machine.openLuxFile();
             initLuxParser();
-            openWithFileMan("--l=\"" + machine.getMachinePathString() + "\" --t --r=\"" + BaseDrawingPaths.I.toString() + "\"");
+            openWithFileMan("--l=\"" + machine.getMachinePathString() + "\"", "--t --r=\"" + BaseDrawingPaths.I.toString() + "\"");
             logger.log("Opened in tc: \n   " + machine.getMachinePathString() + "\n   " + BaseDrawingPaths.I.toString());
             machine.setMachineType(luxParser.getMachineType());
             ConsoleHelper.writeMessage("Copy base installation drawing for " + machine.getMachineType() + "\nand then press enter");
@@ -451,7 +498,7 @@ public class MainApp {
             Files.move(Paths.get(machine.getMachinePathString() + machine.getCkdFiles().get(0)), Paths.get(machine.getMachinePathString() + installationName));  //rename installation
             desktop.open(new File(machine.getMachinePathString() + installationName));
             logger.log("Installation " + installationName + " opened");
-            openWithFileMan("--r=\"" + machine.getRemoteMachinePathString() + "\"");
+            openWithFileMan("", "--r=\"" + machine.getRemoteMachinePathString() + "\"");
             logger.log("Opened in tc :\n   " + machine.getRemoteMachinePathString());
         }
 
@@ -459,7 +506,7 @@ public class MainApp {
             logger.log("target is: machine");
             if (!Files.exists(Paths.get(machine.getMachinePathString() + machine.getMachineXlsName())))
                 xlsTarget();
-            openWithFileMan("--l=\"" + machine.getMachinePathString() + "\" --t --r=\"" + PLANS + "\"");
+            openWithFileMan("--l=\"" + machine.getMachinePathString() + "\"", " --t --r=\"" + PLANS + "\"");
             logger.log("Opened in tc: \n   " + machine.getMachinePathString() + "\n   " + PLANS);
             initMachineExcelParser();
             initLuxParser();
@@ -474,7 +521,7 @@ public class MainApp {
             machine.copyEtiq();
             machine.open4CkdFiles();
             logger.log("ckd files opened");
-            openWithFileMan("--r=\"" + machine.getRemoteMachinePathString() + "\"");
+            openWithFileMan("", "--r=\"" + machine.getRemoteMachinePathString() + "\"");
             logger.log("Opened in tc :\n   " + machine.getRemoteMachinePathString());
         }
 
@@ -482,7 +529,7 @@ public class MainApp {
 
     private void xlsTarget() throws IOException {
         logger.log("target is: xls");
-        openWithFileMan("--l=\"" + machine.getMachinePathString() + "\" --t --r=\"" + machine.getRemoteMachinePathString() + "\"");
+        openWithFileMan("--l=\"" + machine.getMachinePathString() + "\"", " --t --r=\"" + machine.getRemoteMachinePathString() + "\"");
         if (!machine.copyMachineXlsIfNotExist()) {
             desktop.open(new File(machine.getMachinePathString() + machine.getMachineXlsName()));
             logger.log("xls is opened");

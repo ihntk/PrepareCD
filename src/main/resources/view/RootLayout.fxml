@@ -22,7 +22,7 @@
                 <Menu fx:id="openMenu" disable="true" mnemonicParsing="false" text="Open">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#handleOpenPrint" text="Print"/>
-                        <MenuItem mnemonicParsing="false" onAction="#handleLocalRemoteMachineDir"
+                        <MenuItem mnemonicParsing="false" onAction="#handleOpenLocalMachineDir"
                                   text="Local machine directory"/>
                         <MenuItem mnemonicParsing="false" onAction="#handleOpenRemoteMachineDir"
                                   text="Remote machine directory"/>
