@@ -122,7 +122,7 @@ public class MainApp {
     public void initializeMachine(String machineName) throws IOException, InterruptedException {
         if (machineName == null) initializeCurrentDirPath(machineName);
 
-        machine = new Machine(machineName);
+        Machine newMachine = new Machine(machineName);
         String luxFileName = "";
         if (!isOfflineMode()) {
             luxFileName = searchLuxFile();
@@ -131,7 +131,10 @@ public class MainApp {
                 luxFileName = gui.getController().processChooseLuxFile(machine.getMachinePathString(), getXlsFileList(new File(machine.getMachinePathString()).list()));
             }
         }
-        machine.setLuxFileName(luxFileName);
+        if (!luxFileName.equals("nothing")) {
+            newMachine.setLuxFileName(luxFileName);
+            machine = newMachine;
+        }
 
         logger.log("machine name is: " + machineName);
     }
