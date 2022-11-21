@@ -43,6 +43,7 @@ public class MainApp {
     private static MainApp instance;
     private static String version = "0.8.2";
     private static Machine machine;
+    private static Machine newMachine;
     public static LuxParser luxParser;
     public static MachineExcelParser machineExcelParser;
     static Desktop desktop = Desktop.getDesktop();
@@ -122,19 +123,19 @@ public class MainApp {
     public void initializeMachine(String machineName) throws IOException, InterruptedException {
         if (machineName == null) initializeCurrentDirPath(machineName);
 
-        Machine newMachine = new Machine(machineName);
-        String luxFileName = "";
+        newMachine = new Machine(machineName);
+        String luxFileName = null;
         if (!isOfflineMode()) {
             luxFileName = searchLuxFile();
         } else {
             if (gui != null) {
-                luxFileName = gui.getController().processChooseLuxFile(machine.getMachinePathString(), getXlsFileList(new File(machine.getMachinePathString()).list()));
+                luxFileName = gui.getController().processChooseLuxFile(newMachine.getMachinePathString(), getXlsFileList(new File(newMachine.getMachinePathString()).list()));
             }
         }
-        if (!luxFileName.equals("nothing")) {
+        if (luxFileName != null) {
             newMachine.setLuxFileName(luxFileName);
             machine = newMachine;
-        }
+        } else return;
 
         logger.log("machine name is: " + machineName);
     }
@@ -171,7 +172,7 @@ public class MainApp {
     }
 
     public String searchLuxFile() {
-        String path = machine.getLuxPathString();
+        String path = newMachine.getLuxPathString();
         ArrayList<String> xlsFileNames = new ArrayList<>(3);
         String searchedFileName = null;
         String luxFile = null;
@@ -179,7 +180,7 @@ public class MainApp {
         try {
             xlsFileNames = getXlsFileList(new File(path).list());
             for (String file : xlsFileNames) {
-                if (file.startsWith(machine.getMachineName())) {
+                if (file.startsWith(newMachine.getMachineName())) {
                     count++;
                     luxFile = file;
                 }

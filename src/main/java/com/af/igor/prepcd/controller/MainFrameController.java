@@ -541,6 +541,8 @@ public class MainFrameController {
 
         if (!app.isOfflineMode()) {
             remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePathString(), DRAWINGS_DIR));
+        } else {
+            remoteMachineDirList.clear();
         }
 
         installButton.setDisable(false);
@@ -582,13 +584,17 @@ public class MainFrameController {
         app.openWithFileMan("--t --l=\"" + path + "\"");
         result = alert.showAndWait();
 
-        if (result.get() == ButtonType.OK) {
-            index = listView.getSelectionModel().getSelectedIndex();
-            if (index < 0)
-                return processChooseLuxFile(path, list);
-        } else fileName = "nothing";
+        try {
+            if (result.get() == ButtonType.OK) {
+                index = listView.getSelectionModel().getSelectedIndex();
+                if (index < 0) {
+                    return processChooseLuxFile(path, list);
+                } else fileName = list.get(index);
+            }
+        } catch (NoSuchElementException e) {
+            app.logger.log("processChooseLuxFile: alert was closed");
+        }
 
-        fileName = list.get(index);
         return fileName;
     }
 
