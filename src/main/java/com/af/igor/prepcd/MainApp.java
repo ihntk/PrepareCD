@@ -489,7 +489,7 @@ public class MainApp {
             logger.log("target is: installation");
             machine.openLuxFile();
             initLuxParser();
-            openWithFileMan("--l=\"" + machine.getMachinePathString() + "\"", "--t --r=\"" + BaseDrawingPaths.I.toString() + "\"");
+            openWithFileMan("--t --l=\"" + machine.getMachinePathString() + "\"", "--t --r=\"" + BaseDrawingPaths.I.toString() + "\"");
             logger.log("Opened in tc: \n   " + machine.getMachinePathString() + "\n   " + BaseDrawingPaths.I.toString());
             machine.setMachineType(luxParser.getMachineType());
             ConsoleHelper.writeMessage("Copy base installation drawing for " + machine.getMachineType() + "\nand then press enter");
@@ -506,7 +506,7 @@ public class MainApp {
             logger.log("target is: machine");
             if (!Files.exists(Paths.get(machine.getMachinePathString() + machine.getMachineXlsName())))
                 xlsTarget();
-            openWithFileMan("--l=\"" + machine.getMachinePathString() + "\"", " --t --r=\"" + PLANS + "\"");
+            openWithFileMan("--t --l=\"" + machine.getMachinePathString() + "\"", "--t --r=\"" + PLANS + "\"");
             logger.log("Opened in tc: \n   " + machine.getMachinePathString() + "\n   " + PLANS);
             initMachineExcelParser();
             initLuxParser();
@@ -529,7 +529,7 @@ public class MainApp {
 
     private void xlsTarget() throws IOException {
         logger.log("target is: xls");
-        openWithFileMan("--l=\"" + machine.getMachinePathString() + "\"", " --t --r=\"" + machine.getRemoteMachinePathString() + "\"");
+        openWithFileMan("--t --l=\"" + machine.getMachinePathString() + "\"", "--t --r=\"" + machine.getRemoteMachinePathString() + "\"");
         if (!machine.copyMachineXlsIfNotExist()) {
             desktop.open(new File(machine.getMachinePathString() + machine.getMachineXlsName()));
             logger.log("xls is opened");
