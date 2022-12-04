@@ -41,7 +41,7 @@ public class MainApp {
     public static String DRAWINGS_DIR;
 
     private static MainApp instance;
-    private static String version = "0.8.4";
+    private static String version = "0.8.5";
     private static Machine machine;
     private static Machine newMachine;
     public static LuxParser luxParser;
@@ -284,8 +284,7 @@ public class MainApp {
     }
 
     private void openWithDoubleCmd(String firstPath, String secondPath) throws IOException {
-        openWithDoubleCmd(firstPath);
-        openWithDoubleCmd(secondPath);
+        openWithDoubleCmd(firstPath + " " + secondPath);
     }
 
     /**
@@ -307,8 +306,7 @@ public class MainApp {
     }
 
     private void openWithTotalCmd(String firstPath, String secondPath) throws IOException {
-        openWithTotalCmd(firstPath);
-        openWithTotalCmd(secondPath);
+        openWithTotalCmd(firstPath + " " + secondPath);
     }
 
     public void openPrintDir() throws IOException {

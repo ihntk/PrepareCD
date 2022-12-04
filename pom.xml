@@ -6,7 +6,7 @@
 
     <groupId>com.af.igor.prepcd</groupId>
     <artifactId>PrepareCD</artifactId>
-    <version>0.8.4</version>
+    <version>0.8.5</version>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
