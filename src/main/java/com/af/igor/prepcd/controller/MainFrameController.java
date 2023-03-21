@@ -307,7 +307,7 @@ public class MainFrameController {
                 machineDir.setOnMouseClicked(mouseEvent -> {
                     try {
                         String planName = machineDir.getSelectionModel().getSelectedItem().toString().trim();
-                        if (planName.length() > 4) {
+                        if (planName.length() > 3) {
                             planName = planName.split("-")[0];
                             int machCodeIndex = planName.indexOf(app.getMachineCode());
                             if (machCodeIndex > 0)
