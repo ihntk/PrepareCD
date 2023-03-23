@@ -77,7 +77,7 @@ public class PrepareCD extends Application {
     public void positionDialog(final Dialog<?> dialog) {
         final Bounds position = rootLayout.localToScreen(rootLayout.getBoundsInLocal());
         dialog.setX(position.getMinX() + position.getWidth() / 2 - 200);
-        dialog.setY(position.getMinY() + position.getHeight() / 2 - 150);
+        dialog.setY(position.getMinY() + position.getHeight() / 2 - 240);
     }
 
     public void setTitle(String machineName) {

@@ -391,6 +391,7 @@ public class MainFrameController {
     private ObservableList<Pane> showCdLanguageSelectorAlert(List<String> languagesOrder) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Select languages");
+        alert.getDialogPane().setPrefHeight(430);
         ObservableList<Pane> languageList = FXCollections.observableArrayList();
 
         for (CdLangFiles lang : CdLangFiles.values()) {
