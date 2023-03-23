@@ -205,10 +205,6 @@ public class Machine {
         app.logger.log("Machine type is: " + this.machineType);
     }
 
-
-    /*
-    getMachineXls() check machineXls exist, if false, copy base machineXls
-     */
     public boolean copyMachineXlsIfNotExist() throws IOException {
         boolean isXlsCreated = false;
         if (!new File(machinePathString + machineXlsName).exists()) {

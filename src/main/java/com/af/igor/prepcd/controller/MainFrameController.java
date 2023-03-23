@@ -172,13 +172,27 @@ public class MainFrameController {
             status.setText("Machine is " + getMachine().getMachineName());
             target.setText("Ready");
             application.setTitle(getMachine().getMachineName() + (app.isOfflineMode() ? " - *OFFLINE*" : ""));
-            currentMachine.setText(getMachine().getMachineName());
+            fillCurrentMachineLabel();
             machineName.setText(getMachine().getMachineName());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private void fillCurrentMachineLabel() {
+        StringBuilder langs = new StringBuilder("");
+        if (app.isMachineXlsExist()) {
+            app.initMachineExcelParser();
+            for (String lang :
+                    returnLanguagesOrder()) {
+                langs.append(lang + " ");
+            }
+            if (!langs.equals(""))
+                langs.insert(0, "lang: ").append("| ");
+        }
+        currentMachine.setText(langs + getMachine().getMachineName());
     }
 
     @FXML
@@ -282,7 +296,7 @@ public class MainFrameController {
         app.logger.log("target is: machine");
         resetControlsDefault();
 
-        if (!Files.exists(Paths.get(getMachine().getMachinePathString() + getMachine().getMachineXlsName()))) {
+        if (!app.isMachineXlsExist()) {
             status.setText("You haven't xls file yet! You could correct this now");
             handleXls();
             status.setText("You can continue process machine just pressing Machine button");
@@ -300,6 +314,7 @@ public class MainFrameController {
             String currentStatus = status.getText();
             basePlanDirFS.getFiles(Paths.get(getMachine().getMachinePathString()));
             refreshMachinePlansList();
+            fillCurrentMachineLabel();
 
             if (!app.isOfflineMode()) {
                 remoteMachineDirFS.getFiles(Paths.get(app.PLANS));
@@ -326,48 +341,59 @@ public class MainFrameController {
 
     @FXML
     private void handleCD() throws IOException {
-        currentTarget = Targets.CD;
-        target.setText("CD");
-        resetControlsDefault();
-        hostServices.showDocument(getMachine().getMachinePathString() + getMachine().getMachineXlsName());
-        app.openWithFileMan("--t --l=\"" + app.getCdsString() + "\"", "--t --r=\"" + app.getCdCommenceString() + "\"");
+        if (!app.isMachineXlsExist()) {
+            status.setText("You haven't xls file yet! You could correct this now");
+            handleXls();
+        } else {
+            currentTarget = Targets.CD;
+            target.setText("CD");
+            resetControlsDefault();
+            hostServices.showDocument(getMachine().getMachinePathString() + getMachine().getMachineXlsName());
+            app.openWithFileMan("--t --l=\"" + app.getCdsString() + "\"", "--t --r=\"" + app.getCdCommenceString() + "\"");
 
-        app.initMachineExcelParser();
-        List<String> languagesOrder = new LinkedList<>();
-        Collections.addAll(languagesOrder, machineExcelParser.getLanguages());
+            app.initMachineExcelParser();
+            fillCurrentMachineLabel();
+            List<String> languagesOrder = returnLanguagesOrder();
 
-        if (languagesOrder.get(0).equals("nothing")) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Attention");
-            alert.setHeaderText("Are you sure?");
-            alert.setContentText("Looks like no CD is required for this order\n" +
-                    "Do you really want to make this CD?");
+            if (languagesOrder.get(0).equals("nothing")) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Attention");
+                alert.setHeaderText("Are you sure?");
+                alert.setContentText("Looks like no CD is required for this order\n" +
+                        "Do you really want to make this CD?");
 
-            ((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText("Yes");
-            ((Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL)).setText("No");
-            application.positionDialog(alert);
-            Optional<ButtonType> result = alert.showAndWait();
+                ((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText("Yes");
+                ((Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL)).setText("No");
+                application.positionDialog(alert);
+                Optional<ButtonType> result = alert.showAndWait();
 
-            if (result.get() == ButtonType.CANCEL) {
-                return;
+                if (result.get() == ButtonType.CANCEL) {
+                    return;
+                }
             }
-        }
 
-        ObservableList<Pane> languageList = showCdLanguageSelectorAlert(languagesOrder);
+            ObservableList<Pane> languageList = showCdLanguageSelectorAlert(languagesOrder);
 
-        List<Path> fileList = new LinkedList<>();
-        Collections.addAll(fileList, CdLangFiles.getRegularFiles());
-        for (Pane pane : languageList) {
-            CheckBox checkBox = (CheckBox) pane.getChildren().get(0);
-            if (checkBox.isSelected()) {
-                fileList.add(Paths.get(CdLangFiles.values()[languageList.indexOf(pane)].getFileName()));
+            List<Path> fileList = new LinkedList<>();
+            Collections.addAll(fileList, CdLangFiles.getRegularFiles());
+            for (Pane pane : languageList) {
+                CheckBox checkBox = (CheckBox) pane.getChildren().get(0);
+                if (checkBox.isSelected()) {
+                    fileList.add(Paths.get(CdLangFiles.values()[languageList.indexOf(pane)].getFileName()));
+                }
             }
-        }
 
-        copyBaseCD(fileList);
+            copyBaseCD(fileList);
         /*
         скопіювати вибрані мови
          */
+        }
+    }
+
+    private List<String> returnLanguagesOrder() {
+        List<String> languagesOrder = new LinkedList<>();
+        Collections.addAll(languagesOrder, machineExcelParser.getLanguages());
+        return languagesOrder;
     }
 
     private void copyBaseCD(List<Path> fileList) throws IOException {

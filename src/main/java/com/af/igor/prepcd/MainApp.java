@@ -110,6 +110,10 @@ public class MainApp {
         return machine;
     }
 
+    public boolean isMachineXlsExist() {
+        return Files.exists(Paths.get(getMachine().getMachinePathString() + getMachine().getMachineXlsName()));
+    }
+
     public boolean isOfflineMode() {
         return offlineMode;
     }
@@ -564,5 +568,4 @@ public class MainApp {
         }
         getInstance().logger.stopLogging();
     }
-
 }
