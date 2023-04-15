@@ -351,7 +351,6 @@ public class MainFrameController {
             hostServices.showDocument(getMachine().getMachinePathString() + getMachine().getMachineXlsName());
             app.openWithFileMan("--t --l=\"" + app.getCdsString() + "\"", "--t --r=\"" + app.getCdCommenceString() + "\"");
 
-            app.initMachineExcelParser();
             fillCurrentMachineLabel();
             List<String> languagesOrder = returnLanguagesOrder();
 

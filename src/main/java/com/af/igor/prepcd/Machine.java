@@ -299,11 +299,11 @@ public class Machine {
     public void open4CkdFiles() throws IOException {
         ArrayList<String> ckdFiles = getCkdFiles();
         for (String file : ckdFiles) {
-            if (file.startsWith("FS"))
-                app.desktop.open(new File(machinePathString + file));
             if (file.startsWith("Etiqclas"))
                 app.desktop.open(new File(machinePathString + file));
             if ((file.startsWith("E")) && (!file.startsWith("Etiqclas")))
+                app.desktop.open(new File(machinePathString + file));
+            if (file.startsWith("FS"))
                 app.desktop.open(new File(machinePathString + file));
             if (file.startsWith("I"))
                 app.desktop.open(new File(machinePathString + file));
