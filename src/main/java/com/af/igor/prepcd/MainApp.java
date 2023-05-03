@@ -41,7 +41,7 @@ public class MainApp {
     public static String DRAWINGS_DIR;
 
     private static MainApp instance;
-    private static String version = "0.8.6";
+    private static String version = "0.8.7";
     private static Machine machine;
     private static Machine newMachine;
     public static LuxParser luxParser;

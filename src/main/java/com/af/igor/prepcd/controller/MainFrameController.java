@@ -496,11 +496,11 @@ public class MainFrameController {
             if (item.getFileName().toString().startsWith("   ")) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Attention");
-                alert.setHeaderText("There is uncopied files");
+                alert.setHeaderText("There is uncopied file");
                 alert.setContentText("You haven't copied " + getMachine().defineFileName(item) + " file\n"
                         + "Are you sure you want to continue ");
 
-                ((Button) alert.getDialogPane().lookupButton(ButtonType.YES)).setText("Yes");
+                ((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText("Yes");
                 ((Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL)).setText("No");
                 application.positionDialog(alert);
                 Optional<ButtonType> result = alert.showAndWait();
