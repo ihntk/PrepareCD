@@ -174,11 +174,18 @@ public class MainFrameController {
             application.setTitle(getMachine().getMachineName() + (app.isOfflineMode() ? " - *OFFLINE*" : ""));
             fillCurrentMachineLabel();
             machineName.setText(getMachine().getMachineName());
+            openExistedTestPdf();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private void openExistedTestPdf() {
+        String testPdf = getMachine().getMachinePathString() + "Test.pdf";
+        if (Files.exists(Paths.get(testPdf)))
+            hostServices.showDocument(testPdf);
     }
 
     private void fillCurrentMachineLabel() {
