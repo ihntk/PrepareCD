@@ -225,7 +225,7 @@ public class MainApp {
     private ArrayList<String> getXlsFileList(String[] files) {
         ArrayList<String> xlsFileList = new ArrayList<>(3);
         for (String file : files) {
-            if (file.endsWith(".xlsx") || file.endsWith(".xltx")) {
+            if (file.endsWith(".xlsx") || file.endsWith(".xltx") || file.endsWith(".xls")) {
                 xlsFileList.add(file);
             }
         }
