@@ -12,6 +12,16 @@ public class FSHelper {
     private ObservableList<Path> list;
     private Path currentPath;
 
+    public static void copyDirPath(Path sourcePath, Path targetPath) throws IOException {
+        Files.walk(sourcePath).forEach(source -> {
+            try {
+                Files.copy(source, targetPath.resolve(sourcePath.relativize(source)));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
     public Path getCurrentPath() {
         return currentPath;
     }

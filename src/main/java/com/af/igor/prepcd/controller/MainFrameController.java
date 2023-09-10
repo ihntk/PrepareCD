@@ -355,7 +355,8 @@ public class MainFrameController {
             currentTarget = Targets.CD;
             target.setText("CD");
             resetControlsDefault();
-            hostServices.showDocument(getMachine().getMachinePathString() + getMachine().getMachineXlsName());
+//            hostServices.showDocument(getMachine().getMachinePathString() + getMachine().getMachineXlsName());    //offline mode
+            hostServices.showDocument(getMachine().getRemoteMachinePathString() + DRAWINGS_DIR + getMachine().getMachineXlsName());
             app.openWithFileMan("--t --l=\"" + app.getCdsString() + "\"", "--t --r=\"" + app.getCdCommenceString() + "\"");
 
             fillCurrentMachineLabel();
@@ -404,8 +405,15 @@ public class MainFrameController {
 
     private void copyBaseCD(List<Path> fileList) throws IOException {
         System.out.println("The method copyBaseCD() do nothing");
-//        Path sourceDirPath = Paths.get(app.getCDTEMPLATE());
-//        Path targetDirPath = Paths.get(app.getCdsString());
+        Path sourceDirPath = Paths.get(app.getCDTEMPLATE());
+        Path targetDirPath = Paths.get(app.getCdsString());
+
+        for (Path path : fileList) {
+            Path sourcePath = sourceDirPath.resolve(path);
+            if (Files.isDirectory(sourceDirPath)) {
+                FSHelper.copyDirPath(sourcePath, targetDirPath.resolve(path));
+            } else app.copyPath(sourceDirPath.resolve(path), targetDirPath.resolve(path));
+        }
 //        for (Path path: fileList){
 //            if (Files.isDirectory(sourceDirPath.resolve(path))){
 //                Files.walk(sourceDirPath.resolve(path)).forEach(source ->{
