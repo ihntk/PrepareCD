@@ -39,6 +39,7 @@ public class MainApp {
     private static String PRINTDIR;
     private static String CDCOMMENCE;
     public static String DRAWINGS_DIR;
+    public static String HPET_DIR;
 
     private static MainApp instance;
     private static String version = "0.8.8";
@@ -82,6 +83,7 @@ public class MainApp {
         DOUBLECOMMANDER = properties.getProperty("DOUBLECOMMANDER");
         PRINTDIR = properties.getProperty("PRINTDIR");
         DRAWINGS_DIR = properties.getProperty("DRAWINGS_DIR");
+        HPET_DIR = properties.getProperty("HPET_DIR");
     }
 
     public static MainApp getInstance() {

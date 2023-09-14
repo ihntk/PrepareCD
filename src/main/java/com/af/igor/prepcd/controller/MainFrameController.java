@@ -22,6 +22,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.apache.commons.collections4.map.HashedMap;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -110,6 +111,7 @@ public class MainFrameController {
     private String installationName;
     private String targetFileName;
     private Targets currentTarget;
+    private Path selectedPath;
 
 
     public void setApplication(PrepareCD application) {
@@ -319,7 +321,7 @@ public class MainFrameController {
             app.openWithFileMan("--t --l=\"" + getMachine().getMachinePathString() + "\"", "--t --r=\"" + PLANS + "\"");
 
             String currentStatus = status.getText();
-            basePlanDirFS.getFiles(Paths.get(getMachine().getMachinePathString()));
+            basePlanDirFS.getFiles(Paths.get(getMachine().getMachinePathString()));     //???
             refreshMachinePlansList();
             fillCurrentMachineLabel();
 
@@ -360,6 +362,7 @@ public class MainFrameController {
             app.openWithFileMan("--t --l=\"" + app.getCdsString() + "\"", "--t --r=\"" + app.getCdCommenceString() + "\"");
 
             fillCurrentMachineLabel();
+            Map<String, Path> plansMap = new HashedMap<>();
             List<String> languagesOrder = returnLanguagesOrder();
 
             if (languagesOrder.get(0).equals("nothing")) {
@@ -391,9 +394,9 @@ public class MainFrameController {
             }
 
             copyBaseCD(fileList);
-        /*
-        скопіювати вибрані мови
-         */
+            refreshMachinePlansList();
+//            copyDrawings(plansMap);
+//            copyMopAndMin();
         }
     }
 
@@ -401,31 +404,6 @@ public class MainFrameController {
         List<String> languagesOrder = new LinkedList<>();
         Collections.addAll(languagesOrder, machineExcelParser.getLanguages());
         return languagesOrder;
-    }
-
-    private void copyBaseCD(List<Path> fileList) throws IOException {
-        System.out.println("The method copyBaseCD() do nothing");
-        Path sourceDirPath = Paths.get(app.getCDTEMPLATE());
-        Path targetDirPath = Paths.get(app.getCdsString());
-
-        for (Path path : fileList) {
-            Path sourcePath = sourceDirPath.resolve(path);
-            if (Files.isDirectory(sourceDirPath)) {
-                FSHelper.copyDirPath(sourcePath, targetDirPath.resolve(path));
-            } else app.copyPath(sourceDirPath.resolve(path), targetDirPath.resolve(path));
-        }
-//        for (Path path: fileList){
-//            if (Files.isDirectory(sourceDirPath.resolve(path))){
-//                Files.walk(sourceDirPath.resolve(path)).forEach(source ->{
-//                    Path destination = targetDirPath.resolve(source.getFileName());
-//                    try {
-//                        app.copyPath(source,destination);
-//                    } catch (IOException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                });
-//            }else app.copyPath(sourceDirPath.resolve(path),targetDirPath.resolve(path));
-//        }
     }
 
     private ObservableList<Pane> showCdLanguageSelectorAlert(List<String> languagesOrder) {
@@ -445,6 +423,96 @@ public class MainFrameController {
         application.positionDialog(alert);
         alert.showAndWait();
         return languageList;
+    }
+
+    private void copyBaseCD(List<Path> fileList) throws IOException {
+        Path sourceDirPath = Paths.get(app.getCDTEMPLATE());
+        Path targetDirPath = Paths.get(app.getCdsString());
+
+        if (Files.exists(targetDirPath)) {
+            app.logger.log("Cd exist already");
+            return;
+        }
+
+        for (Path path : fileList) {
+            Path sourcePath = sourceDirPath.resolve(path);
+            if (Files.isDirectory(sourceDirPath)) {
+                FSHelper.copyDirPath(sourcePath, targetDirPath.resolve(path));
+            } else app.copyPath(sourceDirPath.resolve(path), targetDirPath.resolve(path));
+        }
+    }
+
+    private void copyDrawings(Map<String, Path> planMap) {
+//        Thread drawing = new Thread();
+        Drawing drawing = new Drawing(planMap);
+        handleSelectDrawing(drawing);
+        drawing.start();
+    }
+
+    private synchronized void copyDrawingsThread(Map<String, Path> planMap) throws IOException, InterruptedException {
+        for (int i = 0; i < machineDirList.size(); i++) {
+            String planName = machineDirList.get(i).toString().trim();
+            if (planName.length() > 5) {
+                continue;
+            }
+
+            if (planName.equals("HPET")) {
+                machineDir.getSelectionModel().select(i);
+                remoteMachineDirFS.getFiles(Paths.get(HPET_DIR));
+
+                //тут потрібно зупинити цикл і чекати, доки не буде mouseClicked
+                wait();
+
+                //remove after test and uncomment bellow
+                planMap.put(planName, selectedPath);
+                machineDirList.set(i, Paths.get(planName + " -> " + planMap.get(planName).getFileName()));
+            } else
+
+//            if (planName.equals("SE")) {
+//                remoteMachineDirFS.getFiles(Paths.get(SE_DIR));
+//                selectDrawing(planMap, planName);
+//            }else
+
+                if (planName.equals("REFR")) {
+                    remoteMachineDirFS.getFiles(Paths.get(DRAWINGS_DIR));
+                }
+
+//            planMap.put(planName, selectedPath);
+//            machineDirList.set(i, Paths.get(planName + " -> " + planMap.get(planName).getFileName()));
+        }
+    }
+
+    private void handleSelectDrawing(Drawing drawing) {
+        synchronized (drawing) {
+            remoteMachineDir.setOnMouseClicked(mouseEvent -> {
+                selectedPath = remoteMachineDirFS.getCurrentPath().resolve(remoteMachineDir.getSelectionModel().getSelectedItem());
+                notify();
+            });
+        }
+    }
+
+    private class Drawing extends Thread {
+        private Map<String, Path> plansMap;
+
+        public Drawing(Map<String, Path> plansMap) {
+            this.plansMap = plansMap;
+        }
+
+        @Override
+        public void run() {
+            try {
+                copyDrawingsThread(plansMap);
+            } catch (IOException e) {
+                app.logger.log("File access error while select or copy drawings into CD");
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private void copyMopAndMin() {
+
     }
 
     @FXML
@@ -653,30 +721,44 @@ public class MainFrameController {
     }
 
     protected void refreshMachinePlansList() throws IOException {
+        ArrayList<String> machinePlanList = null;
+
         if (currentTarget == Targets.INSTALL)
             updateInstallationName();
 
         if (currentTarget == Targets.MACHINE || currentTarget == Targets.APRAGAZ) {
-            ArrayList<String> machinePlansList = new ArrayList<>();
-            createMachinePlansList(machinePlansList);
+            machinePlanList = new ArrayList<>();
+            createMachinePlansList(machinePlanList);
 
-            for (int i = 0; i < machinePlansList.size(); i++) {             //rename if file exist
-                String name = getMachine().defineFileName(Paths.get(machinePlansList.get(i)));
+            for (int i = 0; i < machinePlanList.size(); i++) {             //rename if file exist
+                String name = getMachine().defineFileName(Paths.get(machinePlanList.get(i)));
                 if (name != null)
                     for (String file : getMachine().getCkdFiles()) {
                         if (file.startsWith(name.substring(0, name.indexOf("."))))
-                            machinePlansList.set(i, file);
+                            machinePlanList.set(i, file);
                     }
             }
 
-            machineDirFS.getFiles(machinePlansList);
         }
+        if (currentTarget == Targets.CD) {
+            machinePlanList = new ArrayList<>();
+            createMachinePlansList(machinePlanList);
+
+        }
+
+        machineDirFS.getFiles(machinePlanList);
     }
 
-    private void createMachinePlansList(ArrayList<String> machinePlansList) {
-        machinePlansList.add("   I" + app.getMachineCode());
-        machinePlansList.add("   E" + app.getMachineCode());
-        machinePlansList.add("   FS" + app.getMachineCode());
+    private void createMachinePlansList(ArrayList<String> machinePlanList) {
+        if (currentTarget != Targets.CD) {
+            machinePlanList.add("   I" + app.getMachineCode());
+            machinePlanList.add("   E" + app.getMachineCode());
+            machinePlanList.add("   FS" + app.getMachineCode());
+        } else {
+            machinePlanList.add("   I");
+            machinePlanList.add("   E");
+            machinePlanList.add("   FS");
+        }
 
         if (currentTarget == Targets.APRAGAZ) {
             currentTarget = Targets.MACHINE;
@@ -687,7 +769,16 @@ public class MainFrameController {
         String mPlans = machineExcelParser.getMPlans();
 
         for (String mPlan : mPlans.split("\\+")) {
-            machinePlansList.add("   " + mPlan.trim());
+            machinePlanList.add("   " + mPlan.trim());
+        }
+
+        if (currentTarget == Targets.CD) {
+            String cdPlans = machineExcelParser.getCdPlans();
+
+            for (String cdPlan : cdPlans.split(",")) {
+                machinePlanList.add("   " + cdPlan.trim());
+            }
+
         }
     }
 

@@ -59,4 +59,17 @@ public class MachineExcelParser extends ExcelParser {
 
         writeXLS();
     }
+
+    public String getCdPlans() {
+        StringBuilder cdPlans = new StringBuilder();
+        if (!getCell(new CellReference("B25")).getStringCellValue().equals("//"))
+            cdPlans.append("HPET");
+        if (!getCell(new CellReference("B22")).getStringCellValue().equals("//")
+                || !getCell(new CellReference("B23")).getStringCellValue().equals("//")
+                || !getCell(new CellReference("B24")).getStringCellValue().equals("//"))
+            cdPlans.append(",REFR");
+        if (!getCell(new CellReference("B16")).getStringCellValue().equals("//"))
+            cdPlans.append(",SE");
+        return cdPlans.toString();
+    }
 }
