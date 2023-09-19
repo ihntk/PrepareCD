@@ -393,8 +393,11 @@ public class MainFrameController {
                 }
             }
 
-            copyBaseCD(fileList);
-            refreshMachinePlansList();
+            if (!Files.exists(Paths.get(app.getCdsString()).resolve(fileList.get(0)))) {
+                copyBaseCD(fileList);
+            }
+
+//            refreshMachinePlansList();
 //            copyDrawings(plansMap);
 //            copyMopAndMin();
         }
@@ -428,11 +431,6 @@ public class MainFrameController {
     private void copyBaseCD(List<Path> fileList) throws IOException {
         Path sourceDirPath = Paths.get(app.getCDTEMPLATE());
         Path targetDirPath = Paths.get(app.getCdsString());
-
-        if (Files.exists(targetDirPath)) {
-            app.logger.log("Cd exist already");
-            return;
-        }
 
         for (Path path : fileList) {
             Path sourcePath = sourceDirPath.resolve(path);
