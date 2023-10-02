@@ -35,7 +35,7 @@ public class MachineExcelParser extends ExcelParser {
         String allLanguages = String.format("%8s", sheet.getRow(8).getCell(1));
         String cdLanguages = "nothing";
         for (String langs : allLanguages.split("\\+")) {
-            if (langs.matches("(.*)CD(.*)")) {
+            if (langs.matches("(.*)CD(.*)") || langs.matches("(.*)USB(.*)")) {
                 cdLanguages = langs.trim().substring(3).replaceAll("\\s", "");
             }
         }
