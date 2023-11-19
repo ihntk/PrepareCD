@@ -37,7 +37,7 @@ public class MachineExcelParser extends ExcelParser {
         for (String langs : allLanguages.split("\\+")) {
             if (langs.matches("(.*)CD(.*)") || langs.matches("(.*)USB(.*)")) {
                 langs = langs.trim();
-                cdLanguages = langs.substring(langs.indexOf(" "));
+                cdLanguages = langs.substring(langs.indexOf(" ") + 1);
             }
         }
         return cdLanguages.split("/");
