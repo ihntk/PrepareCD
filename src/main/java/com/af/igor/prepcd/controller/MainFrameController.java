@@ -721,10 +721,9 @@ public class MainFrameController {
     protected void refreshMachinePlansList() throws IOException {
         ArrayList<String> machinePlanList = null;
 
-        if (currentTarget == Targets.INSTALL)
+        if (currentTarget == Targets.INSTALL) {
             updateInstallationName();
-
-        if (currentTarget == Targets.MACHINE || currentTarget == Targets.APRAGAZ) {
+        } else if (currentTarget == Targets.MACHINE || currentTarget == Targets.APRAGAZ) {
             machinePlanList = new ArrayList<>();
             createMachinePlansList(machinePlanList);
 
@@ -736,13 +735,11 @@ public class MainFrameController {
                             machinePlanList.set(i, file);
                     }
             }
-
-        }
-        if (currentTarget == Targets.CD) {
+        } else if (currentTarget == Targets.CD) {
             machinePlanList = new ArrayList<>();
             createMachinePlansList(machinePlanList);
 
-        }
+        } else return;
 
         machineDirFS.getFiles(machinePlanList);
     }
