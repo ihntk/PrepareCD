@@ -1,6 +1,7 @@
 package com.af.igor.prepcd.util;
 
 import com.af.igor.prepcd.MainApp;
+import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -20,6 +21,7 @@ public abstract class ExcelParser {
     public void setExcelFile(String excelFile) {
         this.excelFile = excelFile;
         try (FileInputStream inputStream = new FileInputStream(new File(excelFile))) {
+            ZipSecureFile.setMinInflateRatio(0);
             workbook = new XSSFWorkbook(inputStream);
         } catch (IOException e) {
             e.printStackTrace();
