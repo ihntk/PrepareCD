@@ -22,7 +22,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.apache.commons.collections4.map.HashedMap;   //FIXME Here must be HashMap from java collection
+import org.apache.commons.collections4.map.HashedMap;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -177,6 +177,7 @@ public class MainFrameController {
             target.setText("Ready");
             application.setTitle(getMachine().getMachineName() + (app.isOfflineMode() ? " - *OFFLINE*" : ""));
             currentMachine.setText(getMachine().getMachineName());
+            fillLanguagesLabel();
             machineName.setText(getMachine().getMachineName());
             openExistedTestPdf();
         } catch (IOException e) {
@@ -725,6 +726,7 @@ public class MainFrameController {
 
         if (currentTarget == Targets.INSTALL) {
             updateInstallationName();
+            return;
         } else if (currentTarget == Targets.MACHINE || currentTarget == Targets.APRAGAZ) {
             machinePlanList = new ArrayList<>();
             createMachinePlansList(machinePlanList);
@@ -742,7 +744,7 @@ public class MainFrameController {
             createMachinePlansList(machinePlanList);
 
         } else return;
-        machineDirFS.getFiles(machinePlanList);     //FIXME maybe it is needed only for machine target. an error pops up after changing additionalOptions
+        machineDirFS.getFiles(machinePlanList);     //FIXME is it rely needed for CD target. an error pops up after changing additionalOptions
 
     }
 
