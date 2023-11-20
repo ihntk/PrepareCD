@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.af.igor.prepcd.controller.MainFrameController">
     <top>
         <HBox alignment="CENTER_LEFT" spacing="5.0" BorderPane.alignment="CENTER">
@@ -71,6 +71,7 @@
                 </Region>
                 <Label fx:id="status" layoutX="12.0" layoutY="12.0" text="Status"/>
                 <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="languages"/>
                 <Label fx:id="currentMachine">
                     <padding>
                         <Insets right="2.0"/>

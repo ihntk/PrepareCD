@@ -22,7 +22,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.apache.commons.collections4.map.HashedMap;
+import org.apache.commons.collections4.map.HashedMap;   //FIXME Here must be HashMap from java collection
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -48,6 +48,8 @@ public class MainFrameController {
 
     @FXML
     private Label target;
+    @FXML
+    public Label languages;
 
     @FXML
     private Label currentMachine;
@@ -174,7 +176,7 @@ public class MainFrameController {
             status.setText("Machine is " + getMachine().getMachineName());
             target.setText("Ready");
             application.setTitle(getMachine().getMachineName() + (app.isOfflineMode() ? " - *OFFLINE*" : ""));
-            fillCurrentMachineLabel();
+            currentMachine.setText(getMachine().getMachineName());
             machineName.setText(getMachine().getMachineName());
             openExistedTestPdf();
         } catch (IOException e) {
@@ -190,7 +192,7 @@ public class MainFrameController {
             hostServices.showDocument(testPdf);
     }
 
-    private void fillCurrentMachineLabel() {
+    private void fillLanguagesLabel() {
         StringBuilder langs = new StringBuilder("");
         if (app.isMachineXlsExist()) {
             app.initMachineExcelParser();
@@ -201,7 +203,7 @@ public class MainFrameController {
             if (!langs.equals(""))
                 langs.insert(0, "lang: ").append("| ");
         }
-        currentMachine.setText(langs + getMachine().getMachineName());
+        languages.setText(langs.toString());
     }
 
     @FXML
@@ -323,7 +325,7 @@ public class MainFrameController {
             String currentStatus = status.getText();
             basePlanDirFS.getFiles(Paths.get(getMachine().getMachinePathString()));     //???
             refreshMachinePlansList();
-            fillCurrentMachineLabel();
+            fillLanguagesLabel();
 
             if (!app.isOfflineMode()) {
                 remoteMachineDirFS.getFiles(Paths.get(app.PLANS));
@@ -361,7 +363,7 @@ public class MainFrameController {
             hostServices.showDocument(getMachine().getRemoteMachinePathString() + DRAWINGS_DIR + getMachine().getMachineXlsName());
             app.openWithFileMan("--t --l=\"" + app.getCdsString() + "\"", "--t --r=\"" + app.getCdCommenceString() + "\"");
 
-            fillCurrentMachineLabel();
+            fillLanguagesLabel();
             Map<String, Path> plansMap = new HashedMap<>();
             List<String> languagesOrder = returnLanguagesOrder();
 
@@ -740,8 +742,8 @@ public class MainFrameController {
             createMachinePlansList(machinePlanList);
 
         } else return;
+        machineDirFS.getFiles(machinePlanList);     //FIXME maybe it is needed only for machine target. an error pops up after changing additionalOptions
 
-        machineDirFS.getFiles(machinePlanList);
     }
 
     private void createMachinePlansList(ArrayList<String> machinePlanList) {
