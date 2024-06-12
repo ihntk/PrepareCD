@@ -386,6 +386,9 @@ public class MainFrameController {
             }
 
             ObservableList<Pane> languageList = showCdLanguageSelectorAlert(languagesOrder);
+            if (languageList.isEmpty()) {
+                return;
+            }
 
             List<Path> fileList = new LinkedList<>();
             Collections.addAll(fileList, CdLangFiles.getRegularFiles());
@@ -413,7 +416,7 @@ public class MainFrameController {
     }
 
     private ObservableList<Pane> showCdLanguageSelectorAlert(List<String> languagesOrder) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Select languages");
         alert.getDialogPane().setPrefHeight(430);
         ObservableList<Pane> languageList = FXCollections.observableArrayList();
@@ -427,7 +430,11 @@ public class MainFrameController {
         }
         alert.getDialogPane().setContent(new ListView<Pane>(languageList));
         application.positionDialog(alert);
-        alert.showAndWait();
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get() == ButtonType.CANCEL) {
+            return FXCollections.emptyObservableList();
+        }
         return languageList;
     }
 

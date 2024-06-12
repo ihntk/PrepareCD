@@ -6,12 +6,13 @@
 
   <groupId>com.af.igor.prepcd</groupId>
   <artifactId>PrepareCD</artifactId>
-  <version>0.8.8.4</version>
+  <version>0.8.8.5</version>
   <name>PrepareCD</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-<junit.version>5.9.2</junit.version>  </properties>
+    <junit.version>5.9.2</junit.version>
+  </properties>
 
   <dependencies>
     <dependency>

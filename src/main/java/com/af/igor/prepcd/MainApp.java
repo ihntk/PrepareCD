@@ -42,7 +42,7 @@ public class MainApp {
     public static String HPET_DIR;
 
     private static MainApp instance;
-    private static String version = "0.8.8.4";
+    private static String version = "0.8.8.5";
     private static Machine machine;
     private static Machine newMachine;
     public static LuxParser luxParser;
