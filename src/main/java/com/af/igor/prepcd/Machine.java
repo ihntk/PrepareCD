@@ -8,6 +8,7 @@ import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.DosFileAttributeView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -228,6 +229,8 @@ public class Machine {
         String machineCode = app.getMachineCode();
         ArrayList<String> ckdFiles = getCkdFiles();
         for (String file : ckdFiles) {
+            disableReadOnlyAtribute(Paths.get(machinePathString + file));
+
             if ((file.startsWith("E")) && (!file.startsWith("Etiqclas"))) {
                 try {
                     if (Integer.parseInt(file.substring(1, file.indexOf("-"))) >= 700) {
@@ -293,6 +296,19 @@ public class Machine {
                 renameInLocalDir(file, renamedCkd);
             }
 
+        }
+    }
+
+    private void disableReadOnlyAtribute(Path file) throws IOException {
+        if (!System.getProperty("os.name").toLowerCase().contains("win")) {
+            return;
+        }
+
+        DosFileAttributeView attributeView = Files.getFileAttributeView(file, DosFileAttributeView.class);
+        if (attributeView != null) {
+            attributeView.setReadOnly(false);
+        } else {
+            throw new UnsupportedOperationException("DOS attributes not supported on this file system");
         }
     }
 
