@@ -520,7 +520,7 @@ public class MainApp {
             logger.log(mPlans);
             ConsoleHelper.writeMessage("Copy base drawings and then press enter\n------\nFor machine " + machineType + "\nYou need to copy E, FS and " + mPlans.replaceAll("\\+", "") + "\n");
             ConsoleHelper.readString();
-            machine.renameAllCkd();
+            machine.renameAllDrawings();
             logger.log("ckd files renamed");
             machine.copyEtiq();
             machine.open4CkdFiles();

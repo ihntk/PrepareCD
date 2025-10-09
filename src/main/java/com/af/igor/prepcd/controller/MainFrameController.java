@@ -278,7 +278,7 @@ public class MainFrameController {
         targetFileName = installationName;
         copyHere.setDisable(false);
         ok.setDisable(false);
-        application.getRootLayoutController().enableRenameAllCkdFiles();
+        application.getRootLayoutController().enableRenameAllDrawingsFiles();
         status.setText("Copy base installation drawing for " + getMachine().getMachineType() + ". Then press ok");
         app.openWithFileMan("--t --l=\"" + getMachine().getMachinePathString() + "\"", "--t --r=\"" + getMachine().getRemoteMachinePathString() + DRAWINGS_DIR + "\"");
     }
@@ -315,7 +315,7 @@ public class MainFrameController {
         } else {
 
             targetFileName = null;
-            application.getRootLayoutController().enableRenameAllCkdFiles();
+            application.getRootLayoutController().enableRenameAllDrawingsFiles();
             copyHere.setDisable(false);
             ok.setDisable(false);
             f4Button.setText("Apragaz");
@@ -553,8 +553,8 @@ public class MainFrameController {
                 alert.showAndWait();
                 return;
             }
-            filename = getMachine().defineFileName(machineDir.getSelectionModel().getSelectedItem());
-            targetPath = Paths.get(getMachine().getMachinePathString() + filename);
+            filename = getMachine().defineFileName(machineDir.getSelectionModel().getSelectedItem());   //FIXME defineFileName() must return file name without .ext
+            targetPath = Paths.get(getMachine().getMachinePathString() + filename);                //FIXME here need to add .ext from a sourcePath
         }
 
         if (!Files.exists(targetPath)) {
@@ -741,7 +741,7 @@ public class MainFrameController {
             for (int i = 0; i < machinePlanList.size(); i++) {             //rename if file exist
                 String name = getMachine().defineFileName(Paths.get(machinePlanList.get(i)));
                 if (name != null)
-                    for (String file : getMachine().getCkdFiles()) {
+                    for (String file : getMachine().getCkdFiles()) {        //todo also slddrw files need
                         if (file.startsWith(name.substring(0, name.indexOf("."))))
                             machinePlanList.set(i, file);
                     }
@@ -837,7 +837,7 @@ public class MainFrameController {
         f4Button.setText("-");
         basePlanDirList.clear();
         cdDirList.clear();
-        application.getRootLayoutController().disableRenameAllCkdFiles();
+        application.getRootLayoutController().disableRenameAllDrawingsFiles();
         status.setTextFill(Color.BLACK);
         machineCode.setTextFill(Color.BLACK);
         machineDir.setOnMouseClicked(null);

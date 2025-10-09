@@ -225,78 +225,76 @@ public class Machine {
         return machineXlsName;
     }
 
-    public void renameAllCkd() throws IOException {
+    public void renameAllDrawings() throws IOException {
         String machineCode = app.getMachineCode();
-        ArrayList<String> ckdFiles = getCkdFiles();
-        for (String file : ckdFiles) {
+        ArrayList<String> drawingFiles = getCkdFiles();
+        drawingFiles.addAll(getSlddrwFiles());
+
+        for (String file : drawingFiles) {
+            String ext = file.substring(file.lastIndexOf("."));
             disableReadOnlyAtribute(Paths.get(machinePathString + file));
 
             if ((file.startsWith("E")) && (!file.startsWith("Etiqclas"))) {
                 try {
                     if (Integer.parseInt(file.substring(1, file.indexOf("-"))) >= 700) {
-                        String renamedCkd = "E" + machineCode + "-" + getMachineName().substring(2) + ".ckd";
-                        renameInLocalDir(file, renamedCkd);
+                        renameFile(file, "E", ext);
                     }
                 } catch (Exception e) {
                 }
 
             }
             if (file.startsWith("FS")) {
-                String renamedCkd = "FS" + machineCode + "-" + getMachineName().substring(2) + ".ckd";
-                renameInLocalDir(file, renamedCkd);
+                renameFile(file, "FS", ext);
             }
             if (file.startsWith("I")) {
-                String renamedCkd = "I" + machineCode + "-" + getMachineName().substring(2) + ".ckd";
-                renameInLocalDir(file, renamedCkd);
+                renameFile(file, "I", ext);
             }
 
             if (file.startsWith("M10") &&
                     !file.startsWith("M100")) {
-                String renamedCkd = "M10" + "-" + getMachineName().substring(2) + ".ckd";
-                renameInLocalDir(file, renamedCkd);
+                renameFile(file, "M10", ext);
             }
             if (file.startsWith("M20")) {
-                String renamedCkd = "M20" + "-" + getMachineName().substring(2) + ".ckd";
-                renameInLocalDir(file, renamedCkd);
+                renameFile(file, "M20", ext);
             }
             if (file.startsWith("M30")) {
-                String renamedCkd = "M30" + "-" + getMachineName().substring(2) + ".ckd";
-                renameInLocalDir(file, renamedCkd);
+                renameFile(file, "M30", ext);
             }
             if (file.startsWith("M40")) {
-                String renamedCkd = "M40" + "-" + getMachineName().substring(2) + ".ckd";
-                renameInLocalDir(file, renamedCkd);
+                renameFile(file, "M40", ext);
             }
             if (file.startsWith("M50")) {
-                String renamedCkd = "M50" + "-" + getMachineName().substring(2) + ".ckd";
-                renameInLocalDir(file, renamedCkd);
+                renameFile(file, "M50", ext);
             }
             if (file.startsWith("M60")) {
-                String renamedCkd = "M60" + "-" + getMachineName().substring(2) + ".ckd";
-                renameInLocalDir(file, renamedCkd);
+                renameFile(file, "M60", ext);
             }
             if (file.startsWith("M70")) {
-                String renamedCkd = "M70" + "-" + getMachineName().substring(2) + ".ckd";
-                renameInLocalDir(file, renamedCkd);
+                renameFile(file, "M70", ext);
             }
             if (file.startsWith("M80")) {
-                String renamedCkd = "M80" + "-" + getMachineName().substring(2) + ".ckd";
-                renameInLocalDir(file, renamedCkd);
+                renameFile(file, "M80", ext);
             }
             if (file.startsWith("M90")) {
-                String renamedCkd = "M90" + "-" + getMachineName().substring(2) + ".ckd";
-                renameInLocalDir(file, renamedCkd);
+                renameFile(file, "M90", ext);
             }
             if (file.startsWith("M100")) {
-                String renamedCkd = "M100" + "-" + getMachineName().substring(2) + ".ckd";
-                renameInLocalDir(file, renamedCkd);
+                renameFile(file, "M100", ext);
             }
             if (file.startsWith("M110")) {
-                String renamedCkd = "M110" + "-" + getMachineName().substring(2) + ".ckd";
-                renameInLocalDir(file, renamedCkd);
+                renameFile(file, "M110", ext);
             }
 
         }
+    }
+
+    private void renameFile(String file, String ft, String ext) throws IOException {
+        String renamedFile = defineName(ft, ext);
+        renameInLocalDir(file, renamedFile);
+    }
+
+    private String defineName(String ft, String ext) {
+        return ft + machineCode + "-" + getMachineName().substring(2) + ext;
     }
 
     private void disableReadOnlyAtribute(Path file) throws IOException {
@@ -363,13 +361,13 @@ public class Machine {
         app.rename(machinePathString + sourceName, machinePathString + targetName);
     }
 
-    public String defineFileName(Path selectedItem) {
+    public String defineFileName(Path selectedItem) {   //FIXME Understand and Replace hardcoded .ckd with ext string like in renameAllDrawings() method
         String machineCode = app.getMachineCode();
         String item = selectedItem.getFileName().toString().trim();
         String fileName = null;
 
         if (item.startsWith("I")) {
-            fileName = "I" + machineCode + "-" + getMachineName().substring(2) + ".ckd";
+            fileName = defineName("I", ".ckd"); //TODO Try to surround it with for loop using BaseDrawingPaths enum
         }
         if ((item.startsWith("E")) && (!item.startsWith("Etiqclas"))) {
             fileName = "E" + machineCode + "-" + getMachineName().substring(2) + ".ckd";
@@ -430,4 +428,12 @@ public class Machine {
         return ckd;
     }
 
+    public ArrayList<String> getSlddrwFiles() {
+        ArrayList<String> drw = new ArrayList<>();
+        for (String file : getFiles()) {
+            if (file.toLowerCase().endsWith(".slddrw"))
+                drw.add(file);
+        }
+        return drw;
+    }
 }

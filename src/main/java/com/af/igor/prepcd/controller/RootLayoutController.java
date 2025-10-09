@@ -69,17 +69,17 @@ public class RootLayoutController {
         openMenu.setDisable(false);
     }
 
-    public void enableRenameAllCkdFiles() {
+    public void enableRenameAllDrawingsFiles() {
         renameAllCkdFiles.setDisable(false);
     }
 
-    public void disableRenameAllCkdFiles() {
+    public void disableRenameAllDrawingsFiles() {
         renameAllCkdFiles.setDisable(true);
     }
 
     @FXML
-    public void handleRenameAllCkdFiles() throws IOException {
-        app.getMachine().renameAllCkd();
+    public void handleRenameAllDrawingsFiles() throws IOException {
+        app.getMachine().renameAllDrawings();
         app.getGui().getController().refreshMachinePlansList();
     }
 
