@@ -553,8 +553,9 @@ public class MainFrameController {
                 alert.showAndWait();
                 return;
             }
-            filename = getMachine().defineFileName(machineDir.getSelectionModel().getSelectedItem());   //FIXME defineFileName() must return file name without .ext
-            targetPath = Paths.get(getMachine().getMachinePathString() + filename);                //FIXME here need to add .ext from a sourcePath
+            filename = getMachine().defineFileName(machineDir.getSelectionModel().getSelectedItem());
+            String ext = sourcePath.toString().substring(sourcePath.toString().lastIndexOf("."));
+            targetPath = Paths.get(getMachine().getMachinePathString(), filename + ext);
         }
 
         if (!Files.exists(targetPath)) {
@@ -740,26 +741,30 @@ public class MainFrameController {
 
             for (int i = 0; i < machinePlanList.size(); i++) {             //rename if file exist
                 String name = getMachine().defineFileName(Paths.get(machinePlanList.get(i)));
-                if (name != null)
-                    for (String file : getMachine().getCkdFiles()) {        //todo also slddrw files need
-                        if (file.startsWith(name.substring(0, name.indexOf("."))))
-                            machinePlanList.set(i, file);
-                    }
+                if (name == null)
+                    continue;
+
+                ArrayList<String> drawingsList = getMachine().getCkdFiles();
+                drawingsList.addAll(getMachine().getSlddrwFiles());
+                for (String file : drawingsList) {
+                    if (file.startsWith(name))
+                        machinePlanList.set(i, file);
+                }
             }
         } else if (currentTarget == Targets.CD) {
             machinePlanList = new ArrayList<>();
             createMachinePlansList(machinePlanList);
 
         } else return;
-        machineDirFS.getFiles(machinePlanList);     //FIXME is it rely needed for CD target. an error pops up after changing additionalOptions
+        machineDirFS.getFiles(machinePlanList);
 
     }
 
     private void createMachinePlansList(ArrayList<String> machinePlanList) {
         if (currentTarget != Targets.CD) {
-            machinePlanList.add("   I" + app.getMachineCode());
-            machinePlanList.add("   E" + app.getMachineCode());
-            machinePlanList.add("   FS" + app.getMachineCode());
+            machinePlanList.add("   I" + app.getMachineCode() + "-");
+            machinePlanList.add("   E" + app.getMachineCode() + "-");
+            machinePlanList.add("   FS" + app.getMachineCode() + "-");
         } else {
             machinePlanList.add("   I");
             machinePlanList.add("   E");
@@ -775,7 +780,7 @@ public class MainFrameController {
         String mPlans = machineExcelParser.getMPlans();
 
         for (String mPlan : mPlans.split("\\+")) {
-            machinePlanList.add("   " + mPlan.trim());
+            machinePlanList.add("   " + mPlan.trim() + "-");
         }
 
         if (currentTarget == Targets.CD) {

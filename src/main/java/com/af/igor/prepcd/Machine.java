@@ -1,6 +1,7 @@
 package com.af.igor.prepcd;
 
 import com.af.igor.prepcd.util.AdditionalOptions;
+import com.af.igor.prepcd.util.BaseDrawingPaths;
 import com.af.igor.prepcd.util.ConsoleHelper;
 
 import java.io.*;
@@ -226,7 +227,6 @@ public class Machine {
     }
 
     public void renameAllDrawings() throws IOException {
-        String machineCode = app.getMachineCode();
         ArrayList<String> drawingFiles = getCkdFiles();
         drawingFiles.addAll(getSlddrwFiles());
 
@@ -234,67 +234,8 @@ public class Machine {
             String ext = file.substring(file.lastIndexOf("."));
             disableReadOnlyAtribute(Paths.get(machinePathString + file));
 
-            if ((file.startsWith("E")) && (!file.startsWith("Etiqclas"))) {
-                try {
-                    if (Integer.parseInt(file.substring(1, file.indexOf("-"))) >= 700) {
-                        renameFile(file, "E", ext);
-                    }
-                } catch (Exception e) {
-                }
-
-            }
-            if (file.startsWith("FS")) {
-                renameFile(file, "FS", ext);
-            }
-            if (file.startsWith("I")) {
-                renameFile(file, "I", ext);
-            }
-
-            if (file.startsWith("M10") &&
-                    !file.startsWith("M100")) {
-                renameFile(file, "M10", ext);
-            }
-            if (file.startsWith("M20")) {
-                renameFile(file, "M20", ext);
-            }
-            if (file.startsWith("M30")) {
-                renameFile(file, "M30", ext);
-            }
-            if (file.startsWith("M40")) {
-                renameFile(file, "M40", ext);
-            }
-            if (file.startsWith("M50")) {
-                renameFile(file, "M50", ext);
-            }
-            if (file.startsWith("M60")) {
-                renameFile(file, "M60", ext);
-            }
-            if (file.startsWith("M70")) {
-                renameFile(file, "M70", ext);
-            }
-            if (file.startsWith("M80")) {
-                renameFile(file, "M80", ext);
-            }
-            if (file.startsWith("M90")) {
-                renameFile(file, "M90", ext);
-            }
-            if (file.startsWith("M100")) {
-                renameFile(file, "M100", ext);
-            }
-            if (file.startsWith("M110")) {
-                renameFile(file, "M110", ext);
-            }
-
+            renameInLocalDir(file, defineFileName(Path.of(file)) + ext);
         }
-    }
-
-    private void renameFile(String file, String ft, String ext) throws IOException {
-        String renamedFile = defineName(ft, ext);
-        renameInLocalDir(file, renamedFile);
-    }
-
-    private String defineName(String ft, String ext) {
-        return ft + machineCode + "-" + getMachineName().substring(2) + ext;
     }
 
     private void disableReadOnlyAtribute(Path file) throws IOException {
@@ -361,54 +302,33 @@ public class Machine {
         app.rename(machinePathString + sourceName, machinePathString + targetName);
     }
 
-    public String defineFileName(Path selectedItem) {   //FIXME Understand and Replace hardcoded .ckd with ext string like in renameAllDrawings() method
+    /**
+     * Method returns file name without extension
+     *
+     * @param selectedItem
+     * @return
+     */
+    public String defineFileName(Path selectedItem) {
         String machineCode = app.getMachineCode();
         String item = selectedItem.getFileName().toString().trim();
         String fileName = null;
 
-        if (item.startsWith("I")) {
-            fileName = defineName("I", ".ckd"); //TODO Try to surround it with for loop using BaseDrawingPaths enum
-        }
-        if ((item.startsWith("E")) && (!item.startsWith("Etiqclas"))) {
-            fileName = "E" + machineCode + "-" + getMachineName().substring(2) + ".ckd";
-        }
-        if (item.startsWith("FS")) {
-            fileName = "FS" + machineCode + "-" + getMachineName().substring(2) + ".ckd";
-        }
+        for (BaseDrawingPaths partName : BaseDrawingPaths.values()) {
+            String startName = partName.name();
+            if (!item.startsWith(startName))
+                continue;
+            if (item.startsWith("I") || item.startsWith("FS"))
+                startName += machineCode;
+            if ((item.startsWith("E")) && (!item.startsWith("Etiqclas"))) {
+                try {
+                    if (Integer.parseInt(item.substring(1, item.indexOf("-"))) >= 700) {
+                        startName += machineCode;
+                    }
+                } catch (Exception e) {
+                }
+            }
 
-        if (item.startsWith("M10") &&
-                !item.startsWith("M100")) {
-            fileName = "M10" + "-" + getMachineName().substring(2) + ".ckd";
-        }
-        if (item.startsWith("M20")) {
-            fileName = "M20" + "-" + getMachineName().substring(2) + ".ckd";
-        }
-        if (item.startsWith("M30")) {
-            fileName = "M30" + "-" + getMachineName().substring(2) + ".ckd";
-        }
-        if (item.startsWith("M40")) {
-            fileName = "M40" + "-" + getMachineName().substring(2) + ".ckd";
-        }
-        if (item.startsWith("M50")) {
-            fileName = "M50" + "-" + getMachineName().substring(2) + ".ckd";
-        }
-        if (item.startsWith("M60")) {
-            fileName = "M60" + "-" + getMachineName().substring(2) + ".ckd";
-        }
-        if (item.startsWith("M70")) {
-            fileName = "M70" + "-" + getMachineName().substring(2) + ".ckd";
-        }
-        if (item.startsWith("M80")) {
-            fileName = "M80" + "-" + getMachineName().substring(2) + ".ckd";
-        }
-        if (item.startsWith("M90")) {
-            fileName = "M90" + "-" + getMachineName().substring(2) + ".ckd";
-        }
-        if (item.startsWith("M100")) {
-            fileName = "M100" + "-" + getMachineName().substring(2) + ".ckd";
-        }
-        if (item.startsWith("M110")) {
-            fileName = "M110" + "-" + getMachineName().substring(2) + ".ckd";
+            fileName = startName + "-" + getMachineName().substring(2);
         }
 
         return fileName;
