@@ -1,23 +1,25 @@
 package com.af.igor.prepcd.util;
 
 public enum BaseDrawingPaths {
-    I("002 - Plan d'installation"),
-    E("001 - Plan d'ensemble"),
-    FS("003 - Flow sheet"),
-    M10("004 - Montage/M10 - AIR COMPRESSEUR"),
-    M20("004 - Montage/M20 - EAU COMPRESSEUR"),
-    M30("004 - Montage/M30 - SORTIE SECHEUR"),
-    M40("004 - Montage/M40 - COLLECTEUR PURGE"),
-    M50("004 - Montage/M50 - AERO ET TOUR"),
-    M60("004 - Montage/M60 - RESERVOIR HAUTE PRESSION APRES SECHEUR"),
-    M70("004 - Montage/M70 - RESERVOIR BASSE PRESSION APRES SECHEUR"),
-    M80("004 - Montage/M80 - LIAISON RBACK"),
-    M90("004 - Montage/M90 - MACHINE DECAPITEE"),
-    M100("004 - Montage/M100 - RESERVOIR AVANT SECHEUR"),
-    M110("004 - Montage/M110 - RESERVOIR RBACK"),
-    M120("004 - Montage/M120 - RESERVOIRS UCL"),
-    M130("004 - Montage/M130 - REFROISISSEMENT EAU ECHANGEUR A PLAQUES"),
-    M140("004 - Montage/M140 - ALL IN ONE");
+    I("I (Installation layout)/I - HO"),
+    E("E (Machines layout)/E - HO"),
+    FS("FS (Flow sheet)/FS HO"),
+    M10("M (Mounting drawings)/M - HO/M10 - AIR COMPRESSEUR"),
+    M20("M (Mounting drawings)/M - HO/M20 - EAU COMPRESSEUR"),
+    M30("M (Mounting drawings)/M - HO/M30 - SORTIE SECHEUR"),
+    M40("M (Mounting drawings)/M - HO/M40 - COLLECTEUR PURGE"),
+    M50("M (Mounting drawings)/M - HO/M50 - AERO ET TOUR"),
+    M60("M (Mounting drawings)/M - HO/M60 - RESERVOIR HAUTE PRESSION APRES SECHEUR"),
+    M70("M (Mounting drawings)/M - HO/M70 - RESERVOIR BASSE PRESSION APRES SECHEUR"),
+    M80("M (Mounting drawings)/M - HO/"),
+    M90("M (Mounting drawings)/M - HO/M90 - MACHINE DECAPITEE"),
+    M100("M (Mounting drawings)/M - HO/M100- RESERVOIR AVANT SECHEUR"),
+    M110("M (Mounting drawings)/M - HO/"),
+    M120("M (Mounting drawings)/M - HO/"),
+    M130("M (Mounting drawings)/M - HO/"),
+    M140("M (Mounting drawings)/M - HO/"),
+    M210("M (Mounting drawings)/M - HO/M210 - ENERGY AUDIT"),
+    M220("M (Mounting drawings)/M - HO/M220 - DEW POINT CHECK");
 
     private String path;
 
