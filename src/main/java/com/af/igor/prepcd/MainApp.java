@@ -25,6 +25,7 @@ import java.util.Properties;
 import java.util.prefs.Preferences;
 
 public class MainApp {
+
     public static String LOGFILE;
     public static String LOGERROR;
     static String ETIQCLAS;
@@ -40,9 +41,10 @@ public class MainApp {
     private static String CDCOMMENCE;
     public static String DRAWINGS_DIR;
     public static String HPET_DIR;
+    public static String PDM_ORDER;
 
     private static MainApp instance;
-    private static String version = "0.8.8.6";
+    private static String version = "0.9.0";
     private static Machine machine;
     private static Machine newMachine;
     public static LuxParser luxParser;
@@ -54,7 +56,7 @@ public class MainApp {
     private static PrepareCD gui = null;
     private static FileManagers fileManager;
     private static Preferences preferences;
-    private boolean offlineMode;
+    private WorkMode currentWorkMode = WorkMode.GENERAL;
 
     private MainApp() {
         try {
@@ -67,7 +69,18 @@ public class MainApp {
         }
 
         preferences = Preferences.userNodeForPackage(MainApp.class);
-        fileManager = FileManagers.valueOf(preferences.get("fileManager", FileManagers.TOTALCMD.name()));
+        fileManager = FileManagers.valueOf(
+                preferences.get("fileManager", FileManagers.TOTALCMD.name()));
+
+        String savedWorkMode = preferences.get(
+                "workMode",
+                WorkMode.GENERAL.name()
+        );
+        try {
+            currentWorkMode = WorkMode.valueOf(savedWorkMode);
+        } catch (IllegalArgumentException e) {
+            currentWorkMode = WorkMode.GENERAL;
+        }
 
         LOGFILE = properties.getProperty("LOGFILE");
         LOGERROR = properties.getProperty("LOGERROR");
@@ -84,6 +97,7 @@ public class MainApp {
         PRINTDIR = properties.getProperty("PRINTDIR");
         DRAWINGS_DIR = properties.getProperty("DRAWINGS_DIR");
         HPET_DIR = properties.getProperty("HPET_DIR");
+        PDM_ORDER = properties.getProperty("PDM_ORDER");
     }
 
     public static MainApp getInstance() {
@@ -113,17 +127,74 @@ public class MainApp {
     }
 
     public boolean isMachineXlsExist() {
-        return Files.exists(Paths.get(getMachine().getMachinePathString() + getMachine().getMachineXlsName()));
+        return Files.exists(
+                Paths.get(getMachine().getMachinePathString() + getMachine().getMachineXlsName()));
     }
 
     public boolean isOfflineMode() {
-        return offlineMode;
+        return currentWorkMode == WorkMode.OFFLINE;
+    }
+
+    public boolean isRemoteMode() {
+        return currentWorkMode == WorkMode.REMOTE;
+    }
+
+    public boolean isGeneralMode() {
+        return currentWorkMode == WorkMode.GENERAL;
+    }
+
+    public WorkMode getCurrentWorkMode() {
+        return currentWorkMode;
+    }
+
+    public void setWorkMode(WorkMode mode) {
+        if (mode == null) {
+            logger.log("Attempted to set null WorkMode, ignoring");
+            return;
+        }
+
+        WorkMode previousMode = currentWorkMode;
+        currentWorkMode = mode;
+
+        try {
+            preferences.put("workMode", mode.name());
+            logger.log("Work mode saved to preferences: " + mode.name());
+        } catch (Exception e) {
+            logger.log(
+                    "Error saving work mode to preferences: " + e.getMessage()
+            );
+        }
+
+        logger.log("Work mode changed from " + previousMode + " to " + mode);
+        if (gui != null) {
+            gui.getController().onWorkModeChanged();
+            gui.getRootLayoutController().updateWorkModeMenuItems();
+        }
     }
 
     public void toggleOffline() {
-        offlineMode = !offlineMode;
-        logger.log("Offline mode is " + (isOfflineMode() ? "enabled" : "disabled"));
-        gui.getController().showOfflineMode();
+        WorkMode newMode = isOfflineMode()
+                ? WorkMode.GENERAL
+                : WorkMode.OFFLINE;
+        logger.log(
+                "Toggling offline mode: " + currentWorkMode + " -> " + newMode
+        );
+        setWorkMode(newMode);
+    }
+
+    public void toggleRemote() {
+        WorkMode newMode = isRemoteMode()
+                ? WorkMode.GENERAL
+                : WorkMode.REMOTE;
+        logger.log(
+                "Toggling remote mode: " + currentWorkMode + " -> " + newMode
+        );
+        setWorkMode(newMode);
+    }
+
+    public void toggleGeneral() {
+        logger.log("Setting general mode: " + currentWorkMode + " -> GENERAL");
+        setWorkMode(WorkMode.GENERAL);
     }
 
     public void initializeMachine(String machineName) throws IOException, InterruptedException {
@@ -135,7 +206,9 @@ public class MainApp {
             luxFileName = searchLuxFile();
         } else {
             if (gui != null) {
-                luxFileName = gui.getController().processChooseLuxFile(newMachine.getMachinePathString(), getXlsFileList(new File(newMachine.getMachinePathString()).list()));
+                luxFileName = gui.getController().processChooseLuxFile(
+                        newMachine.getMachinePathString(),
+                        getXlsFileList(new File(newMachine.getMachinePathString()).list()));
             }
         }
         if (luxFileName != null) {
@@ -159,7 +232,8 @@ public class MainApp {
     }
 
     private void help() throws InterruptedException {
-        ConsoleHelper.writeMessage("_________________\n" +
+        ConsoleHelper.writeMessage(
+                "_________________\n" +
                 "Available parameters:\n" +
                 "-n [machine name]    Name of machine\n" +
                 "-i                   Make installation\n" +
@@ -173,8 +247,9 @@ public class MainApp {
     }
 
     public static String getVersion() {
-        return "\nPrepareCD version " + version +
-                "\njava version " + System.getProperty("java.version");
+        return (
+                "\nPrepareCD version " + version +
+                        "\njava version " + System.getProperty("java.version"));
     }
 
     public String searchLuxFile() {
@@ -266,7 +341,7 @@ public class MainApp {
             openWithFileMan(firstPath);
         } else {
             switch (fileManager) {
-                case EXPLORER:
+                case EXPLORER: //TODO open with explorer
                     return;
                 case TOTALCMD:
                     openWithTotalCmd(firstPath, secondPath);
@@ -282,7 +357,10 @@ public class MainApp {
         if (pathParameters.equals("")) {
             return;
         }
-        pathParameters = pathParameters.replaceAll("/", "\\\\").replaceAll("--", "-").replaceAll("=", " ");
+        pathParameters = pathParameters
+                .replaceAll("/", "\\\\")
+                .replaceAll("--", "-")
+                .replaceAll("=", " ");
         Runtime runtime = Runtime.getRuntime();
         String command = DOUBLECOMMANDER + " -C " + pathParameters;
         Process process = runtime.exec(command);
@@ -304,7 +382,9 @@ public class MainApp {
         if (pathParameters.equals("")) {
             return;
         }
-        pathParameters = pathParameters.replaceAll("/", "\\\\").replaceAll("--", "/");
+        pathParameters = pathParameters
+                .replaceAll("/", "\\\\")
+                .replaceAll("--", "/");
         Runtime runtime = Runtime.getRuntime();
         String command = TOTALCOMMANDER + " /O " + pathParameters;
         Process process = runtime.exec(command);
@@ -317,17 +397,14 @@ public class MainApp {
 
     public void openPrintDir() throws IOException {
         Path printDir = Paths.get(PRINTDIR, machine.getMachineName());
-        if (!Files.exists(printDir))
-            Files.createDirectory(printDir);
+        if (!Files.exists(printDir)) Files.createDirectory(printDir);
 
         openWithFileMan("", "--t --r=\"" + printDir + "\"");
     }
 
-
     public String getCdsString() throws IOException {
         String cd = CDS + machine.getMachineName() + "/";
-        if (!Files.exists(Paths.get(cd)))
-            Files.createDirectory(Paths.get(cd));
+        if (!Files.exists(Paths.get(cd))) Files.createDirectory(Paths.get(cd));
         return cd;
     }
 
@@ -337,8 +414,8 @@ public class MainApp {
 
     public String getCdCommenceString() throws IOException {
         String cdCom = CDCOMMENCE + machine.getMachineName() + "/";
-        if (!Files.exists(Paths.get(cdCom)))
-            Files.createDirectory(Paths.get(cdCom));
+        if (!Files.exists(Paths.get(cdCom))) Files.createDirectory(
+                Paths.get(cdCom));
         return cdCom;
     }
 
@@ -346,8 +423,9 @@ public class MainApp {
         String machineType = null;
         String machineCode;
         if (machine.getMachineCode() == null) {
-            if (machine.getMachineType().contains("-"))
-                machineType = machine.getMachineType().replaceAll("-", "_");
+            if (machine.getMachineType().contains("-")) machineType = machine
+                    .getMachineType()
+                    .replaceAll("-", "_");
             else machineType = machine.getMachineType();
 
             try {
@@ -356,8 +434,7 @@ public class MainApp {
                 if (gui == null) {
                     ConsoleHelper.writeMessage("Input machine's code");
                     machineCode = ConsoleHelper.readString();
-                } else
-                    machineCode = gui.getController().handleSetMachineCode();
+                } else machineCode = gui.getController().handleSetMachineCode();
             }
         } else machineCode = machine.getMachineCode();
 
@@ -405,8 +482,7 @@ public class MainApp {
          */
         for (int i = 0; i < args.length; i++) {
             String flag = args[i];
-            if (flag.equals("-t"))
-                logger.log("========THIS RECORD IS FOR TEST ONLY========");
+            if (flag.equals("-t")) logger.log("========THIS RECORD IS FOR TEST ONLY========");
         }
 
         /*
@@ -470,7 +546,6 @@ public class MainApp {
             if (flag.equals("-m")) use = (byte) (use | 8);
         }
 
-
         /**
          * use - marker control program:
          * 0 - do nothing
@@ -486,8 +561,7 @@ public class MainApp {
             openWithFileMan("--l=\"" + machine.getMachinePathString() + "\"");
             help();
         }
-        if (use == 1)
-            xlsTarget();
+        if (use == 1) xlsTarget();
 
         if (use == 4) {
             logger.log("target is: installation");
@@ -508,8 +582,7 @@ public class MainApp {
 
         if (use == 8) {
             logger.log("target is: machine");
-            if (!Files.exists(Paths.get(machine.getMachinePathString() + machine.getMachineXlsName())))
-                xlsTarget();
+            if (!Files.exists(Paths.get(machine.getMachinePathString() + machine.getMachineXlsName()))) xlsTarget();
             openWithFileMan("--t --l=\"" + machine.getMachinePathString() + "\"", "--t --r=\"" + PLANS + "\"");
             logger.log("Opened in tc: \n   " + machine.getMachinePathString() + "\n   " + PLANS);
             initMachineExcelParser();
@@ -528,7 +601,6 @@ public class MainApp {
             openWithFileMan("", "--r=\"" + machine.getRemoteMachinePathString() + "\"");
             logger.log("Opened in tc :\n   " + machine.getRemoteMachinePathString());
         }
-
     }
 
     private void xlsTarget() throws IOException {

@@ -1,8 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
+<?xml version="1.0" encoding="UTF-8" ?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0"
@@ -13,27 +10,83 @@
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem fx:id="renameAllCkdFiles" disable="true" mnemonicParsing="false"
-                                  onAction="#handleRenameAllDrawingsFiles" text="Rename all drawings"/>
-                        <MenuItem fx:id="offline" mnemonicParsing="false" onAction="#handleOffline" text="Offline"/>
+                        <MenuItem
+                                fx:id="renameAllDrawingsFiles"
+                                disable="true"
+                                mnemonicParsing="false"
+                                onAction="#handleRenameAllDrawingsFiles"
+                                text="Rename all drawings"
+                        />
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <CheckMenuItem
+                                fx:id="generalModeMenuItem"
+                                mnemonicParsing="false"
+                                onAction="#handleGeneral"
+                                selected="true"
+                                text="General"
+                        />
+                        <CheckMenuItem
+                                fx:id="remoteModeMenuItem"
+                                mnemonicParsing="false"
+                                onAction="#handleRemote"
+                                text="Remote"
+                        />
+                        <CheckMenuItem
+                                fx:id="offlineModeMenuItem"
+                                mnemonicParsing="false"
+                                onAction="#handleOffline"
+                                text="Offline"
+                        />
+                        <SeparatorMenuItem mnemonicParsing="false"/>
                         <MenuItem mnemonicParsing="false" text="Close"/>
                     </items>
                 </Menu>
-                <Menu fx:id="openMenu" disable="true" mnemonicParsing="false" text="Open">
+                <Menu
+                        fx:id="openMenu"
+                        disable="true"
+                        mnemonicParsing="false"
+                        text="Open"
+                >
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#handleOpenPrint" text="Print"/>
-                        <MenuItem mnemonicParsing="false" onAction="#handleOpenLocalMachineDir"
-                                  text="Local machine directory"/>
-                        <MenuItem mnemonicParsing="false" onAction="#handleOpenRemoteMachineDir"
-                                  text="Remote machine directory"/>
-                        <MenuItem mnemonicParsing="false" onAction="#handleOpenBaseDrawings" text="Base drawings"/>
-                        <MenuItem mnemonicParsing="false" onAction="#handleOpenBaseCD" text="Base CD"/>
-                        <MenuItem mnemonicParsing="false" onAction="#handleOpenRemoteCD" text="Remote CD"/>
+                        <MenuItem
+                                mnemonicParsing="false"
+                                onAction="#handleOpenPrint"
+                                text="Print"
+                        />
+                        <MenuItem
+                                mnemonicParsing="false"
+                                onAction="#handleOpenLocalMachineDir"
+                                text="Local machine directory"
+                        />
+                        <MenuItem
+                                mnemonicParsing="false"
+                                onAction="#handleOpenRemoteMachineDir"
+                                text="Remote machine directory"
+                        />
+                        <MenuItem
+                                mnemonicParsing="false"
+                                onAction="#handleOpenBaseDrawings"
+                                text="Base drawings"
+                        />
+                        <MenuItem
+                                mnemonicParsing="false"
+                                onAction="#handleOpenBaseCD"
+                                text="Base CD"
+                        />
+                        <MenuItem
+                                mnemonicParsing="false"
+                                onAction="#handleOpenRemoteCD"
+                                text="Remote CD"
+                        />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#handleAbout" text="About"/>
+                        <MenuItem
+                                mnemonicParsing="false"
+                                onAction="#handleAbout"
+                                text="About"
+                        />
                     </items>
                 </Menu>
             </menus>

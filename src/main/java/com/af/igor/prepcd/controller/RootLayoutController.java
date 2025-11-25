@@ -1,26 +1,36 @@
 package com.af.igor.prepcd.controller;
 
 import com.af.igor.prepcd.MainApp;
+import com.af.igor.prepcd.util.WorkMode;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 
 import java.io.IOException;
 
-import static com.af.igor.prepcd.MainApp.*;
+import static com.af.igor.prepcd.MainApp.PLANS;
+import static com.af.igor.prepcd.MainApp.getMachine;
 
 public class RootLayoutController {
-    private MainApp app = MainApp.getInstance();
 
-    @FXML
-    private MenuItem About;
+    private MainApp app = MainApp.getInstance();
 
     @FXML
     private Menu openMenu;
 
     @FXML
-    private MenuItem renameAllCkdFiles;
+    private MenuItem renameAllDrawingsFiles;
+
+    @FXML
+    private CheckMenuItem generalModeMenuItem;
+
+    @FXML
+    private CheckMenuItem remoteModeMenuItem;
+
+    @FXML
+    private CheckMenuItem offlineModeMenuItem;
 
     public RootLayoutController() {
         app.getGui().setRootLayoutController(this);
@@ -70,11 +80,11 @@ public class RootLayoutController {
     }
 
     public void enableRenameAllDrawingsFiles() {
-        renameAllCkdFiles.setDisable(false);
+        renameAllDrawingsFiles.setDisable(false);
     }
 
     public void disableRenameAllDrawingsFiles() {
-        renameAllCkdFiles.setDisable(true);
+        renameAllDrawingsFiles.setDisable(true);
     }
 
     @FXML
@@ -86,5 +96,39 @@ public class RootLayoutController {
     @FXML
     public void handleOffline() {
         app.toggleOffline();
+        updateWorkModeMenuItems();
+    }
+
+    @FXML
+    public void handleGeneral() {
+        app.toggleGeneral();
+        updateWorkModeMenuItems();
+    }
+
+    @FXML
+    public void handleRemote() {
+        app.toggleRemote();
+        updateWorkModeMenuItems();
+    }
+
+    public void updateWorkModeMenuItems() {
+        WorkMode currentMode = app.getCurrentWorkMode();
+        boolean wasGeneralSelected = generalModeMenuItem.isSelected();
+        boolean wasRemoteSelected = remoteModeMenuItem.isSelected();
+        boolean wasOfflineSelected = offlineModeMenuItem.isSelected();
+
+        generalModeMenuItem.setSelected(currentMode == WorkMode.GENERAL);
+        remoteModeMenuItem.setSelected(currentMode == WorkMode.REMOTE);
+        offlineModeMenuItem.setSelected(currentMode == WorkMode.OFFLINE);
+
+    }
+
+    @FXML
+    private void initialize() {
+        updateWorkModeMenuItems();
+    }
+
+    public void postInitialize() {
+        updateWorkModeMenuItems();
     }
 }

@@ -2,10 +2,7 @@ package com.af.igor.prepcd.controller;
 
 import com.af.igor.prepcd.MainApp;
 import com.af.igor.prepcd.PrepareCD;
-import com.af.igor.prepcd.util.AdditionalOptions;
-import com.af.igor.prepcd.util.BaseDrawingPaths;
-import com.af.igor.prepcd.util.CdLangFiles;
-import com.af.igor.prepcd.util.FSHelper;
+import com.af.igor.prepcd.util.*;
 import javafx.application.HostServices;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,6 +31,7 @@ import java.util.*;
 import static com.af.igor.prepcd.MainApp.*;
 
 public class MainFrameController {
+
     private MainApp app = MainApp.getInstance();
     private PrepareCD application;
 
@@ -48,6 +46,7 @@ public class MainFrameController {
 
     @FXML
     private Label target;
+
     @FXML
     public Label languages;
 
@@ -62,8 +61,9 @@ public class MainFrameController {
 
     @FXML
     private Label sgBar;
+
     @FXML
-    private Label offline;
+    private Label workModeLabel;
 
     @FXML
     private ListView<Path> machineDir;
@@ -98,7 +98,6 @@ public class MainFrameController {
     @FXML
     public ComboBox<AdditionalOptions> additionalComboBox;
 
-
     private ObservableList<Path> machineDirList;
     private ObservableList<Path> remoteMachineDirList;
     private ObservableList<Path> basePlanDirList;
@@ -115,7 +114,6 @@ public class MainFrameController {
     private Targets currentTarget;
     private Path selectedPath;
 
-
     public void setApplication(PrepareCD application) {
         this.application = application;
         hostServices = application.getHostServices();
@@ -123,8 +121,7 @@ public class MainFrameController {
 
     public void updateInstallationName() {
         installationName = "I" + app.getMachineCode() + "-" + getMachine().getMachineName().substring(2) + ".ckd";
-        if (currentTarget == Targets.INSTALL && targetFileName != null)
-            targetFileName = installationName;
+        if (currentTarget == Targets.INSTALL && targetFileName != null) targetFileName = installationName;
     }
 
     public String getSgBarString() {
@@ -155,14 +152,24 @@ public class MainFrameController {
 
         additionalComboBox.setItems(FXCollections.observableArrayList(AdditionalOptions.values()));
 
-        showOfflineMode();
+        showWorkMode();
     }
 
-    public void showOfflineMode() {
-        if (app.isOfflineMode()) {
-            offline.setVisible(true);
-        } else {
-            offline.setVisible(false);
+    public void showWorkMode() {
+        switch (app.getCurrentWorkMode()) {
+            case OFFLINE:
+                workModeLabel.setText("Offline");
+                workModeLabel.setVisible(true);
+                break;
+            case REMOTE:
+                workModeLabel.setText("Remote");
+                workModeLabel.setVisible(true);
+                break;
+            case GENERAL:
+            default:
+                workModeLabel.setText("");
+                workModeLabel.setVisible(false);
+                break;
         }
     }
 
@@ -175,7 +182,7 @@ public class MainFrameController {
             if (getMachine() == null) return;
             status.setText("Machine is " + getMachine().getMachineName());
             target.setText("Ready");
-            application.setTitle(getMachine().getMachineName() + (app.isOfflineMode() ? " - *OFFLINE*" : ""));
+            updateWindowTitle();
             currentMachine.setText(getMachine().getMachineName());
             fillLanguagesLabel();
             machineName.setText(getMachine().getMachineName());
@@ -189,20 +196,17 @@ public class MainFrameController {
 
     private void openExistedTestPdf() {
         String testPdf = getMachine().getMachinePathString() + "Test.pdf";
-        if (Files.exists(Paths.get(testPdf)))
-            hostServices.showDocument(testPdf);
+        if (Files.exists(Paths.get(testPdf))) hostServices.showDocument(testPdf);
     }
 
     private void fillLanguagesLabel() {
         StringBuilder langs = new StringBuilder("");
         if (app.isMachineXlsExist()) {
             app.initMachineExcelParser();
-            for (String lang :
-                    returnLanguagesOrder()) {
+            for (String lang : returnLanguagesOrder()) {
                 langs.append(lang + " ");
             }
-            if (!langs.equals(""))
-                langs.insert(0, "lang: ").append("| ");
+            if (!langs.equals("")) langs.insert(0, "lang: ").append("| ");
         }
         languages.setText(langs.toString());
     }
@@ -348,7 +352,6 @@ public class MainFrameController {
                 });
             }
         }
-
     }
 
     @FXML
@@ -471,7 +474,7 @@ public class MainFrameController {
                 //тут потрібно зупинити цикл і чекати, доки не буде mouseClicked
                 wait();
 
-                //remove after test and uncomment bellow
+                //TODO remove after test and uncomment bellow
                 planMap.put(planName, selectedPath);
                 machineDirList.set(i, Paths.get(planName + " -> " + planMap.get(planName).getFileName()));
             } else
@@ -500,6 +503,7 @@ public class MainFrameController {
     }
 
     private class Drawing extends Thread {
+
         private Map<String, Path> plansMap;
 
         public Drawing(Map<String, Path> plansMap) {
@@ -520,7 +524,6 @@ public class MainFrameController {
     }
 
     private void copyMopAndMin() {
-
     }
 
     @FXML
@@ -560,10 +563,8 @@ public class MainFrameController {
 
         if (!Files.exists(targetPath)) {
             Files.copy(sourcePath, targetPath);
-            if (index > -1)
-                machineDirList.set(index, targetPath.getFileName());
-            else
-                machineDirList.add(targetPath.getFileName());
+            if (index > -1) machineDirList.set(index, targetPath.getFileName());
+            else machineDirList.add(targetPath.getFileName());
         } else {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Attention");
@@ -575,8 +576,9 @@ public class MainFrameController {
             application.positionDialog(alert);
             Optional<ButtonType> optionalButtonType = alert.showAndWait();
 
-            if (optionalButtonType.get() == ButtonType.OK)
+            if (optionalButtonType.get() == ButtonType.OK) {
                 Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+            }
             else
                 return;
         }
@@ -617,10 +619,8 @@ public class MainFrameController {
 
     @FXML
     private void handleF4Button() throws IOException {
-        if (f4Button.getText().equals("Open Print"))
-            app.openPrintDir();
-        if (f4Button.getText().equals("Apragaz"))
-            processApragaz();
+        if (f4Button.getText().equals("Open Print")) app.openPrintDir();
+        if (f4Button.getText().equals("Apragaz")) processApragaz();
     }
 
     public void machineInit(String machineName) throws IOException, InterruptedException {
@@ -747,17 +747,14 @@ public class MainFrameController {
                 ArrayList<String> drawingsList = getMachine().getCkdFiles();
                 drawingsList.addAll(getMachine().getSlddrwFiles());
                 for (String file : drawingsList) {
-                    if (file.startsWith(name))
-                        machinePlanList.set(i, file);
+                    if (file.startsWith(name)) machinePlanList.set(i, file);
                 }
             }
         } else if (currentTarget == Targets.CD) {
             machinePlanList = new ArrayList<>();
             createMachinePlansList(machinePlanList);
-
         } else return;
         machineDirFS.getFiles(machinePlanList);
-
     }
 
     private void createMachinePlansList(ArrayList<String> machinePlanList) {
@@ -789,7 +786,6 @@ public class MainFrameController {
             for (String cdPlan : cdPlans.split(",")) {
                 machinePlanList.add("   " + cdPlan.trim());
             }
-
         }
     }
 
@@ -804,12 +800,17 @@ public class MainFrameController {
                 status.setText(installationName + " is opened");
             }
             break;
-
             case MACHINE: {
                 getMachine().copyEtiq();
-                getMachine().open4CkdFiles();
-                status.setText("Ready");
-                app.openWithFileMan("", "--r=\"" + getMachine().getRemoteMachinePathString() + DRAWINGS_DIR + "\"");
+                if (app.isRemoteMode()) {
+                    getMachine().moveFilesToRemote();
+                    getMachine().openPdmExplorer();
+                    status.setText("Mowe slddrw files to PDM.");
+                } else {
+                    getMachine().open4CkdFiles();
+                    status.setText("Ready");
+                    app.openWithFileMan("", "--r=\"" + getMachine().getRemoteMachinePathString() + DRAWINGS_DIR + "\"");
+                }
                 f1Button.setText("Open M");
                 f1Button.setDisable(false);
 
@@ -822,10 +823,8 @@ public class MainFrameController {
                 f4Button.setDisable(false);
             }
             break;
-
             case CD:
                 break;
-
             case XLS: {
                 app.openWithFileMan("--t --l=\"" + getMachine().getMachinePathString() + "\"", "--t --r=\"" + getMachine().getRemoteMachinePathString() + DRAWINGS_DIR + "\"");
             }
@@ -853,7 +852,23 @@ public class MainFrameController {
         XLS,
         MACHINE,
         APRAGAZ,
-        CD;
+        CD,
     }
 
+    private void updateWindowTitle() {
+        String title = getMachine().getMachineName();
+        String titleSuffix = "";
+
+        if (app.getCurrentWorkMode() == WorkMode.GENERAL) titleSuffix = "";
+        else titleSuffix = " - " + workModeLabel.getText() + " mode";
+
+        application.setTitle(title + titleSuffix);
+    }
+
+    public void onWorkModeChanged() {
+        showWorkMode();
+        if (getMachine() != null) {
+            updateWindowTitle();
+        }
+    }
 }

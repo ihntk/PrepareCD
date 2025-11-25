@@ -21,6 +21,7 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
  * Created by ede on 11.08.2016.
  */
 public class Machine {
+
     private String luxFileName;
     MainApp app = MainApp.getInstance();
     private final String machineName;
@@ -39,7 +40,6 @@ public class Machine {
     private final String machineXlsName;
 
     private AdditionalOptions additionalOption = AdditionalOptions.BASE_FRAME;
-
 
     public String getRemoteMachinePathString() {
         return remoteMachinePathString;
@@ -99,10 +99,9 @@ public class Machine {
         if (machineCodePure.equals("")) {
             machineCode = null;
             this.machineCodePure = app.getMachineCode();
-        } else
-            this.machineCodePure = machineCodePure;                            // if null, app.getMachineCode() calculates right code
+        } else this.machineCodePure = machineCodePure;      // if null, app.getMachineCode() calculates right code
 
-        propertyElements.put("machineCodePure", machineCodePure);               // and save null config file
+        propertyElements.put("machineCodePure", machineCodePure); // and save null config file
         calculateMachineCode();
         return saveConfigFile();
     }
@@ -118,7 +117,9 @@ public class Machine {
         this.machineName = machineName;
         remoteMachinePathString = app.H_MACHINES + machineName + "/";
         sm = machineName.substring(0, 2);
-        machineSeries = machineName.substring(2, 3).equals("Y") ? machineName.substring(2, 3) : machineName.substring(2, 4);
+        machineSeries = machineName.substring(2, 3).equals("Y")
+                ? machineName.substring(2, 3)
+                : machineName.substring(2, 4);
         luxPathString = remoteMachinePathString + "010 Order/";
         machineXlsName = machineName + ".xlsx";
         machinePathString = app.MACHINES + machineName + "/";
@@ -129,8 +130,7 @@ public class Machine {
     }
 
     public void initMachineCode() {
-        if (machineCodePure == null)
-            machineCodePure = app.getMachineCode();
+        if (machineCodePure == null) machineCodePure = app.getMachineCode();
 
         calculateMachineCode();
     }
@@ -140,8 +140,7 @@ public class Machine {
     }
 
     private void loadFromConfigFile() {
-        if (!Files.exists(confFile))
-            return;
+        if (!Files.exists(confFile)) return;
 
         try (FileInputStream stream = new FileInputStream(confFile.toFile())) {
             Properties confFileProperty = new Properties();
@@ -165,7 +164,6 @@ public class Machine {
                 additionalOption = AdditionalOptions.valueOf(confFileProperty.getProperty("additionalOption"));
                 propertyElements.put("additionalOption", additionalOption.getText());
             }
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -186,14 +184,14 @@ public class Machine {
 
         try (FileOutputStream stream = new FileOutputStream(confFile.toFile())) {
             for (Map.Entry<String, String> element : propertyElements.entrySet()) {
-                if (element.getValue().equals(""))
+                if (element.getValue().equals("")) {
                     confFileProperty.remove(element.getKey());
-                else
+                } else {
                     confFileProperty.setProperty(element.getKey(), element.getValue());
+                }
             }
             confFileProperty.store(stream, null);
             result = true;
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -247,36 +245,40 @@ public class Machine {
         if (attributeView != null) {
             attributeView.setReadOnly(false);
         } else {
-            throw new UnsupportedOperationException("DOS attributes not supported on this file system");
+            throw new UnsupportedOperationException(
+                    "DOS attributes not supported on this file system"
+            );
         }
     }
 
     public void open4CkdFiles() throws IOException {
         ArrayList<String> ckdFiles = getCkdFiles();
         for (String file : ckdFiles) {
-            if (file.startsWith("Etiqclas"))
-                app.desktop.open(new File(machinePathString + file));
-            if ((file.startsWith("E")) && (!file.startsWith("Etiqclas")))
-                app.desktop.open(new File(machinePathString + file));
-            if (file.startsWith("FS"))
-                app.desktop.open(new File(machinePathString + file));
-            if (file.startsWith("I"))
-                app.desktop.open(new File(machinePathString + file));
+            if (file.startsWith("Etiqclas")) app.desktop.open(
+                    new File(machinePathString + file));
+            if ((file.startsWith("E")) && (!file.startsWith("Etiqclas"))) app.desktop.open(
+                    new File(machinePathString + file));
+            if (file.startsWith("FS")) app.desktop.open(
+                    new File(machinePathString + file));
+            if (file.startsWith("I")) app.desktop.open(
+                    new File(machinePathString + file));
         }
     }
 
     public void openMCkdFiles() throws IOException {
         ArrayList<String> ckdFiles = getCkdFiles();
         for (String file : ckdFiles) {
-            if (file.startsWith("M"))
-                app.desktop.open(new File(machinePathString + file));
+            if (file.startsWith("M")) app.desktop.open(
+                    new File(machinePathString + file));
         }
     }
 
     public void copyEtiq() throws IOException {
-        String machineEtiq = "Etiqclas" + "-" + getMachineName().substring(2) + ".ckd";
-        if (!new File(machinePathString + machineEtiq).exists())
-            app.copy(app.ETIQCLAS, machinePathString + machineEtiq);
+        String machineEtiq =
+                "Etiqclas" + "-" + getMachineName().substring(2) + ".ckd";
+        if (!new File(machinePathString + machineEtiq).exists()) app.copy(
+                app.ETIQCLAS,
+                machinePathString + machineEtiq);
     }
 
     private void copyXls() throws IOException {
@@ -290,16 +292,22 @@ public class Machine {
         if (luxFileName == null || app.isOfflineMode()) return;
 
         try {
-            app.copy(luxPathString + luxFileName, machinePathString + luxFileName, REPLACE_EXISTING);
+            app.copy(
+                    luxPathString + luxFileName,
+                    machinePathString + luxFileName,
+                    REPLACE_EXISTING);
             app.logger.log("Copied luxFileName:\n   " + luxFileName);
         } catch (FileSystemException e) {
-            ConsoleHelper.writeMessage("I can't replace " + luxFileName + " file because it is being used by another process");
+            ConsoleHelper.writeMessage("I can't replace " + luxFileName +
+                    " file because it is being used by another process");
             app.logger.log("Could'nt replace:\n   " + luxFileName);
         }
     }
 
     public void renameInLocalDir(String sourceName, String targetName) throws IOException {
-        app.rename(machinePathString + sourceName, machinePathString + targetName);
+        app.rename(
+                machinePathString + sourceName,
+                machinePathString + targetName);
     }
 
     /**
@@ -315,10 +323,10 @@ public class Machine {
 
         for (BaseDrawingPaths partName : BaseDrawingPaths.values()) {
             String startName = partName.name();
-            if (!item.startsWith(startName))
-                continue;
-            if (item.startsWith("I") || item.startsWith("FS"))
+            if (!item.startsWith(startName)) continue;
+            if (item.startsWith("I") || item.startsWith("FS")) {
                 startName += machineCode;
+            }
             if ((item.startsWith("E")) && (!item.startsWith("Etiqclas"))) {
                 try {
                     if (Integer.parseInt(item.substring(1, item.indexOf("-"))) >= 700) {
@@ -336,14 +344,12 @@ public class Machine {
 
     public String[] getFiles() {
         return machinePathDir.list();
-
     }
 
     public ArrayList<String> getCkdFiles() {
         ArrayList<String> ckd = new ArrayList<>();
         for (String file : getFiles()) {
-            if (file.toLowerCase().endsWith(".ckd"))
-                ckd.add(file);
+            if (file.toLowerCase().endsWith(".ckd")) ckd.add(file);
         }
         return ckd;
     }
@@ -351,9 +357,56 @@ public class Machine {
     public ArrayList<String> getSlddrwFiles() {
         ArrayList<String> drw = new ArrayList<>();
         for (String file : getFiles()) {
-            if (file.toLowerCase().endsWith(".slddrw"))
-                drw.add(file);
+            if (file.toLowerCase().endsWith(".slddrw")) drw.add(file);
         }
         return drw;
+    }
+
+    public void moveFilesToRemote() throws IOException {
+        ArrayList<String> ckdFiles = getCkdFiles();
+        String remoteDrawingsPath =
+                getRemoteMachinePathString() + MainApp.DRAWINGS_DIR;
+
+        app.logger.log(
+                "Moving CKD files to remote server: " + remoteDrawingsPath
+        );
+
+        for (String file : ckdFiles) {
+            Path sourceFile = Paths.get(machinePathString + file);
+            Path targetFile = Paths.get(remoteDrawingsPath + file);
+
+            try {
+                disableReadOnlyAtribute(sourceFile);
+
+                Files.move(sourceFile, targetFile, REPLACE_EXISTING);
+                app.logger.log("Moved file: " + file);
+            } catch (IOException e) {
+                app.logger.log(
+                        "Error moving file " + file + ": " + e.getMessage()
+                );
+                throw e;
+            }
+        }
+    }
+
+    public void openPdmExplorer() throws IOException {
+        if (MainApp.PDM_ORDER == null || MainApp.PDM_ORDER.isEmpty()) {
+            app.logger.log("PDM_ORDER path is not configured");
+            return;
+        }
+
+        app.logger.log("Opening PDM Explorer at: " + MainApp.PDM_ORDER);
+
+        try {
+            app.desktop.open(new File(MainApp.PDM_ORDER));
+
+            ArrayList<String> slddrwFiles = getSlddrwFiles();
+            if (!slddrwFiles.isEmpty()) {
+                app.desktop.open(new File(machinePathString));
+            }
+        } catch (IOException e) {
+            app.logger.log("Error opening PDM Explorer: " + e.getMessage());
+            throw e;
+        }
     }
 }

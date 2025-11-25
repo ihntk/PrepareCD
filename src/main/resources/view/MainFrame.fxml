@@ -36,8 +36,8 @@
                         <Insets left="2.0"/>
                     </padding>
                 </ComboBox>
-                <Label fx:id="offline" style="-fx-font-size: 16; -fx-font-weight: bold;" text="OFFLINE"
-                       textFill="#f50101">
+                <Label fx:id="workModeLabel" style="-fx-font-size: 16; -fx-font-weight: bold;" text="WorkMode"
+                       textFill="#248624">
                     <HBox.margin>
                         <Insets left="5.0" right="5.0"/>
                     </HBox.margin>
