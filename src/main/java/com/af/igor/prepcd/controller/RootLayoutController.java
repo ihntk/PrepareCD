@@ -10,8 +10,7 @@ import javafx.scene.control.MenuItem;
 
 import java.io.IOException;
 
-import static com.af.igor.prepcd.MainApp.PLANS;
-import static com.af.igor.prepcd.MainApp.getMachine;
+import static com.af.igor.prepcd.MainApp.*;
 
 public class RootLayoutController {
 
@@ -57,7 +56,7 @@ public class RootLayoutController {
 
     @FXML
     private void handleOpenRemoteMachineDir() throws IOException {
-        app.openWithFileMan("", "--t --r=\"" + getMachine().getRemoteMachinePathString() + "\"");
+        app.openWithFileMan("", "--t --r=\"" + getMachine().getRemoteMachinePathString() + DRAWINGS_DIR + "\"");
     }
 
     @FXML
