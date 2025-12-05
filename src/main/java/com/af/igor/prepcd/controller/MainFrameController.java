@@ -325,7 +325,7 @@ public class MainFrameController {
             f4Button.setText("Apragaz");
             f4Button.setDisable(false);
             status.setText("Copy base drawings for " + getMachine().getMachineType() + ". Then press ok");
-            app.openWithFileMan("--t --l=\"" + getMachine().getMachinePathString() + "\"", "--t --r=\"" + PLANS + "\"");
+            app.openWithFileMan("--t --l=\"" + getMachine().getMachinePathString() + "\"", "--t --r=\"" + getMachine().getRemoteMachinePathString() + DRAWINGS_DIR + "\"");
 
             String currentStatus = status.getText();
             basePlanDirFS.getFiles(Paths.get(getMachine().getMachinePathString()));     //???
@@ -808,9 +808,9 @@ public class MainFrameController {
                     status.setText("Mowe slddrw files to PDM.");
                 } else {
                     getMachine().open4CkdFiles();
-                    status.setText("Ready");
-                    app.openWithFileMan("", "--r=\"" + getMachine().getRemoteMachinePathString() + DRAWINGS_DIR + "\"");
                 }
+                status.setText("Ready");
+                app.openWithFileMan("", "--r=\"" + getMachine().getRemoteMachinePathString() + DRAWINGS_DIR + "\"");
                 f1Button.setText("Open M");
                 f1Button.setDisable(false);
 

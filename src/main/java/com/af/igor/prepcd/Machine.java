@@ -399,11 +399,6 @@ public class Machine {
 
         try {
             app.desktop.open(new File(MainApp.PDM_ORDER));
-
-            ArrayList<String> slddrwFiles = getSlddrwFiles();
-            if (!slddrwFiles.isEmpty()) {
-                app.desktop.open(new File(machinePathString));
-            }
         } catch (IOException e) {
             app.logger.log("Error opening PDM Explorer: " + e.getMessage());
             throw e;
