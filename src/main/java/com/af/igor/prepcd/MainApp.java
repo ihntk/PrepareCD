@@ -44,7 +44,7 @@ public class MainApp {
     public static String PDM_ORDER;
 
     private static MainApp instance;
-    private static String version = "0.9.1";
+    private static String version = "0.9.2";
     private static Machine machine;
     private static Machine newMachine;
     public static LuxParser luxParser;
