@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 
 import java.io.IOException;
 import java.nio.file.*;
+import java.nio.file.attribute.DosFileAttributeView;
 import java.util.List;
 
 public class FSHelper {
@@ -20,6 +21,21 @@ public class FSHelper {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    public static void disableReadOnlyAtribute(Path file) throws IOException {
+        if (!System.getProperty("os.name").toLowerCase().contains("win")) {
+            return;
+        }
+
+        DosFileAttributeView attributeView = Files.getFileAttributeView(file, DosFileAttributeView.class);
+        if (attributeView != null) {
+            attributeView.setReadOnly(false);
+        } else {
+            throw new UnsupportedOperationException(
+                    "DOS attributes not supported on this file system"
+            );
+        }
     }
 
     public Path getCurrentPath() {

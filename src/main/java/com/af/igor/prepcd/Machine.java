@@ -3,6 +3,7 @@ package com.af.igor.prepcd;
 import com.af.igor.prepcd.util.AdditionalOptions;
 import com.af.igor.prepcd.util.BaseDrawingPaths;
 import com.af.igor.prepcd.util.ConsoleHelper;
+import com.af.igor.prepcd.util.FSHelper;
 
 import java.io.*;
 import java.nio.file.FileSystemException;
@@ -230,24 +231,8 @@ public class Machine {
 
         for (String file : drawingFiles) {
             String ext = file.substring(file.lastIndexOf("."));
-            disableReadOnlyAtribute(Paths.get(machinePathString + file));
-
+            FSHelper.disableReadOnlyAtribute(Paths.get(machinePathString + file));
             renameInLocalDir(file, defineFileName(Path.of(file)) + ext);
-        }
-    }
-
-    private void disableReadOnlyAtribute(Path file) throws IOException {
-        if (!System.getProperty("os.name").toLowerCase().contains("win")) {
-            return;
-        }
-
-        DosFileAttributeView attributeView = Files.getFileAttributeView(file, DosFileAttributeView.class);
-        if (attributeView != null) {
-            attributeView.setReadOnly(false);
-        } else {
-            throw new UnsupportedOperationException(
-                    "DOS attributes not supported on this file system"
-            );
         }
     }
 
@@ -376,8 +361,6 @@ public class Machine {
             Path targetFile = Paths.get(remoteDrawingsPath + file);
 
             try {
-                disableReadOnlyAtribute(sourceFile);
-
                 Files.move(sourceFile, targetFile, REPLACE_EXISTING);
                 app.logger.log("Moved file: " + file);
             } catch (IOException e) {

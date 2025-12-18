@@ -582,6 +582,7 @@ public class MainFrameController {
             else
                 return;
         }
+        FSHelper.disableReadOnlyAtribute(targetPath);
     }
 
     @FXML

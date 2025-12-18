@@ -6,7 +6,7 @@ module com.af.igor.prepcd.preparecd {
     requires org.apache.poi.poi;
     requires org.apache.poi.ooxml;
     requires org.apache.commons.collections4;
-    requires com.af.igor.prepcd.preparecd;
+//    requires com.af.igor.prepcd.preparecd;
 
     opens com.af.igor.prepcd to javafx.fxml;
     exports com.af.igor.prepcd;
