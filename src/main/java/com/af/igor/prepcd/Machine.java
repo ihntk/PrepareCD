@@ -372,19 +372,4 @@ public class Machine {
         }
     }
 
-    public void openPdmExplorer() throws IOException {
-        if (MainApp.PDM_ORDER == null || MainApp.PDM_ORDER.isEmpty()) {
-            app.logger.log("PDM_ORDER path is not configured");
-            return;
-        }
-
-        app.logger.log("Opening PDM Explorer at: " + MainApp.PDM_ORDER);
-
-        try {
-            app.desktop.open(new File(MainApp.PDM_ORDER));
-        } catch (IOException e) {
-            app.logger.log("Error opening PDM Explorer: " + e.getMessage());
-            throw e;
-        }
-    }
 }

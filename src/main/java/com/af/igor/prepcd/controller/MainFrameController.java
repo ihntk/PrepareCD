@@ -794,7 +794,11 @@ public class MainFrameController {
         switch (currentTarget) {
             case INSTALL: {
                 hostServices.showDocument(getMachine().getMachinePathString() + getMachine().getLuxFileName());
-                hostServices.showDocument(getMachine().getMachinePathString() + installationName);
+                if (app.isRemoteMode()) {
+                    getMachine().moveFilesToRemote();
+                } else {
+                    hostServices.showDocument(getMachine().getMachinePathString() + installationName);
+                }
                 if (!app.isOfflineMode()) {
                     remoteMachineDirFS.getFiles(Paths.get(getMachine().getRemoteMachinePathString(), DRAWINGS_DIR));
                 }
@@ -805,7 +809,7 @@ public class MainFrameController {
                 getMachine().copyEtiq();
                 if (app.isRemoteMode()) {
                     getMachine().moveFilesToRemote();
-                    getMachine().openPdmExplorer();
+                    hostServices.showDocument(PDM_ORDER);
                     status.setText("Mowe slddrw files to PDM.");
                 } else {
                     getMachine().open4CkdFiles();
