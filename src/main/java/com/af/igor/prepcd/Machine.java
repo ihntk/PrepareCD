@@ -11,10 +11,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.DosFileAttributeView;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
@@ -331,9 +330,26 @@ public class Machine {
         return machinePathDir.list();
     }
 
+    private List<String> getAllFiles() {
+        Path localDir = Paths.get(machinePathString);
+        Path remoteDir = Paths.get(getRemoteMachinePathString() + MainApp.DRAWINGS_DIR);
+
+        try {
+            return Stream.concat(
+                            Files.list(localDir),
+                            Files.list(remoteDir)
+                    )
+                    .filter(Files::isRegularFile)
+                    .map(path -> path.getFileName().toString())
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public ArrayList<String> getCkdFiles() {
         ArrayList<String> ckd = new ArrayList<>();
-        for (String file : getFiles()) {
+        for (String file : getAllFiles()) {
             if (file.toLowerCase().endsWith(".ckd")) ckd.add(file);
         }
         return ckd;
@@ -341,7 +357,7 @@ public class Machine {
 
     public ArrayList<String> getSlddrwFiles() {
         ArrayList<String> drw = new ArrayList<>();
-        for (String file : getFiles()) {
+        for (String file : getAllFiles()) {
             if (file.toLowerCase().endsWith(".slddrw")) drw.add(file);
         }
         return drw;

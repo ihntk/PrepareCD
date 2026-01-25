@@ -561,7 +561,9 @@ public class MainFrameController {
             targetPath = Paths.get(getMachine().getMachinePathString(), filename + ext);
         }
 
-        if (!Files.exists(targetPath)) {
+        Path targetRemotePath = Paths.get(getMachine().getRemoteMachinePathString(), DRAWINGS_DIR, targetPath.getFileName().toString());
+        if (!Files.exists(targetPath) &&
+                !Files.exists(targetRemotePath)) {
             Files.copy(sourcePath, targetPath);
             if (index > -1) machineDirList.set(index, targetPath.getFileName());
             else machineDirList.add(targetPath.getFileName());
