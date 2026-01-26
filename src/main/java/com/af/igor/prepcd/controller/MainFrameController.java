@@ -176,12 +176,11 @@ public class MainFrameController {
     @FXML
     private void handleSetMachine() {
         try {
-            target.setText("Processing machine");
             status.setText("Wait");
             machineInit(machineName.getText().toUpperCase());
             if (getMachine() == null) return;
             status.setText("Machine is " + getMachine().getMachineName());
-            target.setText("Ready");
+            setTargetLabel("Ready");
             updateWindowTitle();
             currentMachine.setText(getMachine().getMachineName());
             fillLanguagesLabel();
@@ -270,7 +269,7 @@ public class MainFrameController {
     @FXML
     private void handleInstall() throws IOException {
         currentTarget = Targets.INSTALL;
-        target.setText("Install");
+        setTargetLabel("Install");
         app.logger.log("target is: installation");
         resetControlsDefault();
         machineDirFS.getFiles(Paths.get(getMachine().getMachinePathString()));
@@ -290,7 +289,7 @@ public class MainFrameController {
     @FXML
     private void handleXls() throws IOException {
         currentTarget = Targets.XLS;
-        target.setText("Xls");
+        setTargetLabel("Xls");
         app.logger.log("target is: xls");
         resetControlsDefault();
         if (!getMachine().copyMachineXlsIfNotExist())
@@ -308,7 +307,7 @@ public class MainFrameController {
     @FXML
     private void handleMachine() throws IOException {
         currentTarget = Targets.MACHINE;
-        target.setText("Machine");
+        setTargetLabel("Machine");
         app.logger.log("target is: machine");
         resetControlsDefault();
 
@@ -361,7 +360,7 @@ public class MainFrameController {
             handleXls();
         } else {
             currentTarget = Targets.CD;
-            target.setText("CD");
+            setTargetLabel("CD");
             resetControlsDefault();
 //            hostServices.showDocument(getMachine().getMachinePathString() + getMachine().getMachineXlsName());    //offline mode
             hostServices.showDocument(getMachine().getRemoteMachinePathString() + DRAWINGS_DIR + getMachine().getMachineXlsName());
@@ -877,5 +876,10 @@ public class MainFrameController {
         if (getMachine() != null) {
             updateWindowTitle();
         }
+    }
+
+    private void setTargetLabel(String label) {
+        String machineType = getMachine().getMachineType() != null ? getMachine().getMachineType() : "";
+        target.setText(label + "     " + machineType);
     }
 }
