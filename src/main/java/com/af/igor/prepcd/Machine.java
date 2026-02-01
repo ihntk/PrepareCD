@@ -10,7 +10,6 @@ import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.DosFileAttributeView;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -225,7 +224,7 @@ public class Machine {
     }
 
     public void renameAllDrawings() throws IOException {
-        ArrayList<String> drawingFiles = getCkdFiles();
+        ArrayList<String> drawingFiles = getCkdFiles(true);
         drawingFiles.addAll(getSlddrwFiles());
 
         for (String file : drawingFiles) {
@@ -236,7 +235,7 @@ public class Machine {
     }
 
     public void open4CkdFiles() throws IOException {
-        ArrayList<String> ckdFiles = getCkdFiles();
+        ArrayList<String> ckdFiles = getCkdFiles(true);
         for (String file : ckdFiles) {
             if (file.startsWith("Etiqclas")) app.desktop.open(
                     new File(machinePathString + file));
@@ -250,7 +249,7 @@ public class Machine {
     }
 
     public void openMCkdFiles() throws IOException {
-        ArrayList<String> ckdFiles = getCkdFiles();
+        ArrayList<String> ckdFiles = getCkdFiles(true);
         for (String file : ckdFiles) {
             if (file.startsWith("M")) app.desktop.open(
                     new File(machinePathString + file));
@@ -326,8 +325,8 @@ public class Machine {
         return fileName;
     }
 
-    public String[] getFiles() {
-        return machinePathDir.list();
+    public List<String> getLocalFiles() {
+        return List.of(Objects.requireNonNull(machinePathDir.list()));
     }
 
     private List<String> getAllFiles() {
@@ -347,9 +346,9 @@ public class Machine {
         }
     }
 
-    public ArrayList<String> getCkdFiles() {
+    public ArrayList<String> getCkdFiles(boolean local) {
         ArrayList<String> ckd = new ArrayList<>();
-        for (String file : getAllFiles()) {
+        for (String file : local ? getLocalFiles() : getAllFiles()) {
             if (file.toLowerCase().endsWith(".ckd")) ckd.add(file);
         }
         return ckd;
@@ -364,7 +363,7 @@ public class Machine {
     }
 
     public void moveFilesToRemote() throws IOException {
-        ArrayList<String> ckdFiles = getCkdFiles();
+        ArrayList<String> ckdFiles = getCkdFiles(true);
         String remoteDrawingsPath =
                 getRemoteMachinePathString() + MainApp.DRAWINGS_DIR;
 

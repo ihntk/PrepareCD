@@ -746,7 +746,7 @@ public class MainFrameController {
                 if (name == null)
                     continue;
 
-                ArrayList<String> drawingsList = getMachine().getCkdFiles();
+                ArrayList<String> drawingsList = getMachine().getCkdFiles(false);
                 drawingsList.addAll(getMachine().getSlddrwFiles());
                 for (String file : drawingsList) {
                     if (file.startsWith(name)) machinePlanList.set(i, file);

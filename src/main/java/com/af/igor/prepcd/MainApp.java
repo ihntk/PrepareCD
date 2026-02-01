@@ -44,7 +44,7 @@ public class MainApp {
     public static String PDM_ORDER;
 
     private static MainApp instance;
-    private static String version = "0.9.4";
+    private static String version = "0.9.5";
     private static Machine machine;
     private static Machine newMachine;
     public static LuxParser luxParser;
@@ -573,7 +573,7 @@ public class MainApp {
             ConsoleHelper.writeMessage("Copy base installation drawing for " + machine.getMachineType() + "\nand then press enter");
             ConsoleHelper.readString();
             String installationName = "I" + getMachineCode() + "-" + machine.getMachineName().substring(2) + ".ckd";
-            Files.move(Paths.get(machine.getMachinePathString() + machine.getCkdFiles().get(0)), Paths.get(machine.getMachinePathString() + installationName));  //rename installation
+            Files.move(Paths.get(machine.getMachinePathString() + machine.getCkdFiles(true).get(0)), Paths.get(machine.getMachinePathString() + installationName));  //rename installation
             desktop.open(new File(machine.getMachinePathString() + installationName));
             logger.log("Installation " + installationName + " opened");
             openWithFileMan("", "--r=\"" + machine.getRemoteMachinePathString() + "\"");
