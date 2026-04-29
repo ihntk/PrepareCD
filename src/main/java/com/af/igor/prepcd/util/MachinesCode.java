@@ -78,7 +78,7 @@ public enum MachinesCode {
     OPC355_10(15000);
 
 
-    private String code;
+    private final String code;
 
     private MachinesCode(int code) {
         this.code = String.valueOf(code);

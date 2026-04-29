@@ -44,7 +44,7 @@ public class MainApp {
     public static String PDM_ORDER;
 
     private static MainApp instance;
-    private static String version = "0.9.5";
+    private static String version = "0.9.6";
     private static Machine machine;
     private static Machine newMachine;
     public static LuxParser luxParser;
@@ -70,7 +70,7 @@ public class MainApp {
 
         preferences = Preferences.userNodeForPackage(MainApp.class);
         fileManager = FileManagers.valueOf(
-                preferences.get("fileManager", FileManagers.TOTALCMD.name()));
+                preferences.get("fileManager", FileManagers.EXPLORER.name()));
 
         String savedWorkMode = preferences.get(
                 "workMode",
@@ -122,6 +122,10 @@ public class MainApp {
         MainApp.gui = gui;
     }
 
+    public FileManagers getFileManager() {
+        return fileManager;
+    }
+
     public static Machine getMachine() {
         return machine;
     }
@@ -147,6 +151,10 @@ public class MainApp {
         return currentWorkMode;
     }
 
+    public void setFileManager(FileManagers selectedFileManager) {
+        fileManager = selectedFileManager;
+        preferences.put("fileManager", fileManager.name());
+    }
     public void setWorkMode(WorkMode mode) {
         if (mode == null) {
             logger.log("Attempted to set null WorkMode, ignoring");
@@ -317,7 +325,7 @@ public class MainApp {
      */
     public void openWithFileMan(String pathParameters) throws IOException {
         switch (fileManager) {
-            case EXPLORER:
+            case EXPLORER: //TODO open with explorer
                 return;
             case TOTALCMD:
                 openWithTotalCmd(pathParameters);

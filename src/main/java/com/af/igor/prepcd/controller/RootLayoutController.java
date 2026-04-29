@@ -1,12 +1,10 @@
 package com.af.igor.prepcd.controller;
 
 import com.af.igor.prepcd.MainApp;
+import com.af.igor.prepcd.util.FileManagers;
 import com.af.igor.prepcd.util.WorkMode;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 
 import java.io.IOException;
 
@@ -30,6 +28,18 @@ public class RootLayoutController {
 
     @FXML
     private CheckMenuItem offlineModeMenuItem;
+
+    @FXML
+    private RadioMenuItem explorerFMMenuItem;
+
+    @FXML
+    private RadioMenuItem doublecmdFMMenuItem;
+
+    @FXML
+    private RadioMenuItem totalcmdFMMenuItem;
+
+    @FXML
+    private ToggleGroup fMGroups;
 
     public RootLayoutController() {
         app.getGui().setRootLayoutController(this);
@@ -122,12 +132,29 @@ public class RootLayoutController {
 
     }
 
+    public void handleExplorer() {
+        app.setFileManager(FileManagers.EXPLORER);
+    }
+
+    public void handleDoublecmd() {
+        app.setFileManager(FileManagers.DOUBLECMD);
+    }
+
+    public void handleTotalcmd() {
+        app.setFileManager(FileManagers.TOTALCMD);
+    }
+
+    private void updateFMMenuItem() {
+        fMGroups.getToggles().stream()
+                .filter(t -> t.getUserData().equals(app.getFileManager().name()))
+                .findFirst()
+                .ifPresent(fMGroups::selectToggle);
+    }
+
     @FXML
     private void initialize() {
         updateWorkModeMenuItems();
+        updateFMMenuItem();
     }
 
-    public void postInitialize() {
-        updateWorkModeMenuItems();
-    }
 }
