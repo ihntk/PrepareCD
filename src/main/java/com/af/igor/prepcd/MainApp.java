@@ -180,31 +180,6 @@ public class MainApp {
         }
     }
 
-    public void toggleOffline() {
-        WorkMode newMode = isOfflineMode()
-                ? WorkMode.GENERAL
-                : WorkMode.OFFLINE;
-        logger.log(
-                "Toggling offline mode: " + currentWorkMode + " -> " + newMode
-        );
-        setWorkMode(newMode);
-    }
-
-    public void toggleRemote() {
-        WorkMode newMode = isRemoteMode()
-                ? WorkMode.GENERAL
-                : WorkMode.REMOTE;
-        logger.log(
-                "Toggling remote mode: " + currentWorkMode + " -> " + newMode
-        );
-        setWorkMode(newMode);
-    }
-
-    public void toggleGeneral() {
-        logger.log("Setting general mode: " + currentWorkMode + " -> GENERAL");
-        setWorkMode(WorkMode.GENERAL);
-    }
-
     public void initializeMachine(String machineName) throws IOException, InterruptedException {
         if (machineName == null) initializeCurrentDirPath(machineName);
 

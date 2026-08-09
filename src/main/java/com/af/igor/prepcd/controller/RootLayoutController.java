@@ -21,13 +21,16 @@ public class RootLayoutController {
     private MenuItem renameAllDrawingsFiles;
 
     @FXML
-    private CheckMenuItem generalModeMenuItem;
+    private RadioMenuItem generalModeMenuItem;
 
     @FXML
-    private CheckMenuItem remoteModeMenuItem;
+    private RadioMenuItem remoteModeMenuItem;
 
     @FXML
-    private CheckMenuItem offlineModeMenuItem;
+    private RadioMenuItem offlineModeMenuItem;
+
+    @FXML
+    private ToggleGroup workModeGroups;
 
     @FXML
     private RadioMenuItem explorerFMMenuItem;
@@ -104,32 +107,25 @@ public class RootLayoutController {
 
     @FXML
     public void handleOffline() {
-        app.toggleOffline();
-        updateWorkModeMenuItems();
+        app.setWorkMode(WorkMode.OFFLINE);
     }
 
     @FXML
     public void handleGeneral() {
-        app.toggleGeneral();
-        updateWorkModeMenuItems();
+        app.setWorkMode(WorkMode.GENERAL);
     }
 
     @FXML
     public void handleRemote() {
-        app.toggleRemote();
-        updateWorkModeMenuItems();
+        app.setWorkMode(WorkMode.REMOTE);
     }
 
     public void updateWorkModeMenuItems() {
         WorkMode currentMode = app.getCurrentWorkMode();
-        boolean wasGeneralSelected = generalModeMenuItem.isSelected();
-        boolean wasRemoteSelected = remoteModeMenuItem.isSelected();
-        boolean wasOfflineSelected = offlineModeMenuItem.isSelected();
-
-        generalModeMenuItem.setSelected(currentMode == WorkMode.GENERAL);
-        remoteModeMenuItem.setSelected(currentMode == WorkMode.REMOTE);
-        offlineModeMenuItem.setSelected(currentMode == WorkMode.OFFLINE);
-
+        workModeGroups.getToggles().stream()
+                .filter(t -> t.getUserData().equals(currentMode.name()))
+                .findFirst()
+                .ifPresent(workModeGroups::selectToggle);
     }
 
     public void handleExplorer() {

@@ -22,12 +22,18 @@
                         <SeparatorMenuItem mnemonicParsing="false"/>
                         <Menu mnemonicParsing="false" text="Mode">
                             <items>
-                                <CheckMenuItem fx:id="generalModeMenuItem" mnemonicParsing="false"
-                                               onAction="#handleGeneral" selected="true" text="General"/>
-                                <CheckMenuItem fx:id="remoteModeMenuItem" mnemonicParsing="false"
-                                               onAction="#handleRemote" text="Remote"/>
-                                <CheckMenuItem fx:id="offlineModeMenuItem" mnemonicParsing="false"
-                                               onAction="#handleOffline" text="Offline"/>
+                                <RadioMenuItem fx:id="generalModeMenuItem" userData="GENERAL" mnemonicParsing="false"
+                                               onAction="#handleGeneral" selected="true" text="General">
+                                    <toggleGroup>
+                                        <ToggleGroup fx:id="workModeGroups"/>
+                                    </toggleGroup>
+                                </RadioMenuItem>
+                                <RadioMenuItem fx:id="remoteModeMenuItem" userData="REMOTE" mnemonicParsing="false"
+                                               onAction="#handleRemote" text="Remote"
+                                               toggleGroup="$workModeGroups"/>
+                                <RadioMenuItem fx:id="offlineModeMenuItem" userData="OFFLINE" mnemonicParsing="false"
+                                               onAction="#handleOffline" text="Offline"
+                                               toggleGroup="$workModeGroups"/>
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="File Manager">
