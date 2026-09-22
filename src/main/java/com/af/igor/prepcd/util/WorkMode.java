@@ -3,7 +3,8 @@ package com.af.igor.prepcd.util;
 public enum WorkMode {
     GENERAL("General"),
     REMOTE("Remote"),
-    OFFLINE("Offline");
+    OFFLINE("Offline"),
+    CITRIX("Citrix");
 
     private final String displayName;
 

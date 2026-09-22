@@ -30,6 +30,9 @@ public class RootLayoutController {
     private RadioMenuItem offlineModeMenuItem;
 
     @FXML
+    private RadioMenuItem citrixModeMenuItem;
+
+    @FXML
     private ToggleGroup workModeGroups;
 
     @FXML
@@ -118,6 +121,11 @@ public class RootLayoutController {
     @FXML
     public void handleRemote() {
         app.setWorkMode(WorkMode.REMOTE);
+    }
+
+    @FXML
+    public void handleCitrix() {
+        app.setWorkMode(WorkMode.CITRIX);
     }
 
     public void updateWorkModeMenuItems() {

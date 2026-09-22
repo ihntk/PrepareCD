@@ -165,6 +165,10 @@ public class MainFrameController {
                 workModeLabel.setText("Remote");
                 workModeLabel.setVisible(true);
                 break;
+            case CITRIX:
+                workModeLabel.setText("Citrix");
+                workModeLabel.setVisible(true);
+                break;
             case GENERAL:
             default:
                 workModeLabel.setText("");

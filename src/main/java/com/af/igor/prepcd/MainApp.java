@@ -143,6 +143,10 @@ public class MainApp {
         return currentWorkMode == WorkMode.REMOTE;
     }
 
+    public boolean isCitrixMode() {
+        return currentWorkMode == WorkMode.CITRIX;
+    }
+
     public boolean isGeneralMode() {
         return currentWorkMode == WorkMode.GENERAL;
     }
@@ -176,7 +180,6 @@ public class MainApp {
         logger.log("Work mode changed from " + previousMode + " to " + mode);
         if (gui != null) {
             gui.getController().onWorkModeChanged();
-            gui.getRootLayoutController().updateWorkModeMenuItems();
         }
     }
 
